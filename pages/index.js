@@ -86,7 +86,7 @@ export default function Home() {
     catch (err) {
       // console.log(err.response.data);
       setError(true)
-      setErrorMsg( err.response !== undefined ? String(err) : String(err))
+      setErrorMsg(err.response !== undefined ? String(err) : String(err))
       setLoading(false);
     }
 
@@ -99,50 +99,53 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="main">
-      <div className="eventform">
-        {error ? <Error setError={setError} msg={errorMsg} /> : null}
-        {loading ?
+        <div className="eventform">
+          {error ? <Error setError={setError} msg={errorMsg} /> : null}
+          {loading ?
 
-          <>
-            <Loader />
-            <p className='loaderMsg'>Don&apos;t refresh this page. Redirecting to payment processing service ...</p>
-          </>
-          :
+            <>
+              <Loader />
+              <p className='loaderMsg'>Don&apos;t refresh this page. Redirecting to payment processing service ...</p>
+            </>
+            :
 
 
-          <div className="eventform_con">
-            <div className="eventdetails">
-              <p className="eventdetails_dnt">REGISTRATION FORM</p>
-              <h3 className="eventdetails_title">WIE ILS 2022 - IEEE Kerala Section</h3>
-             
+            <div className="eventform_con">
+              <div className="eventdetails">
+                <p className="eventdetails_dnt">REGISTRATION FORM</p>
+                <h3 className="eventdetails_title">WIE ILS 2022 - IEEE Kerala Section</h3>
+
+              </div>
+              <Formik
+                initialValues={user}
+                validationSchema={schema}
+                onSubmit={(values) => { handleUpload(values) }}
+              >
+                {({ values, setFieldValue, handleSubmit, errors }) => (
+                  <>
+                    <Input label="First Name" placeholder={"Your NAME"} value={values} name="firstName" setFieldValue={setFieldValue} errors={errors}></Input>
+                    <Input label="Last Name" placeholder={"Email"} value={values} name="lastName" setFieldValue={setFieldValue} errors={errors}></Input>
+                    <Input label="Email" placeholder={"Phone"} value={values} name="email" setFieldValue={setFieldValue} errors={errors}></Input>
+                    <Input label="Email" placeholder={"College / Institution"} value={values} name="email" setFieldValue={setFieldValue} errors={errors}></Input>
+                    <Input label="Phone" placeholder={"ieee membership id"} value={values} name="phone" setFieldValue={setFieldValue} errors={errors}></Input>
+                   
+                      <button className="button" onClick={handleSubmit}>
+                        SUBMIT
+                      </button>
+                
+
+                  </>
+                )}
+              </Formik>
+
+
             </div>
-            <Formik
-              initialValues={user}
-              validationSchema={schema}
-              onSubmit={(values) => { handleUpload(values) }}
-            >
-              {({ values, setFieldValue, handleSubmit, errors }) => (
-                <>
-                  <Input label="First Name" placeholder={"Your NAME"} value={values} name="firstName" setFieldValue={setFieldValue} errors={errors}></Input>
-                  <Input label="Last Name" placeholder={"Email"} value={values} name="lastName" setFieldValue={setFieldValue} errors={errors}></Input>
-                  <Input label="Email" placeholder={"Phone"} value={values} name="email" setFieldValue={setFieldValue} errors={errors}></Input>
-                  <Input label="Email" placeholder={"College / Institution"} value={values} name="email" setFieldValue={setFieldValue} errors={errors}></Input>
-                  <Input label="Phone" placeholder={"ieee membership id"} value={values} name="phone" setFieldValue={setFieldValue} errors={errors}></Input>
-                  <button className="button" onClick={handleSubmit}>
-                   SUBMIT
-                  </button>
-                </>
-              )}
-            </Formik>
 
+          }
 
-          </div>
+        </div>
+      </main>
 
-        }
-
-      </div>
-    </main>
-    
     </div>
   )
 }
