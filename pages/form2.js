@@ -2,7 +2,7 @@
 import styles from '../styles/Form.module.css';
 import React, { useState } from 'react';
 
-export default function form2() {
+export default function Form2() {
 
     const [count, setCount] = useState(0);
 
