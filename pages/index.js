@@ -105,7 +105,7 @@ export default function Home() {
 
           <>
             <Loader />
-            <p className='loaderMsg'>Don't refresh this page. Redirecting to payment processing service ...</p>
+            <p className='loaderMsg'>Don&apos;t refresh this page. Redirecting to payment processing service ...</p>
           </>
           :
 
