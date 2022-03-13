@@ -112,8 +112,8 @@ export default function Home() {
 
           <div className="eventform_con">
             <div className="eventdetails">
-              <p className="eventdetails_dnt">REGISTRATION</p>
-              <h3 className="eventdetails_title">25th International conference on Science and Technology - Bangkok Thailand - September 2022</h3>
+              <p className="eventdetails_dnt">REGISTRATION FORM</p>
+              <h3 className="eventdetails_title">WIE ILS 2022 - IEEE Kerala Section</h3>
              
             </div>
             <Formik

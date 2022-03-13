@@ -59,8 +59,8 @@ a {
 }
 
 .eventform_con {
-  max-width: 550px;
-  padding: 60px;
+  width: 550px;
+  padding: 60px 40px;
   /* background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3)); */
   border-radius: 2rem;
   /* box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px; */
@@ -330,3 +330,28 @@ a {
     bottom: -100px;
   }
 }
+
+@media only screen and (max-width: 768px) {
+
+  .eventform_con{
+    width: 100%;
+    max-width: 80%;
+    margin-top: 20px;
+  }
+  .eventform{
+    padding: 0;
+    justify-content: unset;
+  }
+  
+ }
+ @media only screen and (max-width: 520px) {
+
+  .eventform_con{
+
+    max-width: 90%;
+
+  }
+ 
+  }
+  
+ 
