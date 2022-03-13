@@ -1,6 +1,6 @@
 
 import styles from '../styles/Form.module.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function form2() {
 
