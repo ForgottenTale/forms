@@ -1,13 +1,34 @@
 
 import { getIn } from 'formik';
+import styles from '../styles/Input.module.css';
+import { useEffect, useState } from 'react';
 
-export default function Input({label,placeholder,value,setFieldValue,name,errors}) {
+export default function Input({ label, placeholder, value, setFieldValue, name, errors }) {
+
+    const [place, setPlace] = useState(value[name] !== "" ? false : true);
+
+    useEffect(() => {
+        if (value[name] === "") {
+            setPlace(true)
+        }
+    }, [value[name]])
     return (
-        <div className='inputContainer'>
-            {/* <p className="label"> {label}</p> */}
-            <input placeholder={placeholder} value={value[name]} onChange={(e)=>setFieldValue(name,e.target.value)} className="input"/>
-            {/* <p className="errorMsg">{getIn(errors, name)!==undefined?getIn(errors, name):""}</p> */}
-        </div>
+        <>
+            <div className={styles.inputContainer} onClick={() => setPlace(false)}>
+                {/* <p className="label"> {label}</p> */}
+                <input
+                    value={value[name]}
+                    onChange={(e) => setFieldValue(name, e.target.value)}
+                    className={styles.input}
+
+                />
+                {place ? <p className={styles.placeholder}>{placeholder}</p> : null}
+
+                {/* <p className="errorMsg">{getIn(errors, name)!==undefined?getIn(errors, name):""}</p> */}
+            </div>
+
+        </>
+
 
 
     );

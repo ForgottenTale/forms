@@ -1,0 +1,71 @@
+.main {
+    display: grid;
+    grid-template-columns: 1fr;
+
+}
+
+.eventform {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 0 100px; */
+}
+
+.eventform_con {
+    max-width: 600px;
+    width: 100%;
+}
+
+.eventdetails_dnt {
+    color: gray;
+    margin-bottom: 10px;
+    font-weight: 500;
+    margin-top: 40px;
+
+}
+
+.eventdetails_title {
+    font-size: 30px;
+    margin-bottom: 10px;
+
+}
+
+.eventdetails_des {
+    color: gray;
+    margin-bottom: 30px;
+    font-size: 14px;
+    line-height: 26px;
+}
+
+.register {
+    margin-bottom: 20px;
+
+}
+
+.button {
+    width: 100%;
+    padding: 10px;
+    height: 45px;
+    background-color: #1479ff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.footer{
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: gray;
+}
+
+@media only screen and (max-width: 600px) {
+    .eventform_con {
+        width: 80%;
+    }
+}

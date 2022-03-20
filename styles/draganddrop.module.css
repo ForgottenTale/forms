@@ -1,0 +1,28 @@
+.label {
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.draganddropContainer {
+    width: 100%;
+    padding: 10px;
+    height: 45px;
+    background-color: #eff2f5;
+    border: none;
+    border-radius: 10px;
+    outline-color: #1479ff;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.draganddrop {
+    margin-bottom: 20px;
+}
+
+.errorMsg {
+    font-size: 12px;
+    color: red;
+}
