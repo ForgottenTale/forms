@@ -15,6 +15,13 @@ export default function Confirmation() {
     const [data, setData] = useState({
     })
 
+    const jobfair = {
+        title : "IEEE Job Fair 2022"
+    }
+    const wlc = {
+        title : "IEEE Job Fair 2022"
+    }
+
     useEffect(async () => {
         if (router.query.id !== undefined) {
             try {
@@ -49,7 +56,7 @@ export default function Confirmation() {
                             <div className={styles.eventform_con}>
                                 <div className={styles.eventdetails}>
                                     <p className={styles.eventdetails_dnt}>Event Registration Confirmation</p>
-                                    <h3 className={styles.eventdetails_title}>25th International conference on Science and Technology - Bangkok Thailand - September 2022</h3>
+                                    <h3 className={styles.eventdetails_title}>{router.query.type==="jobfair"?jobfair.title:"WIE ILS 2022 - IEEE Kerala Section"}</h3>
                                     <p className={styles.eventdetails_des}>Thank you for registering for the event. A copy of the receipt has been sent to your registered email</p>
                                     {/* <p className="confirm"></p> */}
                                 </div>
