@@ -6,16 +6,19 @@
 
 .input {
     width: 100%;
-    padding: 10px;
-    height: 45px;
-    background-color: #eff2f5;
+    padding: 10px 20px;
+    height: 60px;
+    /* background-color: #eff2f5; */
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     outline-color: #1479ff;
+    /* box-shadow: 0 5px 10px 0 rgba(236, 236, 236, 0.42); */
+    box-shadow: 0 12px 20px 0 rgba(136,174,222,0.42),inset 0 -1px 8px 0 #B9D1F1;
 }
 
 .inputContainer {
     margin-bottom: 20px;
+    
 
 }
 .errorMsg{
