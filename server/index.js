@@ -8,9 +8,10 @@ const path = require('path');
 const Applicant = require('./models/applicant')
 const mongoose = require('mongoose')
 const cors = require("cors");
-const port = process.env.PORT  || 3000
+const port = process.env.PORT || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
+const logger = require("./logger");
 
 const handle = app.getRequestHandler()
 
@@ -62,12 +63,12 @@ app.prepare().then(() => {
             applicant.save()
                 .then(() => res.send(txnId))
                 .catch((err) => {
-                    console.log(err)
+                    logger.error(err)
                     res.status(400).send({ error: err.message })
                 })
         }
         catch (err) {
-            console.log(err)
+            logger.error(err)
             return res.status(400).send(err);
         }
     })
@@ -98,6 +99,7 @@ app.prepare().then(() => {
         }
         catch (err) {
             res.status(400).send({ error: err.message })
+            logger.error(err)
         }
 
     })
@@ -120,7 +122,7 @@ app.prepare().then(() => {
                     txnDate: response.responseObject.body.txnDate,
                     txnId: response.responseObject.body.txnId,
                 })
-            
+
                 return res.redirect(`http://localhost:3000/confirmation/jobfair/${req.body.ORDERID}`)
                 // res.status(201).send("done")
             }
@@ -139,14 +141,14 @@ app.prepare().then(() => {
         }
         catch (err) {
             res.status(400).send(err)
-            console.log(err)
+            logger.error(err)
             // res.redirect("http://localhost:3000/confirmation")
         }
 
     })
     server.get("/api/redirect", (req, res) => {
 
-        console.log("reached")
+        // logger.error("reached")
         return res.redirect("/confirmation")
         // return res.send(response.responseObject.body)
 
@@ -161,11 +163,11 @@ app.prepare().then(() => {
     server.options("*", cors());
     mongoose.connect(process.env.dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => server.listen(port, (err) => {
-            console.log(`> Connected to MongoDB`)
+            logger.info(`> Connected to MongoDB`)
             if (err) throw err
-            console.log(`> Ready on http://localhost:${port}`)
+            logger.info(`> Ready on http://localhost:${port}`)
         }))
-        .catch((err) => console.log(err))
+        .catch((err) => logger.error(err))
 
 
 })
@@ -203,10 +205,12 @@ const generateTxnId = async (req) => {
             TXN_AMOUNT: "10.00",
             WEBSITE: "WEBSTAGING",
         }
+        logger.info(details)
 
         return details
     }
     catch (err) {
+        logger.error(err)
         return err
     }
 }
@@ -222,12 +226,12 @@ function connectToPaytm() {
         Paytm.MerchantProperties.setCallbackUrl(callbackUrl);
         Paytm.MerchantProperties.initialize(env, mid, key, client_id, website);
         Paytm.MerchantProperties.setConnectionTimeout(5000);
-        console.log(`> Connected to Paytm Servers`)
+        logger.info(`> Connected to Paytm Servers`)
     }
     catch (e) {
-        console.log("Exception caught: ", e);
+        logger.error("Exception caught: ", e);
         Paytm.LoggingUtil.addLog(Paytm.LoggingUtil.LogLevel.INFO, "DemoApp", "Exception caught: ", e);
-        console.log("Failed")
+        logger.error("Failed")
 
     }
 
