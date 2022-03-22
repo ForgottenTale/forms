@@ -9,7 +9,7 @@ const Applicant = require('./models/applicant')
 const mongoose = require('mongoose')
 const cors = require("cors");
 const port = process.env.PORT || 3000
-const dev = process.env.NODE_ENV !== 'production'
+const dev = process.env.NEXT_ENV !== 'production'
 const app = next({ dev })
 const logger = require("./logger");
 

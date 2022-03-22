@@ -14,7 +14,7 @@ export default function Input({ label, placeholder, value, setFieldValue, name, 
                
             }} 
             onChange={(e) => setFieldValue(name, e.target.value)} className={styles.input} />
-            <p className={styles.errorMsg}>{getIn(errors, name) !== undefined ? getIn(errors, name) : ""}</p>
+            {/* <p className={styles.errorMsg}>{getIn(errors, name) !== undefined ? getIn(errors, name) : ""}</p> */}
         </div>
 
 

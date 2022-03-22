@@ -11,9 +11,16 @@
     align-items: center;
     /* padding: 0 100px; */
 }
+.image{
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
 
 .eventdetails_con {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -37,6 +44,7 @@
 
 .eventdetails_title {
     font-size: 30px;
+    color: #2CA0DF;
 }
 
 .eventdetails_des {
@@ -73,6 +81,10 @@
     font-weight: 500;
     margin-bottom: 20px;
     color: gray;
+}
+.footer p{
+
+    font-weight: 300;
 }
 
 @media only screen and (max-width: 600px) {

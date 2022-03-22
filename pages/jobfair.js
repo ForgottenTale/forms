@@ -28,10 +28,10 @@ export default function Home() {
         CGPA: "",
         backlog: 0,
         membershipId: undefined,
-        yearofPassout:  undefined,
-        ieeeMember:  undefined,
-        resume:  undefined,
-        package:  undefined
+        yearofPassout: undefined,
+        ieeeMember: undefined,
+        resume: undefined,
+        package: undefined
     }
     // const user = {
     //     email: "a@v.vom",
@@ -160,7 +160,10 @@ export default function Home() {
 
                 <main className={styles.main}>
                     <div className={styles.eventdetails_con} >
+                        <img src="/banner.jpeg" className={styles.image} />
+
                         <div className={styles.eventdetails} >
+
                             <p className={styles.eventdetails_dnt} >REGISTRATION FORM</p>
                             <h3 className={styles.eventdetails_title} >IEEE Job Fair 2022</h3>
                         </div>
@@ -178,7 +181,6 @@ export default function Home() {
 
 
                             <div className={styles.eventform_con} >
-
                                 <Formik
                                     initialValues={user}
                                     validationSchema={schema}
@@ -186,6 +188,7 @@ export default function Home() {
                                 >
                                     {({ values, setFieldValue, handleSubmit, errors }) => (
                                         <>
+
 
                                             <Input label="First Name *"
                                                 placeholder={"Enter your first name"}
@@ -211,26 +214,26 @@ export default function Home() {
                                                 name="phone"
                                                 setFieldValue={setFieldValue}
                                                 errors={errors}></Input>
-                                            <Input label="College/Institution Name "
+                                            <Input label="College/Institution Name *"
                                                 placeholder={"Enter your College/Institution name"}
                                                 value={values}
                                                 name="institute"
                                                 setFieldValue={setFieldValue}
                                                 errors={errors}></Input>
-                                            <Input label="Branch"
+                                            <Input label="Branch *"
                                                 placeholder={"Enter your branch"}
                                                 value={values}
                                                 name="branch"
                                                 setFieldValue={setFieldValue}
                                                 errors={errors}></Input>
-                                            <Input label="CGPA"
+                                            <Input label="CGPA *"
                                                 placeholder={"Total CGPA till 6th Semester"}
                                                 value={values}
                                                 name="CGPA"
                                                 setFieldValue={setFieldValue}
                                                 errors={errors}></Input>
                                             <Select
-                                                label="Year of passout*"
+                                                label="Year of passout *"
                                                 options={yop}
                                                 name="yearofPassout"
                                                 value={[{ value: values["yearofPassout"], label: values["yearofPassout"] }]}
@@ -247,7 +250,7 @@ export default function Home() {
                                                 label="Are an IEEE member? *"
                                                 options={options}
                                                 name="ieeeMember"
-                                                value={[{ value: values["ieeeMember"], label: values["ieeeMember"] ? "Yes" : "No" }]}
+                                                value={[{ value: values["ieeeMember"], label: values["ieeeMember"] ? "Yes" : values["ieeeMember"]!==undefined ? "No" : undefined }]}
                                                 setFieldValue={setFieldValue}
                                                 errors={errors} />
                                             <Input label="IEEE Membership Number"
@@ -259,8 +262,8 @@ export default function Home() {
 
 
                                             <DragandDrop
-                                                label="Upload Resume"
-                                                accept='image/jpeg,image/png'
+                                                label="Upload Resume *"
+                                                accept='application/pdf'
                                                 files={values}
                                                 name="resume"
                                                 setFiles={setFieldValue}
@@ -286,8 +289,8 @@ export default function Home() {
                                 </Formik>
 
                                 <footer className={styles.footer}>
-                                    This content is created by the owner of the form. The data you submit will be sent to the form owner. IEEE Kerala Section is not responsible for the privacy or security practices of its customers, including those of this form owner. Never give out your password.
-                                    <br /><br />Powered by IKS Mint Forms | <a style={{ color: "blue" }} href='https://ieee-mint.org/privacy'>Privacy and cookies</a> | <a style={{ color: "blue" }} href='https://ieee-mint.org/terms'>Terms of use</a>
+                                   <p>This content is created by the owner of the form. The data you submit will be sent to the form owner. IEEE Kerala Section is not responsible for the privacy or security practices of its customers, including those of this form owner. Never give out your password.</p> 
+                                    <br />Powered by IKS Mint Forms | <a style={{ color: "blue" }} href='https://ieee-mint.org/privacy'>Privacy and cookies</a> | <a style={{ color: "blue" }} href='https://ieee-mint.org/terms'>Terms of use</a>
                                 </footer>
                             </div>
 
