@@ -165,6 +165,7 @@ app.prepare().then(() => {
         .then(() => server.listen(port, (err) => {
             logger.info(`> Connected to MongoDB`)
             if (err) throw err
+            logger.info(`> Callback url${process.env.Callback}`)
             logger.info(`> Ready on http://localhost:${port}`)
         }))
         .catch((err) => logger.error(err))
