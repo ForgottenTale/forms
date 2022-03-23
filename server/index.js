@@ -123,7 +123,7 @@ app.prepare().then(() => {
                     txnId: response.responseObject.body.txnId,
                 })
 
-                return res.redirect(`http://localhost:3000/confirmation/jobfair/${req.body.ORDERID}`)
+                return res.redirect(`${process.env.NODE_ENV==="development"?"http://localhost:3000":"https://forms.ieee-mint.org/"}/confirmation/jobfair/${req.body.ORDERID}`)
                 // res.status(201).send("done")
             }
             else {
@@ -133,7 +133,7 @@ app.prepare().then(() => {
                     txnDate: response.responseObject.body.txnDate,
                     txnId: response.responseObject.body.txnId,
                 })
-                return res.redirect(`http://localhost:3000/confirmation/jobfair/${req.body.ORDERID}`)
+                return res.redirect(`${process.env.NODE_ENV==="development"?"http://localhost:3000":"https://forms.ieee-mint.org/"}/confirmation/jobfair/${req.body.ORDERID}`)
                 // res.status(201).send("done")
 
             }
