@@ -1,0 +1,30 @@
+.customSelect {
+  width: 100%;
+  height: 30px;
+  border: none;
+  background-color: transparent;
+  text-transform: uppercase;
+  font-size: 14px;
+  border-bottom: 1px white solid;
+  color: white;
+  margin-bottom: 20px;
+  position: relative;
+}
+.options {
+  position: absolute;
+  top: 100%;
+  background-color: white;
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 5px;
+}
+.option {
+  padding: 8px 8px;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 500;
+  color: rgb(84, 84, 84);
+}
+.option:hover{
+  background-color: rgb(199, 236, 255);
+}

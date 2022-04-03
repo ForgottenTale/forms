@@ -13,9 +13,10 @@ export default function Input({ label, placeholder, value, setFieldValue, name, 
         }
     }, [value[name]])
     return (
-        <>
-            <div className={styles.inputContainer} onClick={() => setPlace(false)}>
+        <div className={styles.inputContainer2}  onClick={() => setPlace(false)}>
+            <div className={styles.inputContainer}  >
                 {/* <p className="label"> {label}</p> */}
+                
                 <input
                     value={value[name]}
                     onChange={(e) => setFieldValue(name, e.target.value)}
@@ -23,11 +24,11 @@ export default function Input({ label, placeholder, value, setFieldValue, name, 
 
                 />
                 {place ? <p className={styles.placeholder}>{placeholder}</p> : null}
-
-                {/* <p className="errorMsg">{getIn(errors, name)!==undefined?getIn(errors, name):""}</p> */}
+               
             </div>
-
-        </>
+            <p className={styles.errorMsg}>{getIn(errors, name)!==undefined?getIn(errors, name):""}</p>
+                
+        </div>
 
 
 

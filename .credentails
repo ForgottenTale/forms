@@ -1,0 +1,64 @@
+ieeemint
+j3423HxEpr
+Host: s11.asurahosting.com
+Port: 25552
+ps aux | grep node
+kill -9 PID
+
+firstName
+:
+"Ruben"
+lastName
+:
+"Shibu"
+email
+:
+"rubenabrahamshibu@gmail.com"
+institute
+:
+"Amal Jyothi College of Engineering"
+branch
+:
+"Computer Science Engineering"
+yearofPassout
+:
+"2022"
+phone
+:
+7356184469
+CGPA
+:
+"7.2"
+backlog
+:
+0
+ieeeMember
+:
+true
+resume
+:
+"files/1648357496992--RubenAbrahamShibu_Resume.pdf"
+orderId
+:
+"order_JBzXSC41iyUgGN"
+amount
+:
+"250"
+paymentStatus
+:
+"Pending"
+txnDate
+:
+"Pending"
+txnId
+:
+"Pending"
+createdAt
+:
+2022-03-27T05:05:03.690+00:00
+updatedAt
+:
+2022-03-27T05:05:03.690+00:00
+__v
+:
+0

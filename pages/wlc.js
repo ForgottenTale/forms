@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Input from '../ui-component/input'
 import { Formik } from 'formik';
@@ -9,89 +8,134 @@ import Loader from '../ui-component/loader';
 import { useState } from 'react';
 import Error from '../ui-component/error';
 import styles2 from '../styles/Wlc.module.css'
+import Select from 'react-select';
+import CustomRadio from '../ui-component/CustomRadio';
 
 export default function Home() {
 
-
+  const customStyles = {
+    control: () => ({
+      padding: "0",
+      display: "flex",
+      color: "white",
+      height: "35px",
+      backgroundColor: "transparent",
+      marginBottom: "30px",
+      borderBottom: "1px white solid"
+    })
+  }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
 
   const user = {
     email: "",
-    firstName: "",
-    lastName: "",
-    phone: ""
+    name: "",
+    phone: "",
+    gender: "",
+    membershipType: "",
+    membershipId: "",
+    institute: "",
+    role: "",
+    location: "",
+    food: ""
   }
 
   let schema = yup.object().shape({
     email: yup.string().email().required(),
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    phone: yup.number().required()
+    name: yup.string().required(),
+    phone: yup.number().required(),
+    gender: yup.string().required(),
+    membershipType: yup.string().required(),
+    membershipId: yup.number(),
+    institute: yup.string().required(),
+    role: yup.string().required(),
+    location: yup.string().required(),
+    food: yup.string().required()
   });
-  function isDate(val) {
-    // Cross realm comptatible
-    return Object.prototype.toString.call(val) === '[object Date]'
-  }
+  async function displayRazorpay(data, values) {
+    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
 
-  function isObj(val) {
-    return typeof val === 'object'
-  }
-
-  function stringifyValue(val) {
-    if (isObj(val) && !isDate(val)) {
-      return JSON.stringify(val)
-    } else {
-      return val
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you online?')
+      return
     }
-  }
 
-  function buildForm({ action, params }) {
-    const form = document.createElement('form')
-    form.setAttribute('method', 'post')
-    form.setAttribute('action', action)
+    const options = {
+      key: data.key,
+      currency: data.currency,
+      amount: String(data.amount),
+      order_id: data.id,
+      name: 'IEEE Job Fair 2022',
+      description: 'Thank you for registering',
 
-    Object.keys(params).forEach(key => {
-      const input = document.createElement('input')
-      input.setAttribute('type', 'hidden')
-      input.setAttribute('name', key)
-      input.setAttribute('value', stringifyValue(params[key]))
-      form.appendChild(input)
-    })
-
-    return form
-  }
-
-  function post(details) {
-    const form = buildForm(details)
-    document.body.appendChild(form)
-    form.submit()
-    form.remove()
-  }
-  const handleUpload = async (values) => {
-    // setLoading(true);
-    try {
-      const res = await axios.post("/api/pay", values, {
-        "headers": {
-          "Content-Type": "application/json"
+      handler: async (response) => {
+        try {
+          await axios.post("/api/pay/razorpay/verify", response)
+          navigate(`/confirmation/jobfair/${response.razorpay_order_id}`)
+        } catch (err) {
+          setError(true)
+          setErrorMsg(err.response !== undefined ? err.response.data.error : err)
+          setLoading(false);
         }
-      })
-      var details = {
-        action: "https://securegw-stage.paytm.in/order/process",
-        params: res.data
-      }
 
-      post(details);
+      },
+      prefill: {
+        name: `${values.firstName} ${values.lastName}`,
+        email: values.email,
+        contact: `+91${values.phone}`
+      }
+    }
+    const paymentObject = new window.Razorpay(options)
+    paymentObject.open()
+    paymentObject.on('payment.failed', async (response) => {
+      console.log(response)
+      try {
+        await axios.post("/api/pay/razorpay/failed", response.error)
+        navigate(`/confirmation/jobfair/${response.error.metadata.order_id}`)
+        paymentObject.close()
+      } catch (err) {
+        setError(true)
+        setErrorMsg(err.response !== undefined ? err.response.data.error : err)
+        setLoading(false);
+      }
+    });
+  }
+  function buildForm(values) {
+
+    var formData = new FormData()
+    var key = Object.keys(values)
+
+    key.forEach((val) => {
+      formData.append(val, values[val])
+    })
+    return formData;
+  }
+
+  const handleUpload = async (values) => {
+    setLoading(true);
+    try {
+      const formData = buildForm(values)
+      const res = await axios.post(`/api/pay/razorpay?formId=wlc`, formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
+
+        }
+      )
+      displayRazorpay(res.data, values)
     }
     catch (err) {
-      // console.log(err.response.data);
       setError(true)
       setErrorMsg(err.response !== undefined ? String(err) : String(err))
       setLoading(false);
     }
 
   }
+
+  const options = [{value:"Male",label:"Male"},{value:"Female",label:"Female"}];
+  
   return (
     <div className={styles.container}>
       <Head>
@@ -124,31 +168,102 @@ export default function Home() {
               >
                 {({ values, setFieldValue, handleSubmit, errors }) => (
                   <>
-                    <Input 
-                    label="First Name" style={{
-                      '::placeholder': {
-                        /* Chrome, Firefox, Opera, Safari 10.1+ */
-                        color: "red",
-                      
-                        /* Firefox */
-                      }
-                    }} id="whitePlaceholder" placeholder={"Your NAME"} value={values} name="firstName" setFieldValue={setFieldValue} errors={errors}></Input>
-                    <Input 
-                    label="Last Name" id="whitePlaceholder" placeholder={"Email"} value={values} name="lastName" setFieldValue={setFieldValue} errors={errors}></Input>
-                    <Input 
-                    label="Email"  id="whitePlaceholder" placeholder={"Phone"} value={values} name="email" setFieldValue={setFieldValue} errors={errors}></Input>
-                    <Input 
-                    label="Email" id="whitePlaceholder" placeholder={"College / Institution"} value={values} name="email" setFieldValue={setFieldValue} errors={errors}></Input>
-                    <Input 
-                    label="Phone" id="whitePlaceholder" placeholder={"ieee membership id"} value={values} name="phone" setFieldValue={setFieldValue} errors={errors}></Input>
-                   
-                      <button className={styles2.button} onClick={handleSubmit}>
-                        SUBMIT
-                      </button>
+                    <Input
+                      id="whitePlaceholder"
+                      placeholder={"Your NAME"}
+                      value={values}
+                      name="name"
+                      setFieldValue={setFieldValue}
+                      errors={errors}></Input>
+
+                    <Input
+                      id="whitePlaceholder"
+                      placeholder={"Email"}
+                      value={values}
+                      name="email"
+                      setFieldValue={setFieldValue}
+                      errors={errors}></Input>
+
+                    <Input
+
+                      id="whitePlaceholder"
+                      placeholder={"Phone"}
+                      value={values}
+                      name="phone"
+                      setFieldValue={setFieldValue}
+                      errors={errors}></Input>
+                    <Select
+                      placeholder={"Gender"}
+                      styles={customStyles}
+                      options={options}
+                      onChange={(e) => setFieldValue("gender", e.value)}
+
+                    />
                 
+                    <CustomRadio
+                      label={"Are you an IEEE Member ?"}
+                      name="membershipType"
+                      values={values}
+                      setFieldValue={setFieldValue}
+                      errors={errors}
+                      options={["IEEE member", "Non - IEEE Academic", "Non - IEEE Industrial"]} />
+
+                    <Input
+
+                      id="whitePlaceholder"
+                      placeholder={"ieee membership id"}
+                      value={values}
+                      name="membershipId"
+                      setFieldValue={setFieldValue}
+                      errors={errors}></Input>
+                    <Input
+
+                      id="whitePlaceholder"
+                      placeholder={"College / Institution"}
+                      value={values}
+                      name="institute"
+                      setFieldValue={setFieldValue}
+                      errors={errors}></Input>
+
+                    <Input
+
+                      id="whitePlaceholder"
+                      placeholder={"Current Role/Position"}
+                      value={values}
+                      name="role"
+                      setFieldValue={setFieldValue}
+                      errors={errors}></Input>
+                    <Input
+
+                      id="whitePlaceholder"
+                      placeholder={"Current Location"}
+                      value={values}
+                      name="location"
+                      setFieldValue={setFieldValue}
+                      errors={errors}></Input>
+                    {/* <Input
+
+                      id="whitePlaceholder"
+                      placeholder={"Food Preference"}
+                      value={values}
+                      name="food"
+                      setFieldValue={setFieldValue}
+                      errors={errors}></Input> */}
+                    <CustomRadio
+                      label={"Food Preference *"}
+                      name="food"
+                      values={values}
+                      setFieldValue={setFieldValue}
+                      errors={errors}
+                      options={["Veg", "Non-Veg"]} />
+                    <button className={styles2.button} onClick={handleSubmit}>
+                      SUBMIT
+                    </button>
+                    {JSON.stringify(values, 2, null)}
 
                   </>
                 )}
+
               </Formik>
 
 

@@ -1,14 +1,11 @@
 html,
 body {
-
   font-family: "Poppins";
   height: 100%;
-
 }
 
 #__next {
   height: 100%;
-
 }
 
 a {
@@ -22,12 +19,7 @@ a {
   margin: 0;
   font-family: "Poppins";
   /* color: white; */
-
 }
-
-
-
-
 
 /* .image{
   background-color: #eff2f5;
@@ -52,7 +44,7 @@ a {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-bottom: 20px
+  margin-bottom: 20px;
 }
 
 .confirm {
@@ -60,7 +52,6 @@ a {
   font-size: 16px;
   font-weight: 500;
 }
-
 
 .errorBox {
   width: 300px;
@@ -78,8 +69,6 @@ a {
   font-size: 14px;
   border-radius: 5px;
   z-index: 2000;
-
-
 }
 
 .errorBox span {
@@ -117,7 +106,6 @@ a {
 }
 
 @media only screen and (max-width: 768px) {
-
   .eventform_con {
     width: 100%;
     max-width: 80%;
@@ -128,15 +116,39 @@ a {
     padding: 0;
     justify-content: unset;
   }
-
 }
 
+.css-qc6sy-singleValue,
+.css-14el2xx-placeholder {
+  color: white !important;
+  margin: 0 !important;
+}
+.css-2613qy-menu {
+  background-color: red !important;
+  z-index: 99;
+}
+.css-319lph-ValueContainer {
+  padding: 0 !important;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.css-6j8wv5-Input {
+  margin: 0 !important;
+}
+.select-items {
+  position: absolute;
+  background-color: transparent;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+
 @media only screen and (max-width: 520px) {
-
   .eventform_con {
-
     max-width: 90%;
-
   }
-
 }
