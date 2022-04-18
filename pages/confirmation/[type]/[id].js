@@ -18,7 +18,7 @@ export default function Confirmation() {
     useEffect(async () => {
         if (router.query.id !== undefined) {
             try {
-                const res = await axios.get(`/api/pay/confirmation?id=${router.query.id}&type=${router.query.type}`);
+                const res = await axios.get(`/api/pay/confirmation?orderId=${router.query.id}&formId=${router.query.type}`);
                 console.log(res.data)
                 setLoading(false);
                 setData(res.data)
@@ -47,35 +47,32 @@ export default function Confirmation() {
                     <div className={styles.eventform_con}>
                         <div className={styles.eventdetails}>
                             <p className={styles.eventdetails_dnt}>Event Registration Confirmation</p>
-                            <h3 className={styles.eventdetails_title}>IEEE Job Fair 2022</h3>
-                            {data.paymentStatus !== undefined && data.paymentStatus === "success" ? <p className={styles.eventdetails_des}>Thank you for registering for the event. A copy of the receipt has been sent to your registered email</p> :
-                                <p className={styles.eventdetails_des}>{data.paymentStatus !== "failed" ? "The payment is yet to be recieved" : "The transaction has failed"}</p>
+                            <h3 className={styles.eventdetails_title}>{data.title}</h3>
+                            {data.responses!== undefined && data.responses[0].paymentStatus === "success" ? <p className={styles.eventdetails_des}>Thank you for registering for the event. A copy of the receipt has been sent to your registered email</p> :
+                                <p className={styles.eventdetails_des}>{data.responses!== undefined && data.responses[0].paymentStatus !== "failed" ? "The payment is yet to be recieved" : "The transaction has failed"}</p>
                             }
                             {/* <p className={styles.confirm}></p> */}
                         </div>
                         <div className={styles.paymentDetails}>
                             <p className={styles.paymentDetails_title}>Payment Details</p>
-                            <div className={styles.paymentDetails_grid}>
-                                {data.orderId !== undefined ?
-                                    <><p>Order Id</p> <p>{data.orderId}</p></> : null}
-                                {data.txnId !== undefined ?
-                                    <><p >Transaction Id</p> <p className={styles.txn}>{data.txnId}</p></> : null}
-                                {data.paymentStatus !== undefined ?
-                                    <><p>Payment Status</p> <p className={styles[data.paymentStatus]}>{data.paymentStatus}</p></> : null}
-                                {data.amount !== undefined ?
-                                    <><p>Amount</p> <p>{data.amount}</p></> : null}
-                                {data.txnDate !== undefined ?
-                                    <><p>Date</p> <p>{new Date(data.txnDate).toLocaleDateString()} {new Date(data.txnDate).toLocaleTimeString()}</p></> : null}
-
-
-
-                            </div>
+                           {data.responses!==undefined? <div className={styles.paymentDetails_grid}>
+                                {data.responses[0].orderId !== undefined ?
+                                    <><p>Order Id</p> <p>{data.responses[0].orderId}</p></> : null}
+                                {data.responses[0].txnId !== undefined ?
+                                    <><p >Transaction Id</p> <p className={styles.txn}>{data.responses[0].txnId}</p></> : null}
+                                {data.responses[0].paymentStatus !== undefined ?
+                                    <><p>Payment Status</p> <p className={styles[data.responses[0].paymentStatus]}>{data.responses[0].paymentStatus}</p></> : null}
+                                {data.responses[0].amount !== undefined ?
+                                    <><p>Amount</p> <p>{data.responses[0].amount}</p></> : null}
+                                {data.responses[0].txnDate !== undefined ?
+                                    <><p>Date</p> <p>{new Date(data.responses[0].txnDate).toLocaleDateString()} {new Date(data.responses[0].txnDate).toLocaleTimeString()}</p></> : null}
+                            </div>:null}
                         </div>
                         <div className={styles.paymentDetails}>
                             <p className={styles.paymentDetails_title}>Event Details</p>
                             <div className={styles.paymentDetails_grid}>
-                                <p>Date and Time</p> <p>April 2022</p>
-                                <p>Venue</p> <p>Online</p>
+                                <p>Date and Time</p> <p>{new Date(data.eventDate).toLocaleString()}</p>
+                                <p>Venue</p> <p>{data.venue}</p>
                                 {/* <p>Amount</p> <p>Rs 10.00</p>
                                 <p>Date</p> <p>12th Mar 2022 11:00 PM IST</p> */}
 
@@ -85,7 +82,7 @@ export default function Confirmation() {
 
                         <div className={styles.buttons}>
                             <button className={styles.button} onClick={() => window.print()}>Print</button>
-                            <button className={styles.button} onClick={() => navigate(`/${type}`)}>Submit another</button>
+                            <button className={styles.button} onClick={() => router.push(`/${router.query.type}`)}>Submit another</button>
                         </div>
                     </div>
                 }

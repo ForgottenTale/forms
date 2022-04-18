@@ -12,7 +12,7 @@ function content(status, data, applicant) {
             cc: "backup@ieeejobfair.com",
             html: success(
                 {
-                    name: applicant.firstName + " " + applicant.lastName,
+                    name: applicant.name,
                     orderId: data.orderId,
                     amount: data.txnAmount,
                     paymentStatus: "success",
@@ -37,7 +37,7 @@ function content(status, data, applicant) {
 
             html: pending(
                 {
-                    name: applicant.firstName + " " + applicant.lastName,
+                    name: applicant.name,
                     orderId: data.id,
                     amount: data.amount,
                     paymentStatus: "pending",
@@ -58,7 +58,7 @@ function content(status, data, applicant) {
 
             html: failed(
                 {
-                    name: applicant.firstName + " " + applicant.lastName,
+                    name: applicant.name,
                     orderId: data.orderId,
                     amount: data.txnAmount,
                     paymentStatus: "failed",

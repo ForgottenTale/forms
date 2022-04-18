@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const applicantSchema = new Schema({
-
+    formId:{type:String},
     name: { type: String },
     title: { type: String },
     description: { type: String },

@@ -7,7 +7,7 @@ export default function CustomRadio({ label, options, values, setFieldValue, nam
             <p className={styles.label}>{label}</p>
             {options.map((val, key) => <div className={styles.option} key={key}>
                 <input type="radio" checked={val === values[name] ? true : false} onChange={() =>setFieldValue(name,val)} />
-                <label className={styles.option_label} onClick={() =>setFieldValue(name,val)} for="age1">{val}</label>
+                <label className={styles.option_label} onClick={() =>setFieldValue(name,val)}>{val}</label>
             </div>)
             }
         </div>

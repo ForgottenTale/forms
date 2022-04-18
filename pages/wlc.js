@@ -10,9 +10,12 @@ import Error from '../ui-component/error';
 import styles2 from '../styles/Wlc.module.css'
 import Select from 'react-select';
 import CustomRadio from '../ui-component/CustomRadio';
+import CustomRadio2 from '../ui-component/CustomRadio2';
+import loadScript from '../utils/razorpayScript';
+import { useRouter } from 'next/router'
 
 export default function Home() {
-
+  const router = useRouter()
   const customStyles = {
     control: () => ({
       padding: "0",
@@ -21,7 +24,38 @@ export default function Home() {
       height: "35px",
       backgroundColor: "transparent",
       marginBottom: "30px",
-      borderBottom: "1px white solid"
+      borderBottom: "1px white solid",
+
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: "white",
+      fontSize: "14px",
+      margin: 0,
+      padding: 0
+    }),
+    placeholder: (defaultStyles) => {
+      return {
+        ...defaultStyles,
+        color: '#ffffff',
+        fontSize: "14px",
+        margin: 0,
+        padding: 0
+      }
+    },
+    valueContainer:(defaultStyles)=>({
+      ...defaultStyles,
+      margin: 0,
+      padding: 0
+    }),
+    indicatorSeparator:(defaultStyles)=>({
+      ...defaultStyles,
+      backgroundColor:"white"
+    }),
+    indicatorContainer:(defaultStyles)=>({
+      ...defaultStyles,
+      backgroundColor:"white",
+      color:"white"
     })
   }
   const [loading, setLoading] = useState(false);
@@ -29,16 +63,17 @@ export default function Home() {
   const [errorMsg, setErrorMsg] = useState(false);
 
   const user = {
-    email: "",
-    name: "",
-    phone: "",
-    gender: "",
-    membershipType: "",
-    membershipId: "",
-    institute: "",
-    role: "",
-    location: "",
-    food: ""
+    email: "abhijithkannan452@gmail.com",
+    name: "Abhijith Kannan",
+    phone: "7025263554",
+    gender: "male",
+    membershipType: "IEEE member",
+    membershipId: 12345,
+    institute: "College of Engineering Kidangoor",
+    role: "Student",
+    location: "Kottayam",
+    food: "Veg",
+    amount: null
   }
 
   let schema = yup.object().shape({
@@ -51,7 +86,8 @@ export default function Home() {
     institute: yup.string().required(),
     role: yup.string().required(),
     location: yup.string().required(),
-    food: yup.string().required()
+    food: yup.string().required(),
+    amount: yup.string().required()
   });
   async function displayRazorpay(data, values) {
     const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
@@ -71,8 +107,8 @@ export default function Home() {
 
       handler: async (response) => {
         try {
-          await axios.post("/api/pay/razorpay/verify", response)
-          navigate(`/confirmation/jobfair/${response.razorpay_order_id}`)
+          await axios.post(`/api/pay/razorpay/verify?formId=wlc&orderId=${response.razorpay_order_id}`, response)
+          router.push(`/confirmation/wlc/${response.razorpay_order_id}`)
         } catch (err) {
           setError(true)
           setErrorMsg(err.response !== undefined ? err.response.data.error : err)
@@ -81,7 +117,7 @@ export default function Home() {
 
       },
       prefill: {
-        name: `${values.firstName} ${values.lastName}`,
+        name: `${values.name}`,
         email: values.email,
         contact: `+91${values.phone}`
       }
@@ -89,10 +125,10 @@ export default function Home() {
     const paymentObject = new window.Razorpay(options)
     paymentObject.open()
     paymentObject.on('payment.failed', async (response) => {
-      console.log(response)
+
       try {
-        await axios.post("/api/pay/razorpay/failed", response.error)
-        navigate(`/confirmation/jobfair/${response.error.metadata.order_id}`)
+        await axios.post(`/api/pay/razorpay/failed?formId=wlc`, response.error)
+        router.push(`/confirmation/wlc/${response.error.metadata.order_id}`)
         paymentObject.close()
       } catch (err) {
         setError(true)
@@ -115,6 +151,9 @@ export default function Home() {
   const handleUpload = async (values) => {
     setLoading(true);
     try {
+      const form = values;
+      // form.amount = JSON.stringify(form.amount)
+      console.log(form)
       const formData = buildForm(values)
       const res = await axios.post(`/api/pay/razorpay?formId=wlc`, formData,
         {
@@ -134,25 +173,55 @@ export default function Home() {
 
   }
 
-  const options = [{value:"Male",label:"Male"},{value:"Female",label:"Female"}];
-  
+  const pricing = [
+
+    {
+      label: "IEEE Member",
+      amount: 10030,
+      earlyBirdAmount: 8850,
+      expries: "2022-04-16T15:21:28.796Z"
+    },
+    {
+      label: "Non IEEE members Academic",
+      amount: 12036,
+      earlyBirdAmount: 10856,
+      expries: "2022-04-16T15:21:28.796Z"
+    },
+    {
+      label: "Non IEEE members Industry",
+      amount: 15340,
+      earlyBirdAmount: 14160,
+      expries: "2022-04-16T15:21:28.796Z"
+    }
+
+  ]
+
+
+  const options = [{ value: "Male", label: "Male" }, { value: "Female", label: "Female" }];
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>WIE ILS 2022 - IEEE Kerala Section</title>
         <meta name="description" content="Generated by create next app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles2.main}>
-        <div className={styles2.eventform}>
-          {error ? <Error setError={setError} msg={errorMsg} /> : null}
-          {loading ?
 
-            <>
-              <Loader />
-              <p className={styles2.loaderMsg}>Don&apos;t refresh this page. Redirecting to payment processing service ...</p>
-            </>
-            :
+      {loading ?
+        <div className={styles2.loaderContainer}>
+          <div>
+            <Loader />
+            <p className={styles2.loaderMsg}>Don&apos;t refresh this page. Redirecting to payment processing service ...</p>
+          </div>
+
+        </div>
+        :
+
+
+        <main className={styles2.main}>
+          <div className={styles2.eventform}>
+            {error ? <Error setError={setError} msg={errorMsg} /> : null}
+
 
 
             <div className={styles2.eventform_con}>
@@ -199,7 +268,7 @@ export default function Home() {
                       onChange={(e) => setFieldValue("gender", e.value)}
 
                     />
-                
+
                     <CustomRadio
                       label={"Are you an IEEE Member ?"}
                       name="membershipType"
@@ -256,10 +325,21 @@ export default function Home() {
                       setFieldValue={setFieldValue}
                       errors={errors}
                       options={["Veg", "Non-Veg"]} />
+
+                    <CustomRadio2
+                      label={"Pricing"}
+                      name="amount"
+                      value={JSON.parse(values["amount"])}
+                      onClickFns={(val) => {
+                        setFieldValue("amount", JSON.stringify(val))
+                      }}
+                      errors={errors}
+                      options={pricing} />
                     <button className={styles2.button} onClick={handleSubmit}>
                       SUBMIT
                     </button>
-                    {JSON.stringify(values, 2, null)}
+                    {/* {JSON.stringify(values, 2, null)}
+                     */}
 
                   </>
                 )}
@@ -269,10 +349,10 @@ export default function Home() {
 
             </div>
 
-          }
 
-        </div>
-      </main>
+
+          </div>
+        </main>}
 
     </div>
   )

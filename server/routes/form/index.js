@@ -4,13 +4,15 @@ const logger = require('../../utils/logger');
 const router = express.Router();
 const sendMail = require('./sendMail');
 const pendingTemplate = require('../../mailTemplates/registerPending');
+const Form = require('../../models/forms');
 
 
 router.get("/responses", async (req, res) => {
 
     try {
-        const applicants = await Applicant.find({})
-        res.send(applicants)
+        // const applicants = await Applicant.find({})
+        const responses = await Form.findOne({formId : req.query.formId})
+        res.send(responses)
     }
     catch (err) {
         logger.error(err);
@@ -37,6 +39,19 @@ router.post("/mail", async (req, res) => {
 
 
 })
+router.delete("/response",async(req,res)=>{
+    try{
+        await Form.updateOne({formId : req.query.formId},{
+            $pull :{responses:{responseId:req.query.responseId}}
+        })
+        res.sendStatus(201)
+    }
+    catch(err){
+        logger.error(err);
+        res.status(400).send({ error: err.message })
+    }
+})
+
 router.post("/mail/reminder", async (req, res) => {
 
     try {

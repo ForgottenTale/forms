@@ -12,7 +12,7 @@ export default function Select2({ options, label, name, errors,value,setFieldVal
             borderRadius: "20px",
             boxShadow:getIn(errors, name) !== undefined ?"0 12px 20px 0 rgba(255, 45, 45, 0.301),inset 0 -1px 8px 0 #ff5f5f6e":"0 12px 20px 0 rgba(136,174,222,0.42),inset 0 -1px 8px 0 #B9D1F1"
           }),
-        
+         
       }
 
     return (

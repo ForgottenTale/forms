@@ -18,7 +18,7 @@ var instance = new Razorpay({
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './files')
+        cb(null, './public/files')
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + "--" + file.originalname)
@@ -48,50 +48,55 @@ router.get("/orderDetails", async (req, res) => {
 })
 
 router.post("/verify", async (req, res) => {
+    try {
+        let body = req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
+        var expectedSignature = crypto.createHmac('sha256', process.env.razorPaySecret)
+            .update(body.toString())
+            .digest('hex');
 
-    let body = req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
-    var expectedSignature = crypto.createHmac('sha256', process.env.razorPaySecret)
-        .update(body.toString())
-        .digest('hex');
-
-    const orderDetails = await instance.orders.fetch(req.body.razorpay_order_id)
-    if (expectedSignature === req.body.razorpay_signature) {
-
-
-        // const applicant = await Applicant.findOneAndUpdate({ orderId: req.body.razorpay_order_id }, {
-        //     paymentStatus: "success",
-        //     txnDate: moment.unix(orderDetails.created_at).toISOString(),
-        //     txnId: req.body.razorpay_payment_id,
-        // });
-        const response = await Form.findOneAndUpdate({ formId: req.query.formId, "responses.orderId": req.query.orderId }, {
-            $set: {
-                "responses.$.paymentStatus": success,
-                "responses.$.txnDate": moment.unix(orderDetails.created_at).toISOString(),
-                "responses.$.txnId": req.body.razorpay_payment_id,
+        const orderDetails = await instance.orders.fetch(req.body.razorpay_order_id)
+        if (expectedSignature === req.body.razorpay_signature) {
+            const response = await Form.findOneAndUpdate({ formId: req.query.formId, "responses.orderId": req.query.orderId }, {
+                $set: {
+                    "responses.$.paymentStatus": "success",
+                    "responses.$.txnDate": moment.unix(orderDetails.created_at).toISOString(),
+                    "responses.$.txnId": req.body.razorpay_payment_id,
+                }
+            })
+            var data = {
+                txnAmount: orderDetails.amount_paid,
+                orderId: req.body.razorpay_order_id,
+                txnDate: moment.unix(orderDetails.created_at).toISOString(),
+                txnId: req.body.razorpay_payment_id,
             }
-        })
-        var data = {
-            txnAmount: orderDetails.amount_paid,
-            orderId: req.body.razorpay_order_id,
-            txnDate: moment.unix(orderDetails.created_at).toISOString(),
-            txnId: req.body.razorpay_payment_id,
+            notify("success", data, response.responses[0]);
+            response.save().then(() => res.sendStatus(200)).catch((err) => {
+                logger.error(err)
+                res.status(400).send({ error: err.message })
+            })
         }
-        notify("success", data, applicant);
-        response.save().then(() => res.sendStatus(200)).catch((err) => {
-            logger.error(err)
-            res.status(400).send({ error: err.message })
-        })
+        else {
+            res.status(400).send({ error: "Cannot verify signature" })
+        }
     }
-    else {
-        res.sendStatus(200)
+    catch (err) {
+        logger.error(err)
+        res.status(400).send({ error: err.message })
     }
-
-
 })
 
 router.post("/test", async (req, res) => {
     try {
-        const response = await Form.findOne({ "responses.orderId": req.query.orderId }, { responses: { $elemMatch: { orderId: req.query.orderId } } })
+        const response = await Form.findOneAndUpdate({ formId: req.query.formId }, {
+            $push: {
+                responses: {
+                    ...req.body,
+                    paymentStatus: "pending",
+                    txnDate: "pending",
+                    txnId: "pending",
+                }
+            }
+        })
         res.send(response)
     }
     catch (err) {
@@ -102,44 +107,45 @@ router.post("/test", async (req, res) => {
 })
 
 router.post("/failed", async (req, res) => {
+    try {
+        const orderDetails = await instance.orders.fetch(req.body.metadata.order_id)
+        var data = {
+            txnAmount: orderDetails.amount_paid,
+            orderId: req.body.metadata.order_id,
+            txnDate: moment.unix(orderDetails.created_at).toISOString(),
+        }
 
-    const orderDetails = await instance.orders.fetch(req.body.metadata.order_id)
-    var data = {
-        txnAmount: orderDetails.amount_paid,
-        orderId: req.body.metadata.order_id,
-        txnDate: moment.unix(orderDetails.created_at).toISOString(),
+        const response = await Form.findOneAndUpdate({ formId: req.query.formId, "responses.orderId": req.body.metadata.order_id }, {
+            $set: {
+                "responses.$.paymentStatus": "failed",
+                "responses.$.txnDate": moment.unix(orderDetails.created_at).toISOString(),
+                "responses.$.txnId": "failed",
+            }
+        })
+        notify("failed", data, response.responses[0]);
+
+        response.save()
+            .then(() => res.sendStatus(200))
+            .catch((err) => {
+                logger.error(err)
+                res.status(400).send({ error: err.message })
+            })
+
+    }
+    catch (err) {
+        logger.error(err)
+        res.status(400).send({ error: err.message })
     }
 
-    const response = await Form.findOneAndUpdate({ formId: req.query.formId, "responses.orderId": req.query.orderId }, {
-        $set: {
-            "responses.$.paymentStatus": "failed",
-            "responses.$.txnDate": moment.unix(orderDetails.created_at).toISOString(),
-            "responses.$.txnId": "failed",
-        }
-    })
-    notify("failed", data, applicant);
-
-    response.save()
-        .then(() => res.sendStatus(200))
-        .catch((err) => {
-            logger.error(err)
-            res.status(400).send({ error: err.message })
-        })
 
 })
 
 router.post("/", upload.single("resume"), async (req, res) => {
     try {
-        var getAmt = () => {
-            if (req.query.formId === "jobfair") {
-                return req.body.ieeeMember === "true" ? 25000 : 50000
-            }
-            else {
-                return 25000
-            }
-        }
+        var ammount = JSON.parse(req.body.amount)
+
         var options = {
-            amount: getAmt(),
+            amount: new Date() > new Date(ammount.expries) ? ammount.amount * 100 : ammount.earlyBirdAmount * 100,
             currency: "INR",
             receipt: generateRandomString()
         };
@@ -150,14 +156,21 @@ router.post("/", upload.single("resume"), async (req, res) => {
             $push: {
                 responses: {
                     ...req.body,
+                    // resume: req.file.path,
+                    responseId: generateRandomString(10),
                     orderId: order.id,
                     amount: order.amount / 100,
-                    paymentStatus: "Pending",
-                    txnDate: "Pending",
-                    txnId: "Pending",
+                    paymentStatus: "pending",
+                    txnDate: "pending",
+                    txnId: "pending",
                 }
             }
         })
+        var data = req.body;
+        if (req.query.formId === "jobfair") {
+            data.name = data.firstName + " " + data.lastName
+        }
+        notify("pending", order, data);
         response.save()
             .then(() => res.send(order))
             .catch((err) => {
