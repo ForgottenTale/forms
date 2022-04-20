@@ -483,7 +483,7 @@ module.exports = function (req) {
                                 <tr>
                                   <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                    <img align="center" border="0" src="https://images.unlayer.com/projects/28517/1648272245659-WhatsApp Image 2022-03-23 at 10.54.19 PM.jpeg" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 500px;"
+                                    <img align="center" border="0" src=${req.banner}
                                       width="500" class="v-src-width v-src-max-width" />
 
                                   </td>
@@ -565,7 +565,7 @@ module.exports = function (req) {
                               <div class="v-line-height" style="line-height: 140%; text-align: center; word-wrap: break-word;">
                                 <p dir="ltr" style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 16px; line-height: 22.4px;"><span style="line-height: 22.4px; font-size: 16px;"><span style="line-height: 22.4px; font-size: 16px;">Dear <span style="color: #001041; font-size: 16px; line-height: 22.4px;"><strong>${req.name}</strong></span></span>
                                   </span><span style="line-height: 22.4px; font-size: 16px;"><strong><span style="line-height: 22.4px; color: #001041; font-size: 16px;"><br /></span></strong><br />Unfortunately, we were unable to process your payment. Your registration
-                                  for <span style="color: #f39c12; font-size: 16px; line-height: 22.4px;"><strong>IEEE Job Fair 2022</strong></span> was not successful.</span>
+                                  for <span style="color: #f39c12; font-size: 16px; line-height: 22.4px;"><strong>${req.title}</strong></span> was not successful.</span>
                                   </span>
                                 </p>
                                 <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
@@ -1436,7 +1436,7 @@ module.exports = function (req) {
                             <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:5px 15px 0px 3px;font-family:arial,helvetica,sans-serif;" align="left">
 
                               <div class="v-line-height" style="line-height: 140%; text-align: right; word-wrap: break-word;">
-                                <p dir="ltr" style="font-size: 14px; line-height: 140%; text-align: left;"><span style="font-size: 14px; line-height: 19.6px;">Online</span></p>
+                                <p dir="ltr" style="font-size: 14px; line-height: 140%; text-align: left;"><span style="font-size: 14px; line-height: 19.6px;">${req.venue}</span></p>
                               </div>
 
                             </td>
@@ -1509,7 +1509,7 @@ module.exports = function (req) {
                             <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:5px 15px 0px 0px;font-family:arial,helvetica,sans-serif;" align="left">
 
                               <div class="v-line-height" style="line-height: 140%; text-align: right; word-wrap: break-word;">
-                                <p dir="ltr" style="font-size: 14px; line-height: 140%; text-align: left;">April 2022</p>
+                                <p dir="ltr" style="font-size: 14px; line-height: 140%; text-align: left;">${req.eventDate}</p>
                               </div>
 
                             </td>

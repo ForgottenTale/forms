@@ -30,7 +30,7 @@ export default function Confirmation() {
             }
         }
 
-    }, [router.query.id,router.query.type])
+    }, [router.query.id, router.query.type])
 
     return (
         <main className="main">
@@ -48,14 +48,14 @@ export default function Confirmation() {
                         <div className={styles.eventdetails}>
                             <p className={styles.eventdetails_dnt}>Event Registration Confirmation</p>
                             <h3 className={styles.eventdetails_title}>{data.title}</h3>
-                            {data.responses!== undefined && data.responses[0].paymentStatus === "success" ? <p className={styles.eventdetails_des}>Thank you for registering for the event. A copy of the receipt has been sent to your registered email</p> :
-                                <p className={styles.eventdetails_des}>{data.responses!== undefined && data.responses[0].paymentStatus !== "failed" ? "The payment is yet to be recieved" : "The transaction has failed"}</p>
+                            {data.responses !== undefined && data.responses[0].paymentStatus === "success" ? <p className={styles.eventdetails_des}>Thank you for registering for the event. A copy of the receipt has been sent to your registered email</p> :
+                                <p className={styles.eventdetails_des}>{data.responses !== undefined && data.responses[0].paymentStatus !== "failed" ? "The payment is yet to be recieved" : "The transaction has failed"}</p>
                             }
                             {/* <p className={styles.confirm}></p> */}
                         </div>
                         <div className={styles.paymentDetails}>
                             <p className={styles.paymentDetails_title}>Payment Details</p>
-                           {data.responses!==undefined? <div className={styles.paymentDetails_grid}>
+                            {data.responses !== undefined ? <div className={styles.paymentDetails_grid}>
                                 {data.responses[0].orderId !== undefined ?
                                     <><p>Order Id</p> <p>{data.responses[0].orderId}</p></> : null}
                                 {data.responses[0].txnId !== undefined ?
@@ -66,9 +66,9 @@ export default function Confirmation() {
                                     <><p>Amount</p> <p>{data.responses[0].amount}</p></> : null}
                                 {data.responses[0].txnDate !== undefined ?
                                     <><p>Date</p> <p>{new Date(data.responses[0].txnDate).toLocaleDateString()} {new Date(data.responses[0].txnDate).toLocaleTimeString()}</p></> : null}
-                            </div>:null}
+                            </div> : null}
                         </div>
-                        <div className={styles.paymentDetails}>
+                        {false?<div className={styles.paymentDetails}>
                             <p className={styles.paymentDetails_title}>Event Details</p>
                             <div className={styles.paymentDetails_grid}>
                                 <p>Date and Time</p> <p>{new Date(data.eventDate).toLocaleString()}</p>
@@ -78,7 +78,7 @@ export default function Confirmation() {
 
                             </div>
 
-                        </div>
+                        </div>:null}
 
                         <div className={styles.buttons}>
                             <button className={styles.button} onClick={() => window.print()}>Print</button>

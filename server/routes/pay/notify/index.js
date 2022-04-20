@@ -4,9 +4,9 @@ const logger = require('../../../utils/logger');
 const nodemailer = require('nodemailer');
 
 
-function notify(status, data, applicant) {
+function notify(status, data, applicant,formDetails) {
 
-    transporter.sendMail(content(status, data, applicant), (err, info) => {
+    transporter.sendMail(content(status, data, applicant,formDetails), (err, info) => {
         if (err) {
             logger.error(err)
             return;

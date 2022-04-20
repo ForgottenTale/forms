@@ -143,7 +143,7 @@ export default function Home() {
         backlog: yup.number(),
         yearofPassout: yup.number().required(),
         ieeeMember: yup.boolean().required(),
-        amount: yup.object("Required").required("Required"),
+        amount: yup.string().required("Required"),
         membershipId: yup.number().when('ieeeMember', (ieeeMember) => {
             if (ieeeMember) {
                 return yup.number().required();

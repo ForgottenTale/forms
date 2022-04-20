@@ -2,13 +2,13 @@ const success = require('../../../mailTemplates/registerSuccess');
 const failed = require('../../../mailTemplates/registerFailed');
 const pending = require('../../../mailTemplates/registerPending');
 
-function content(status, data, applicant) {
+function content(status, data, applicant,formDetails) {
 
     if (status === "success") {
         return {
             from: process.env.NODE_ENV === "production" ? process.env.MAIL_USER : "graciela.keeling37@ethereal.email",
             to: process.env.NODE_ENV === "production" ? applicant.email : "graciela.keeling37@ethereal.email",
-            subject: "IEEE Job Fair 2022 | Registration Successful",
+            subject: `${formDetails.title} | Registration Successful`,
             cc: "backup@ieeejobfair.com",
             html: success(
                 {
@@ -19,8 +19,11 @@ function content(status, data, applicant) {
                     txnDate: data.txnDate,
                     txnId: data.txnId,
                     email: applicant.email,
-                    phone: applicant.phone
-
+                    phone: applicant.phone,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails._doc.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails._doc.banner}`,
+                    title:formDetails.title,
+                    venue:formDetails._doc.venue,
+                    eventDate:formDetails._doc.eventDate
                 }
             )
 
@@ -32,7 +35,7 @@ function content(status, data, applicant) {
         return {
             from: process.env.NODE_ENV === "production" ? process.env.MAIL_USER : "graciela.keeling37@ethereal.email",
             to: process.env.NODE_ENV === "production" ? applicant.email : "graciela.keeling37@ethereal.email",
-            subject: "IEEE Job Fair 2022 | Registration pending",
+            subject: `${formDetails.title} | Registration pending`,
             cc: "backup@ieeejobfair.com",
 
             html: pending(
@@ -43,7 +46,11 @@ function content(status, data, applicant) {
                     paymentStatus: "pending",
                     txnDate: data.created_at,
                     email: applicant.email,
-                    phone: applicant.phone
+                    phone: applicant.phone,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails._doc.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails._doc.banner}`,
+                    title:formDetails.title,
+                    venue:formDetails._doc.venue,
+                    eventDate:formDetails._doc.eventDate
                 }
             )
         }
@@ -53,7 +60,7 @@ function content(status, data, applicant) {
         return {
             from: process.env.NODE_ENV === "production" ? process.env.MAIL_USER : "graciela.keeling37@ethereal.email",
             to: process.env.NODE_ENV === "production" ? applicant.email : "graciela.keeling37@ethereal.email",
-            subject: "IEEE Job Fair 2022 | Registration failed",
+            subject: `${formDetails.title} | Registration failed`,
             cc: "backup@ieeejobfair.com",
 
             html: failed(
@@ -64,7 +71,11 @@ function content(status, data, applicant) {
                     paymentStatus: "failed",
                     txnDate: data.txnDate,
                     email: applicant.email,
-                    phone: applicant.phone
+                    phone: applicant.phone,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails._doc.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails._doc.banner}`,
+                    title:formDetails.title,
+                    venue:formDetails._doc.venue,
+                    eventDate:formDetails._doc.eventDate
                 }
             )
         }

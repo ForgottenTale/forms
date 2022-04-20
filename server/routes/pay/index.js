@@ -18,9 +18,8 @@ router.get("/confirmation", async (req, res) => {
             venue: 1,
             eventDate: 1,
             responses: {
-                $elemMatch: { orderId: req.query.orderId },
-
-            },
+                $elemMatch: { orderId: req.query.orderId }
+            }
         })
         return res.send(response)
     }

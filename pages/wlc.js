@@ -192,19 +192,19 @@ export default function Home() {
       label: "IEEE Member",
       amount: 10030,
       earlyBirdAmount: 8850,
-      expries: "2022-04-16T15:21:28.796Z"
+      expries: "2022-05-20T18:29:58.677Z"
     },
     {
       label: "Non IEEE members Academic",
       amount: 12036,
       earlyBirdAmount: 10856,
-      expries: "2022-04-16T15:21:28.796Z"
+      expries: "2022-05-20T18:29:58.677Z"
     },
     {
       label: "Non IEEE members Industry",
       amount: 15340,
       earlyBirdAmount: 14160,
-      expries: "2022-04-16T15:21:28.796Z"
+      expries: "2022-05-20T18:29:58.677Z"
     }
 
   ]

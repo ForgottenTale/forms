@@ -69,7 +69,9 @@ router.post("/verify", async (req, res) => {
                 txnDate: moment.unix(orderDetails.created_at).toISOString(),
                 txnId: req.body.razorpay_payment_id,
             }
-            notify("success", data, response.responses[0]);
+            // console.log(response)
+            const formDetails = await Form.findOne({ formId: req.query.formId })
+            notify("success", data, response.responses[0], formDetails);
             response.save().then(() => res.sendStatus(200)).catch((err) => {
                 logger.error(err)
                 res.status(400).send({ error: err.message })
@@ -122,7 +124,7 @@ router.post("/failed", async (req, res) => {
                 "responses.$.txnId": "failed",
             }
         })
-        notify("failed", data, response.responses[0]);
+        notify("failed", data, response.responses[0], response);
 
         response.save()
             .then(() => res.sendStatus(200))
@@ -170,7 +172,7 @@ router.post("/", upload.single("resume"), async (req, res) => {
         if (req.query.formId === "jobfair") {
             data.name = data.firstName + " " + data.lastName
         }
-        notify("pending", order, data);
+        notify("pending", order, data, response);
         response.save()
             .then(() => res.send(order))
             .catch((err) => {

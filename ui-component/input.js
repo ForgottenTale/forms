@@ -19,7 +19,11 @@ export default function Input({ label, placeholder, value, setFieldValue, name, 
                 
                 <input
                     value={value[name]}
-                    onChange={(e) => setFieldValue(name, e.target.value)}
+                    onChange={(e) =>{
+                        if(place){
+                            setPlace(false)
+                        }
+                        setFieldValue(name, e.target.value)}}
                     className={styles.input}
 
                 />
