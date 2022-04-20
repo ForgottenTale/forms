@@ -154,7 +154,6 @@ export default function Home() {
             }
         }),
         resume: yup.mixed().required(),
-        package: yup.number().required(),
         courseType: yup.string().required()
     });
 
@@ -362,7 +361,7 @@ export default function Home() {
                                         <button className={styles.button} onClick={handleSubmit}>
                                             SUBMIT
                                         </button>
-                                        {/* {JSON.stringify(values, null, 2)} */}
+                                        {/* {JSON.stringify(errors, null, 2)} */}
 
                                     </>
                                 )}

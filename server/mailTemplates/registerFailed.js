@@ -565,7 +565,7 @@ module.exports = function (req) {
                               <div class="v-line-height" style="line-height: 140%; text-align: center; word-wrap: break-word;">
                                 <p dir="ltr" style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 16px; line-height: 22.4px;"><span style="line-height: 22.4px; font-size: 16px;"><span style="line-height: 22.4px; font-size: 16px;">Dear <span style="color: #001041; font-size: 16px; line-height: 22.4px;"><strong>${req.name}</strong></span></span>
                                   </span><span style="line-height: 22.4px; font-size: 16px;"><strong><span style="line-height: 22.4px; color: #001041; font-size: 16px;"><br /></span></strong><br />Unfortunately, we were unable to process your payment. Your registration
-                                  for <span style="color: #f39c12; font-size: 16px; line-height: 22.4px;"><strong>${req.title}</strong></span> was not successful.</span>
+                                  for <span style="color: #f39c12; font-size: 16px; line-height: 22.4px;"><strong>${req.banner}</strong></span> was not successful.</span>
                                   </span>
                                 </p>
                                 <p style="font-size: 14px; line-height: 140%;">&nbsp;</p>
