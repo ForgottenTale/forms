@@ -62,17 +62,30 @@ export default function Home() {
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
 
+  // const user = {
+  //   email: "abhijithkannan452@gmail.com",
+  //   name: "Abhijith Kannan",
+  //   phone: "7025263554",
+  //   gender: "male",
+  //   membershipType: "IEEE member",
+  //   membershipId: 12345,
+  //   institute: "College of Engineering Kidangoor",
+  //   role: "Student",
+  //   location: "Kottayam",
+  //   food: "Veg",
+  //   amount: null
+  // }
   const user = {
-    email: "abhijithkannan452@gmail.com",
-    name: "Abhijith Kannan",
-    phone: "7025263554",
-    gender: "male",
-    membershipType: "IEEE member",
-    membershipId: 12345,
-    institute: "College of Engineering Kidangoor",
-    role: "Student",
-    location: "Kottayam",
-    food: "Veg",
+    email: "",
+    name: "",
+    phone: undefined,
+    gender: "",
+    membershipType: "",
+    membershipId: null,
+    institute: "",
+    role: "",
+    location: "",
+    food: "",
     amount: null
   }
 

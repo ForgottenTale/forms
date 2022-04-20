@@ -25,5 +25,5 @@ const applicantSchema = new Schema({
 
 }, { timestamps: true })
 
-const Applicant = mongoose.model('Test', applicantSchema)
+const Applicant = mongoose.model('Applicant', applicantSchema)
 module.exports = Applicant;

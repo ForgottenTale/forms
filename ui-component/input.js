@@ -8,12 +8,12 @@ export default function Input({ label, placeholder, value, setFieldValue, name, 
     const [place, setPlace] = useState(value[name] !== "" ? false : true);
 
     useEffect(() => {
-        if (value[name] === "") {
+        if (value[name] === ""||value[name]===null||value[name]===undefined) {
             setPlace(true)
         }
     }, [value[name]])
     return (
-        <div className={styles.inputContainer2}  onClick={() => setPlace(false)}>
+        <div className={styles.inputContainer2}  onClick={() => setPlace(false)} onFocus={() => setPlace(false)}>
             <div className={styles.inputContainer}  >
                 {/* <p className="label"> {label}</p> */}
                 

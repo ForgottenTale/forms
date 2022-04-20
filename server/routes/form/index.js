@@ -5,6 +5,7 @@ const router = express.Router();
 const sendMail = require('./sendMail');
 const pendingTemplate = require('../../mailTemplates/registerPending');
 const Form = require('../../models/forms');
+const generateRandomString = require('../../utils/generateRandomString');
 
 
 router.get("/responses", async (req, res) => {
@@ -82,5 +83,27 @@ router.post("/mail/reminder", async (req, res) => {
 
 })
 
+
+router.get("/jobfairUpdate",async(req,res)=>{
+    try{
+       const response = await Applicant.find({},{_id:false,__v:false})
+       const updated =[]
+       response.map((e)=>{
+
+           updated.push({
+               name:e.firstName +" "+ e.lastName,
+               responseId:generateRandomString(10),
+               membershipType:e.ieeeMember?"IEEE Member":"Non IEEE Member",
+               ...e._doc
+           })
+       })
+       await Form.updateOne({formId:"jobfair"},{responses:updated})
+       res.send(updated)
+    }
+    catch(err){
+        logger.error(err);
+        res.status(400).send({ error: err.message })
+    }
+})
 
 module.exports = router

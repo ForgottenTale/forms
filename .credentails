@@ -62,3 +62,7 @@ updatedAt
 __v
 :
 0
+
+`${n.firstName + " " + n.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+                                    || n.name.toLowerCase().includes(searchTerm.toLowerCase())
+                                    
