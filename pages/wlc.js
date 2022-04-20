@@ -81,7 +81,7 @@ export default function Home() {
     phone: undefined,
     gender: "",
     membershipType: "",
-    membershipId: null,
+    membershipId: undefined,
     institute: "",
     role: "",
     location: "",
@@ -251,7 +251,6 @@ export default function Home() {
                 {({ values, setFieldValue, handleSubmit, errors }) => (
                   <>
                     <Input
-                      id="whitePlaceholder"
                       placeholder={"Your NAME"}
                       value={values}
                       name="name"
@@ -259,7 +258,6 @@ export default function Home() {
                       errors={errors}></Input>
 
                     <Input
-                      id="whitePlaceholder"
                       placeholder={"Email"}
                       value={values}
                       name="email"
@@ -267,8 +265,6 @@ export default function Home() {
                       errors={errors}></Input>
 
                     <Input
-
-                      id="whitePlaceholder"
                       placeholder={"Phone"}
                       value={values}
                       name="phone"
@@ -276,6 +272,7 @@ export default function Home() {
                       errors={errors}></Input>
                     <Select
                       placeholder={"Gender"}
+                      instanceId
                       styles={customStyles}
                       options={options}
                       onChange={(e) => setFieldValue("gender", e.value)}
@@ -292,7 +289,7 @@ export default function Home() {
 
                     <Input
 
-                      id="whitePlaceholder"
+                     
                       placeholder={"ieee membership id"}
                       value={values}
                       name="membershipId"
@@ -300,7 +297,7 @@ export default function Home() {
                       errors={errors}></Input>
                     <Input
 
-                      id="whitePlaceholder"
+                     
                       placeholder={"College / Institution"}
                       value={values}
                       name="institute"
@@ -309,7 +306,7 @@ export default function Home() {
 
                     <Input
 
-                      id="whitePlaceholder"
+                     
                       placeholder={"Current Role/Position"}
                       value={values}
                       name="role"
@@ -317,7 +314,7 @@ export default function Home() {
                       errors={errors}></Input>
                     <Input
 
-                      id="whitePlaceholder"
+                     
                       placeholder={"Current Location"}
                       value={values}
                       name="location"
@@ -325,7 +322,7 @@ export default function Home() {
                       errors={errors}></Input>
                     {/* <Input
 
-                      id="whitePlaceholder"
+                     
                       placeholder={"Food Preference"}
                       value={values}
                       name="food"

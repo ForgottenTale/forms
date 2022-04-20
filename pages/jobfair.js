@@ -34,23 +34,23 @@ export default function Home() {
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
 
-    const user = {
-        email: "abhijithkannan452@gmail.com",
-        firstName: "Abhijith",
-        lastName: "Kannan",
-        phone: 1236851234,
-        institute: "CEK",
-        branch: "EEE",
-        CGPA: 1.25,
-        backlog: 0,
-        membershipId: undefined,
-        yearofPassout: 2021,
-        ieeeMember: false,
-        resume: undefined,
-        package: 250,
-        courseType: undefined,
-        amount: null
-    }
+    // const user = {
+    //     email: "abhijithkannan452@gmail.com",
+    //     firstName: "Abhijith",
+    //     lastName: "Kannan",
+    //     phone: 1236851234,
+    //     institute: "CEK",
+    //     branch: "EEE",
+    //     CGPA: 1.25,
+    //     backlog: 0,
+    //     membershipId: undefined,
+    //     yearofPassout: 2021,
+    //     ieeeMember: false,
+    //     resume: undefined,
+    //     package: 250,
+    //     courseType: undefined,
+    //     amount: null
+    // }
     const pricing = [
 
         {
@@ -66,22 +66,23 @@ export default function Home() {
             expries: "2022-04-16T15:21:28.796Z"
         }
     ]
-    // const user = {
-    //     email: "",
-    //     firstName: "",
-    //     lastName: "",
-    //     phone: undefined,
-    //     institute: "",
-    //     branch: "",
-    //     CGPA: "",
-    //     backlog: 0,
-    //     membershipId: undefined,
-    //     yearofPassout: undefined,
-    //     ieeeMember: undefined,
-    //     resume: undefined,
-    //     package: undefined,
-    //     courseType: undefined
-    // }
+    const user = {
+        email: "",
+        firstName: "",
+        lastName: "",
+        phone: undefined,
+        institute: "",
+        branch: "",
+        CGPA: "",
+        backlog: 0,
+        membershipId: undefined,
+        yearofPassout: undefined,
+        ieeeMember: undefined,
+        resume: undefined,
+        package: undefined,
+        courseType: undefined,
+        amount: null
+    }
 
     async function displayRazorpay(data, values) {
         const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')

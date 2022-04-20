@@ -4,10 +4,11 @@ import styles from '../styles/Input.module.css';
 import { useEffect, useState } from 'react';
 
 export default function Input({ label, placeholder, value, setFieldValue, name, errors }) {
-
+ 
     const [place, setPlace] = useState(value[name] !== "" ? false : true);
 
     useEffect(() => {
+        console.log(`${name} : ${value[name]}`)
         if (value[name] === ""||value[name]===null||value[name]===undefined) {
             setPlace(true)
         }
