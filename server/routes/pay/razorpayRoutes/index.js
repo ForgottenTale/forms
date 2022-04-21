@@ -28,21 +28,25 @@ const fileStorage = multer.diskStorage({
 const upload = multer({ storage: fileStorage })
 
 router.get("/orderDetails", async (req, res) => {
+    console.log(req.query.orderId)
     try {
         const orderDetails = await instance.orders.fetch(req.query.orderId)
-        const applicant = await Applicant.findOne({ orderId: req.query.orderId })
-        logger.info(`> Reinitated payment for ${applicant.firstName + " " + applicant.lastName} orderId : ${req.query.orderId}`)
+        const applicant = await Form.findOne({formId:req.query.formId},{
+         responses:{$elemMatch:{orderId:req.query.orderId}}
+        })
+        // console.log(applicant)
+        logger.info(`> Reinitated payment for ${applicant.responses[0].name} orderId : ${req.query.orderId}`)
         orderDetails.key = process.env.razorPayId
         orderDetails.userDetails = {
-            name: applicant.firstName + " " + applicant.lastName,
-            email: applicant.email,
-            phone: applicant.phone
+            name: applicant.responses[0].name,
+            email: applicant.responses[0].email,
+            phone: applicant.responses[0].phone
         }
         res.send(orderDetails)
     }
     catch (err) {
         logger.error(err)
-        res.status(400).send({ error: err.message })
+        res.status(400).send({ error: JSON.stringify(err.message) })
     }
 
 })
@@ -70,8 +74,9 @@ router.post("/verify", async (req, res) => {
                 txnId: req.body.razorpay_payment_id,
             }
             // console.log(response)
+            const index = response.responses.findIndex(obj=>obj.orderId===req.query.orderId)
             const formDetails = await Form.findOne({ formId: req.query.formId })
-            notify("success", data, response.responses[0], formDetails);
+            notify("success", data, response.responses[index], formDetails);
             response.save().then(() => res.sendStatus(200)).catch((err) => {
                 logger.error(err)
                 res.status(400).send({ error: err.message })
@@ -124,7 +129,8 @@ router.post("/failed", async (req, res) => {
                 "responses.$.txnId": "failed",
             }
         })
-        notify("failed", data, response.responses[0], response);
+        const index = response.responses.findIndex(obj=>obj.orderId===req.body.metadata.order_id )
+        notify("failed", data, response.responses[index], response);
 
         response.save()
             .then(() => res.sendStatus(200))
@@ -142,7 +148,7 @@ router.post("/failed", async (req, res) => {
 
 })
 
-router.post("/", upload.single("resume"), async (req, res) => {
+router.post("/", upload.single("fileUpload"), async (req, res) => {
     try {
         var ammount = JSON.parse(req.body.amount)
 
@@ -158,7 +164,7 @@ router.post("/", upload.single("resume"), async (req, res) => {
             $push: {
                 responses: {
                     ...req.body,
-                    // resume: req.file.path,
+                    ...(req.body.fileUpload!==undefined) && {fileUpload: req.body.fileUpload},
                     responseId: generateRandomString(10),
                     orderId: order.id,
                     amount: order.amount / 100,
@@ -168,11 +174,9 @@ router.post("/", upload.single("resume"), async (req, res) => {
                 }
             }
         })
-        var data = req.body;
-        if (req.query.formId === "jobfair") {
-            data.name = data.firstName + " " + data.lastName
-        }
-        notify("pending", order, data, response);
+
+        logger.info(`> Razor token created for ${req.body.name}`)
+        notify("pending", order, req.body, response);
         response.save()
             .then(() => res.send(order))
             .catch((err) => {

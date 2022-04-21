@@ -20,10 +20,10 @@ function content(status, data, applicant,formDetails) {
                     txnId: data.txnId,
                     email: applicant.email,
                     phone: applicant.phone,
-                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails._doc.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails._doc.banner}`,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails.banner}`,
                     title:formDetails.title,
-                    venue:formDetails._doc.venue,
-                    eventDate:formDetails._doc.eventDate
+                    venue:formDetails.venue,
+                    eventDate:formDetails.eventDate
                 }
             )
 
@@ -47,10 +47,10 @@ function content(status, data, applicant,formDetails) {
                     txnDate: data.created_at,
                     email: applicant.email,
                     phone: applicant.phone,
-                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails._doc.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails._doc.banner}`,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails.banner}`,
                     title:formDetails.title,
-                    venue:formDetails._doc.venue,
-                    eventDate:formDetails._doc.eventDate
+                    venue:formDetails.venue,
+                    eventDate:formDetails.eventDate
                 }
             )
         }
@@ -72,10 +72,10 @@ function content(status, data, applicant,formDetails) {
                     txnDate: data.txnDate,
                     email: applicant.email,
                     phone: applicant.phone,
-                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails._doc.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails._doc.banner}`,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails.banner}`,
                     title:formDetails.title,
-                    venue:formDetails._doc.venue,
-                    eventDate:formDetails._doc.eventDate
+                    venue:formDetails.venue,
+                    eventDate:formDetails.eventDate
                 }
             )
         }

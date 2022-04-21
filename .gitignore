@@ -4,7 +4,7 @@
 /node_modules
 /build
 /.pnp
-
+/public/files
 .pnp.js
 .env
 # testing

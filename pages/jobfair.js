@@ -36,8 +36,7 @@ export default function Home() {
 
     // const user = {
     //     email: "abhijithkannan452@gmail.com",
-    //     firstName: "Abhijith",
-    //     lastName: "Kannan",
+    //     name: "Abhijith",
     //     phone: 1236851234,
     //     institute: "CEK",
     //     branch: "EEE",
@@ -46,11 +45,27 @@ export default function Home() {
     //     membershipId: undefined,
     //     yearofPassout: 2021,
     //     ieeeMember: false,
-    //     resume: undefined,
-    //     package: 250,
+    //     fileUpload: undefined,
     //     courseType: undefined,
     //     amount: null
     // }
+
+    const user = {
+        email: "",
+        name: "",
+        phone: undefined,
+        institute: "",
+        branch: "",
+        CGPA: "",
+        backlog: 0,
+        membershipId: undefined,
+        yearofPassout: undefined,
+        ieeeMember: undefined,
+        resume: undefined,
+        courseType: undefined,
+        amount: null
+    }
+
     const pricing = [
 
         {
@@ -66,23 +81,6 @@ export default function Home() {
             expries: "2022-04-16T15:21:28.796Z"
         }
     ]
-    const user = {
-        email: "",
-        firstName: "",
-        lastName: "",
-        phone: undefined,
-        institute: "",
-        branch: "",
-        CGPA: "",
-        backlog: 0,
-        membershipId: undefined,
-        yearofPassout: undefined,
-        ieeeMember: undefined,
-        resume: undefined,
-        package: undefined,
-        courseType: undefined,
-        amount: null
-    }
 
     async function displayRazorpay(data, values) {
         const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
@@ -135,8 +133,7 @@ export default function Home() {
 
     let schema = yup.object().shape({
         email: yup.string().email().required(),
-        firstName: yup.string().required(),
-        lastName: yup.string().required(),
+        name: yup.string().required(),
         phone: yup.number().required(),
         institute: yup.string().required(),
         branch: yup.string().required(),
@@ -153,7 +150,7 @@ export default function Home() {
                 return yup.number()
             }
         }),
-        resume: yup.mixed().required(),
+        fileUpload: yup.mixed().required(),
         courseType: yup.string().required()
     });
 
@@ -251,18 +248,18 @@ export default function Home() {
                                     <>
 
 
-                                        <Input label="First Name *"
-                                            placeholder={"Enter your first name"}
+                                        <Input label="Name *"
+                                            placeholder={"Enter your name"}
                                             value={values}
-                                            name="firstName"
+                                            name="name"
                                             setFieldValue={setFieldValue}
                                             errors={errors}></Input>
-                                        <Input label="Last Name *"
+                                        {/* <Input label="Last Name *"
                                             placeholder={"Enter your last name"}
                                             value={values}
                                             name="lastName"
                                             setFieldValue={setFieldValue}
-                                            errors={errors}></Input>
+                                            errors={errors}></Input> */}
                                         <Input label="Email *"
                                             placeholder={"Enter your email addrees"}
                                             value={values}
@@ -333,7 +330,7 @@ export default function Home() {
                                             label="Upload Resume *"
                                             accept='application/pdf'
                                             files={values}
-                                            name="resume"
+                                            name="fileUpload"
                                             setFiles={setFieldValue}
                                             errors={errors} />
 

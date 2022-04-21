@@ -1339,7 +1339,7 @@ module.exports = function (req) {
                           <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:7px 15px 0px 3px;font-family:arial,helvetica,sans-serif;" align="left">
 
                             <div class="v-line-height" style="line-height: 140%; text-align: right; word-wrap: break-word;">
-                              <p dir="ltr" style="font-size: 14px; line-height: 140%; text-align: left;"><a rel="noopener" href="mailto:?subject=&body=" target="_blank">${req.name}</a></p>
+                              <p dir="ltr" style="font-size: 14px; line-height: 140%; text-align: left;"><a rel="noopener" href="mailto:?subject=&body=" target="_blank">${req.email}</a></p>
                             </div>
 
                           </td>
