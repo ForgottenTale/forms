@@ -19,8 +19,8 @@ export default function UserDetails({ data, setShow }) {
                 <DisabledInput label="Passout Year" value={data.yearofPassout}/>
                 <DisabledInput label="Payment Status" value={data.paymentStatus}/>
                 <DisabledInput label="Backlogs" value={data.backlog}/>
-                <div onClick={()=>window.open(`/${data.resume}`)}>
-                <DisabledInput label="Resume Link" value={data.resume} />
+                <div onClick={()=>window.open(`/${data.fileUpload}`)}>
+                <DisabledInput label="Resume Link" value={data.fileUpload} />
 
                 </div>
             </div>

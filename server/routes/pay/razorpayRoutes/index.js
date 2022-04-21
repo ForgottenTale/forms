@@ -31,8 +31,8 @@ router.get("/orderDetails", async (req, res) => {
     console.log(req.query.orderId)
     try {
         const orderDetails = await instance.orders.fetch(req.query.orderId)
-        const applicant = await Form.findOne({formId:req.query.formId},{
-         responses:{$elemMatch:{orderId:req.query.orderId}}
+        const applicant = await Form.findOne({ formId: req.query.formId }, {
+            responses: { $elemMatch: { orderId: req.query.orderId } }
         })
         // console.log(applicant)
         logger.info(`> Reinitated payment for ${applicant.responses[0].name} orderId : ${req.query.orderId}`)
@@ -74,7 +74,7 @@ router.post("/verify", async (req, res) => {
                 txnId: req.body.razorpay_payment_id,
             }
             // console.log(response)
-            const index = response.responses.findIndex(obj=>obj.orderId===req.query.orderId)
+            const index = response.responses.findIndex(obj => obj.orderId === req.query.orderId)
             const formDetails = await Form.findOne({ formId: req.query.formId })
             notify("success", data, response.responses[index], formDetails);
             response.save().then(() => res.sendStatus(200)).catch((err) => {
@@ -129,7 +129,7 @@ router.post("/failed", async (req, res) => {
                 "responses.$.txnId": "failed",
             }
         })
-        const index = response.responses.findIndex(obj=>obj.orderId===req.body.metadata.order_id )
+        const index = response.responses.findIndex(obj => obj.orderId === req.body.metadata.order_id)
         notify("failed", data, response.responses[index], response);
 
         response.save()
@@ -163,14 +163,15 @@ router.post("/", upload.single("fileUpload"), async (req, res) => {
         const response = await Form.findOneAndUpdate({ formId: req.query.formId }, {
             $push: {
                 responses: {
-                    ...req.body,
-                    ...(req.body.fileUpload!==undefined) && {fileUpload: req.body.fileUpload},
+
                     responseId: generateRandomString(10),
                     orderId: order.id,
                     amount: order.amount / 100,
                     paymentStatus: "pending",
                     txnDate: "pending",
                     txnId: "pending",
+                    ...req.body,
+                    ...(req.file!== undefined&&req.file.path !== undefined) && { fileUpload: req.file.path }
                 }
             }
         })
