@@ -181,7 +181,7 @@ export default function Responses() {
                                     {/* <div className={styles.table_item}>{val.CGPA}</div> */}
                                     {/* <div className={styles.table_item}>{val.yearofPassout}</div> */}
                                     <div className={styles.table_item}>{val.membershipType}</div>
-                                    <div className={styles.table_item}>{val.amount}</div>
+                                    <div className={styles.table_item}>{JSON.parse(val.amount).amount}</div>
                                     <div className={styles.table_item}>{val.paymentStatus}</div>
                                     <div className={styles.table_item}>
                                         <div className={styles.table_icon}>

@@ -18,7 +18,7 @@ var instance = new Razorpay({
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './public/files')
+        cb(null, './files')
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + "--" + file.originalname)

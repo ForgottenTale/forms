@@ -61,7 +61,6 @@ export default function Home() {
         membershipId: undefined,
         yearofPassout: undefined,
         ieeeMember: undefined,
-        resume: undefined,
         courseType: undefined,
         amount: null
     }
@@ -163,8 +162,9 @@ export default function Home() {
         // }
         // else{
         try {
-
-            const formData = buildForm(values)
+            var data = values
+            data.membershipType = values.ieeeMember?"IEEE Member":"Non IEEE Member"
+            const formData = buildForm(data)
             const res = await axios.post("/api/pay/razorpay?formId=jobfair", formData,
                 {
                     headers: {
@@ -248,7 +248,7 @@ export default function Home() {
                                     <>
 
 
-                                        <Input label="Name *"
+                                        <Input label="Full Name *"
                                             placeholder={"Enter your name"}
                                             value={values}
                                             name="name"

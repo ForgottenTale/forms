@@ -63,7 +63,7 @@ export default function Confirmation() {
                                 {data.responses[0].paymentStatus !== undefined ?
                                     <><p>Payment Status</p> <p className={styles[data.responses[0].paymentStatus]}>{data.responses[0].paymentStatus}</p></> : null}
                                 {data.responses[0].amount !== undefined ?
-                                    <><p>Amount</p> <p>{data.responses[0].amount}</p></> : null}
+                                    <><p>Amount</p> <p>{JSON.parse(data.responses[0].amount).amount}</p></> : null}
                                 {data.responses[0].txnDate !== undefined ?
                                     <><p>Date</p> <p>{new Date(data.responses[0].txnDate).toLocaleDateString()} {new Date(data.responses[0].txnDate).toLocaleTimeString()}</p></> : null}
                             </div> : null}

@@ -22,6 +22,9 @@ app.prepare().then(() => {
 
     server.use(bodyParser.json());
     server.use(bodyParser.urlencoded({ extended: true }))
+    server.route('/files/*').get((req, res) => {
+      res.sendFile(process.cwd() + decodeURI(req.url));
+    })
 
     server.get("/api/test", (req, res) => {
         return res.send("Hi")
@@ -40,7 +43,6 @@ app.prepare().then(() => {
         .then(() => server.listen(port, (err) => {
             logger.info(`> Connected to MongoDB`)
             if (err) throw err
-            logger.info(`> Callback url${process.env.Callback}`)
             logger.info(`> Ready on http://localhost:${port}`)
         }))
         .catch((err) => logger.error(err))
