@@ -93,8 +93,9 @@ export default function Home({ pricing: price, members }) {
     food: "",
     amount: null,
     accommodation: "",
-    promoCode: "default"
+    promoCode: new Date() >= new Date(price["earlyBird"].expiryDate) ? "default" : "earlyBird"
   }
+  console.log(new Date(price["earlyBird"].expiryDate))
 
   let schema = yup.object().shape({
     email: yup.string().email().required(),
@@ -168,10 +169,12 @@ export default function Home({ pricing: price, members }) {
         initialRender.current = false;
 
       } else {
-        if (values.membershipId !== undefined && values.membershipId.length > 7) {
+        if (values.membershipId !== undefined && values.membershipId.length > 7 && new Date() >= new Date(price["earlyBird"].expiryDate)) {
           setFieldValue("promoCode", members.some((val) => Number(values.membershipId) === Number(val)) ? "IEEEMember" : "default")
         } else {
-          setFieldValue("promoCode", "default")
+          if(new Date() >= new Date(price["earlyBird"].expiryDate)){
+            setFieldValue("promoCode", "default")
+          }
         }
       }
 
@@ -344,13 +347,13 @@ export default function Home({ pricing: price, members }) {
                       }}
                       errors={getIn(errors, "food") !== undefined ? getIn(errors, "food") : ""}
                       options={pricing[values.promoCode].packages} />
-
-                    <PromoCode
-                      placeholder="Promo codes"
-                      // onChange={(val) => handleDiscounts(val)}
-                      onClick={(val) => handleDiscounts(val, setFieldValue)
-                      }
-                    />
+                    {new Date() >= new Date(price["earlyBird"].expiryDate) ?
+                      <PromoCode
+                        placeholder="Promo codes"
+                        // onChange={(val) => handleDiscounts(val)}
+                        onClick={(val) => handleDiscounts(val, setFieldValue)
+                        }
+                      /> : null}
                     {/* <input  onChange={(val) => handleDiscounts(val.target.value)}/> */}
                     <button type='onSubmit' className={styles2.button} onClick={handleSubmit}>
                       SUBMIT

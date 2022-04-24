@@ -1,7 +1,7 @@
 import styles from './Radio.module.css'
 
 export default function CustomRadio({ label, options, values, setFieldValue, name, errors }) {
-console.log(errors)
+
     return (
         <div className={styles.radio}>
             <p className={styles.label}>{label}</p>
