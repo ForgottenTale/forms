@@ -1,7 +1,7 @@
 import styles from '../../styles/PromoCode.module.css';
 import { useEffect, useState } from 'react';
 
-export default function PromoCode({ placeholder, onClick }) {
+export default function PromoCode({ placeholder, onClick,onChange }) {
     const [value, setValue] = useState("")
     const [place, setPlace] = useState(value !== "" ? false : true);
 
@@ -19,6 +19,7 @@ export default function PromoCode({ placeholder, onClick }) {
                     if (place) {
                         setPlace(false)
                     }
+                    // onChange(e.target.value)
                     setValue(e.target.value)
                 }}
                 className={styles.input}

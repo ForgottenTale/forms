@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Input from '../ui-component/input'
-import { Formik, useFormikContext } from 'formik';
+import { Formik, useFormikContext, getIn } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import Loader from '../ui-component/loader';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Error from '../ui-component/error';
 import styles2 from '../styles/Wlc.module.css'
 import Select from 'react-select';
@@ -18,6 +18,7 @@ import PromoCode from '../ui-component/promocode';
 
 export default function Home({ pricing: price, members }) {
 
+  const initialRender = useRef(true);
   const router = useRouter()
   const customStyles = {
     control: () => ({
@@ -64,7 +65,6 @@ export default function Home({ pricing: price, members }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [pricing, setPricing] = useState(price)
-  const [promoCode, setPromoCode] = useState("default");
   const [errorMsg, setErrorMsg] = useState(false);
 
   // const user = {
@@ -91,7 +91,9 @@ export default function Home({ pricing: price, members }) {
     role: "",
     location: "",
     food: "",
-    amount: null
+    amount: null,
+    accommodation: "",
+    promoCode: "default"
   }
 
   let schema = yup.object().shape({
@@ -105,7 +107,9 @@ export default function Home({ pricing: price, members }) {
     role: yup.string().required(),
     location: yup.string().required(),
     food: yup.string().required(),
-    amount: yup.string().required()
+    accommodation: yup.string().required(),
+    amount: yup.string().required(),
+    promoCode: yup.string()
   });
   async function displayRazorpay(data, values) {
     const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js')
@@ -157,16 +161,24 @@ export default function Home({ pricing: price, members }) {
   }
 
   const TrackMemberShipID = () => {
-    const { values } = useFormikContext();
+
+    const { values, setFieldValue } = useFormikContext();
     useEffect(() => {
-      console.log("yup")
-      if (values.membershipId!==undefined&&values.membershipId.length > 7) {
-        setPromoCode(members.some((val) => Number(values.membershipId) === Number(val))?"IEEEMember":"default")
+      if (initialRender.current) {
+        initialRender.current = false;
+
       } else {
-        setPromoCode("default")
+        if (values.membershipId !== undefined && values.membershipId.length > 7) {
+          setFieldValue("promoCode", members.some((val) => Number(values.membershipId) === Number(val)) ? "IEEEMember" : "default")
+        } else {
+          setFieldValue("promoCode", "default")
+        }
       }
+
     }, [values.membershipId]);
+
     return null;
+
   }
 
   function buildForm(values) {
@@ -180,9 +192,9 @@ export default function Home({ pricing: price, members }) {
     return formData;
   }
 
-  const handleDiscounts = (val) => {
+  const handleDiscounts = (val, setFieldValue) => {
     if (pricing[val] !== undefined) {
-      setPromoCode(val)
+      setFieldValue("promoCode", val);
     }
   }
 
@@ -244,28 +256,28 @@ export default function Home({ pricing: price, members }) {
                 {({ values, setFieldValue, handleSubmit, errors }) => (
                   <>
                     <Input
-                      placeholder={"Your NAME"}
+                      placeholder={"Your NAME *"}
                       value={values}
                       name="name"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
 
                     <Input
-                      placeholder={"Email"}
+                      placeholder={"Email *"}
                       value={values}
                       name="email"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
 
                     <Input
-                      placeholder={"Phone"}
+                      placeholder={"Phone *"}
                       value={values}
                       name="phone"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
 
                     <Select
-                      placeholder={"Gender"}
+                      placeholder={"Gender *"}
                       instanceId
                       styles={customStyles}
                       options={options}
@@ -273,11 +285,11 @@ export default function Home({ pricing: price, members }) {
                     />
 
                     <CustomRadio
-                      label={"Are you an IEEE Member ?"}
+                      label={"Are you an IEEE Member ? *"}
                       name="membershipType"
                       values={values}
                       setFieldValue={setFieldValue}
-                      errors={errors}
+                      errors={getIn(errors, "membershipType") !== undefined ? getIn(errors, "membershipType") : ""}
                       options={["IEEE member", "Non - IEEE Academic", "Non - IEEE Industrial"]} />
 
                     <Input
@@ -288,53 +300,63 @@ export default function Home({ pricing: price, members }) {
                       errors={errors}></Input>
                     <TrackMemberShipID />
                     <Input
-                      placeholder={"College / Institution"}
+                      placeholder={"College / Institution *"}
                       value={values}
                       name="institute"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
 
                     <Input
-                      placeholder={"Current Role / Position"}
+                      placeholder={"Current Role / Position *"}
                       value={values}
                       name="role"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
 
                     <Input
-                      placeholder={"Current Location"}
+                      placeholder={"Current Location *"}
                       value={values}
                       name="location"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
+                    <CustomRadio
+                      label={"Do you require accommodation prior or after the event ? *"}
+                      name="accommodation"
+                      values={values}
+                      setFieldValue={setFieldValue}
+                      errors={getIn(errors, "accommodation") !== undefined ? getIn(errors, "accommodation") : ""}
+                      options={["Yes", "No"]} />
 
                     <CustomRadio
                       label={"Food Preference *"}
                       name="food"
                       values={values}
                       setFieldValue={setFieldValue}
-                      errors={errors}
+                      errors={getIn(errors, "food") !== undefined ? getIn(errors, "accommodation") : ""}
                       options={["Veg", "Non-Veg"]} />
 
                     <CustomRadio2
-                      label={"Pricing"}
+                      label={"Pricing *"}
                       name="amount"
                       value={JSON.parse(values["amount"])}
                       onClickFns={(val) => {
                         setFieldValue("amount", JSON.stringify(val))
                       }}
-                      errors={errors}
-                      options={pricing[promoCode].packages} />
+                      errors={getIn(errors, "food") !== undefined ? getIn(errors, "food") : ""}
+                      options={pricing[values.promoCode].packages} />
 
                     <PromoCode
                       placeholder="Promo codes"
-                      onClick={(val) => handleDiscounts(val)}
+                      // onChange={(val) => handleDiscounts(val)}
+                      onClick={(val) => handleDiscounts(val, setFieldValue)
+                      }
                     />
-                    <button className={styles2.button} onClick={handleSubmit}>
+                    {/* <input  onChange={(val) => handleDiscounts(val.target.value)}/> */}
+                    <button type='onSubmit' className={styles2.button} onClick={handleSubmit}>
                       SUBMIT
                     </button>
-                    {/* {JSON.stringify(values, 2, null)}
-                     */}
+                    {/* {JSON.stringify(values, null, 2)} */}
+
                   </>
                 )}
 
@@ -349,7 +371,7 @@ export default function Home({ pricing: price, members }) {
 
 export async function getServerSideProps(context) {
   try {
-    const price = await axios.get("/api/form/pricing?formId=wlc")
+    const price = await axios.get(process.env.NODE_ENV !== "development" ? "https://forms.ieee-mint.org/api/form/pricing?formId=wlc" : "http://localhost:3000/api/form/pricing?formId=wlc")
 
     return {
       props: price.data

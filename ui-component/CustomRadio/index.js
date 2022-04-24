@@ -1,7 +1,7 @@
 import styles from './Radio.module.css'
 
 export default function CustomRadio({ label, options, values, setFieldValue, name, errors }) {
-
+console.log(errors)
     return (
         <div className={styles.radio}>
             <p className={styles.label}>{label}</p>
@@ -10,6 +10,7 @@ export default function CustomRadio({ label, options, values, setFieldValue, nam
                 <label className={styles.option_label} onClick={() =>setFieldValue(name,val)}>{val}</label>
             </div>)
             }
+            <p className={styles.errorMsg}>{errors}</p>
         </div>
     )
 }
