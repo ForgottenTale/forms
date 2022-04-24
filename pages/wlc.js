@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Input from '../ui-component/input'
-import { Formik } from 'formik';
+import { Formik, useFormikContext } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import Loader from '../ui-component/loader';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Error from '../ui-component/error';
 import styles2 from '../styles/Wlc.module.css'
 import Select from 'react-select';
@@ -13,8 +13,11 @@ import CustomRadio from '../ui-component/CustomRadio';
 import CustomRadio2 from '../ui-component/CustomRadio2';
 import loadScript from '../utils/razorpayScript';
 import { useRouter } from 'next/router'
+import PromoCode from '../ui-component/promocode';
+// import pricing from '../utils/pricing';
 
-export default function Home() {
+export default function Home({ pricing: price, members }) {
+
   const router = useRouter()
   const customStyles = {
     control: () => ({
@@ -43,23 +46,25 @@ export default function Home() {
         padding: 0
       }
     },
-    valueContainer:(defaultStyles)=>({
+    valueContainer: (defaultStyles) => ({
       ...defaultStyles,
       margin: 0,
       padding: 0
     }),
-    indicatorSeparator:(defaultStyles)=>({
+    indicatorSeparator: (defaultStyles) => ({
       ...defaultStyles,
-      backgroundColor:"white"
+      backgroundColor: "white"
     }),
-    indicatorContainer:(defaultStyles)=>({
+    indicatorContainer: (defaultStyles) => ({
       ...defaultStyles,
-      backgroundColor:"white",
-      color:"white"
+      backgroundColor: "white",
+      color: "white"
     })
   }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [pricing, setPricing] = useState(price)
+  const [promoCode, setPromoCode] = useState("default");
   const [errorMsg, setErrorMsg] = useState(false);
 
   // const user = {
@@ -150,6 +155,20 @@ export default function Home() {
       }
     });
   }
+
+  const TrackMemberShipID = () => {
+    const { values } = useFormikContext();
+    useEffect(() => {
+      console.log("yup")
+      if (values.membershipId.length > 7) {
+        setPromoCode(members.some((val) => Number(values.membershipId) === Number(val))?"IEEEMember":"default")
+      } else {
+        setPromoCode("default")
+      }
+    }, [values.membershipId]);
+    return null;
+  }
+
   function buildForm(values) {
 
     var formData = new FormData()
@@ -161,12 +180,15 @@ export default function Home() {
     return formData;
   }
 
+  const handleDiscounts = (val) => {
+    if (pricing[val] !== undefined) {
+      setPromoCode(val)
+    }
+  }
+
   const handleUpload = async (values) => {
     setLoading(true);
     try {
-      const form = values;
-      // form.amount = JSON.stringify(form.amount)
-      console.log(form)
       const formData = buildForm(values)
       const res = await axios.post(`/api/pay/razorpay?formId=wlc`, formData,
         {
@@ -185,30 +207,6 @@ export default function Home() {
     }
 
   }
-
-  const pricing = [
-
-    {
-      label: "IEEE Member",
-      amount: 10030,
-      earlyBirdAmount: 8850,
-      expries: "2022-05-20T18:29:58.677Z"
-    },
-    {
-      label: "Non IEEE members Academic",
-      amount: 12036,
-      earlyBirdAmount: 10856,
-      expries: "2022-05-20T18:29:58.677Z"
-    },
-    {
-      label: "Non IEEE members Industry",
-      amount: 15340,
-      earlyBirdAmount: 14160,
-      expries: "2022-05-20T18:29:58.677Z"
-    }
-
-  ]
-
 
   const options = [{ value: "Male", label: "Male" }, { value: "Female", label: "Female" }];
 
@@ -229,14 +227,9 @@ export default function Home() {
 
         </div>
         :
-
-
         <main className={styles2.main}>
           <div className={styles2.eventform}>
             {error ? <Error setError={setError} msg={errorMsg} /> : null}
-
-
-
             <div className={styles2.eventform_con}>
               <div className={styles2.eventdetails}>
                 <p className={styles2.eventdetails_dnt}>REGISTRATION FORM</p>
@@ -270,13 +263,13 @@ export default function Home() {
                       name="phone"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
+
                     <Select
                       placeholder={"Gender"}
                       instanceId
                       styles={customStyles}
                       options={options}
                       onChange={(e) => setFieldValue("gender", e.value)}
-
                     />
 
                     <CustomRadio
@@ -288,16 +281,13 @@ export default function Home() {
                       options={["IEEE member", "Non - IEEE Academic", "Non - IEEE Industrial"]} />
 
                     <Input
-
-                     
                       placeholder={"ieee membership id"}
                       value={values}
                       name="membershipId"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
+                    <TrackMemberShipID />
                     <Input
-
-                     
                       placeholder={"College / Institution"}
                       value={values}
                       name="institute"
@@ -305,29 +295,19 @@ export default function Home() {
                       errors={errors}></Input>
 
                     <Input
-
-                     
-                      placeholder={"Current Role/Position"}
+                      placeholder={"Current Role / Position"}
                       value={values}
                       name="role"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
-                    <Input
 
-                     
+                    <Input
                       placeholder={"Current Location"}
                       value={values}
                       name="location"
                       setFieldValue={setFieldValue}
                       errors={errors}></Input>
-                    {/* <Input
 
-                     
-                      placeholder={"Food Preference"}
-                      value={values}
-                      name="food"
-                      setFieldValue={setFieldValue}
-                      errors={errors}></Input> */}
                     <CustomRadio
                       label={"Food Preference *"}
                       name="food"
@@ -344,26 +324,43 @@ export default function Home() {
                         setFieldValue("amount", JSON.stringify(val))
                       }}
                       errors={errors}
-                      options={pricing} />
+                      options={pricing[promoCode].packages} />
+
+                    <PromoCode
+                      placeholder="Promo codes"
+                      onClick={(val) => handleDiscounts(val)}
+                    />
                     <button className={styles2.button} onClick={handleSubmit}>
                       SUBMIT
                     </button>
                     {/* {JSON.stringify(values, 2, null)}
                      */}
-
                   </>
                 )}
 
               </Formik>
-
-
             </div>
-
-
-
           </div>
         </main>}
 
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  try {
+    const price = await axios.get("http://localhost:3000/api/form/pricing?formId=wlc")
+
+    return {
+      props: price.data
+    }
+
+  } catch (err) {
+    console.log(err)
+    return {
+      props: {
+        pricing: {}
+      }
+    }
+  }
 }

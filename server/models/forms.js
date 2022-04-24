@@ -9,6 +9,8 @@ const applicantSchema = new Schema({
     description: { type: String },
     venue: { type: String },
     eventDate: { type: String },
+    pricing: { type: Object },
+    members: { type: Array },
     responses: [
         Object
     ],

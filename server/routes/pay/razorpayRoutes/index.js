@@ -92,26 +92,6 @@ router.post("/verify", async (req, res) => {
     }
 })
 
-router.post("/test", async (req, res) => {
-    try {
-        const response = await Form.findOneAndUpdate({ formId: req.query.formId }, {
-            $push: {
-                responses: {
-                    ...req.body,
-                    paymentStatus: "pending",
-                    txnDate: "pending",
-                    txnId: "pending",
-                }
-            }
-        })
-        res.send(response)
-    }
-    catch (err) {
-        console.log(err)
-        res.sendStatus(400)
-    }
-
-})
 
 router.post("/failed", async (req, res) => {
     try {
@@ -153,11 +133,29 @@ router.post("/", upload.single("fileUpload"), async (req, res) => {
         var ammount = JSON.parse(req.body.amount)
 
         var options = {
-            amount: new Date() > new Date(ammount.expries) ? ammount.amount * 100 : ammount.earlyBirdAmount * 100,
+            amount: ammount.amount * 100,
             currency: "INR",
             receipt: generateRandomString()
         };
-        var order = await instance.orders.create(options);
+        var order;
+        if (req.query.formId === "wlc") {
+            order = await instance.orders.create({
+                amount: ammount.amount * 100,
+                currency: "INR",
+                transfers: [
+                    {
+                        account: process.env.transferAcc,
+                        amount: ammount.amount * 100,
+                        currency: "INR",
+                        on_hold: 0
+                    }
+                ]
+            })
+        }
+        else {
+            order = await instance.orders.create(options);
+        }
+
         order.key = process.env.razorPayId
 
         const response = await Form.findOneAndUpdate({ formId: req.query.formId }, {
@@ -171,7 +169,7 @@ router.post("/", upload.single("fileUpload"), async (req, res) => {
                     txnDate: "pending",
                     txnId: "pending",
                     ...req.body,
-                    ...(req.file!== undefined&&req.file.path !== undefined) && { fileUpload: req.file.path }
+                    ...(req.file !== undefined && req.file.path !== undefined) && { fileUpload: req.file.path }
                 }
             }
         })
