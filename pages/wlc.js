@@ -160,7 +160,7 @@ export default function Home({ pricing: price, members }) {
     const { values } = useFormikContext();
     useEffect(() => {
       console.log("yup")
-      if (values.membershipId.length > 7) {
+      if (values.membershipId!==undefined&&values.membershipId.length > 7) {
         setPromoCode(members.some((val) => Number(values.membershipId) === Number(val))?"IEEEMember":"default")
       } else {
         setPromoCode("default")
@@ -349,7 +349,7 @@ export default function Home({ pricing: price, members }) {
 
 export async function getServerSideProps(context) {
   try {
-    const price = await axios.get("http://localhost:3000/api/form/pricing?formId=wlc")
+    const price = await axios.get("/api/form/pricing?formId=wlc")
 
     return {
       props: price.data
