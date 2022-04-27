@@ -14,7 +14,11 @@ export default function Input({ placeholder, value, setFieldValue, name, errors 
     }, [value[name]])
 
     return (
-        <div className={styles.inputContainer2} onClick={() => setPlace(false)} onFocus={() => setPlace(false)}>
+        <div className={styles.inputContainer2} onClick={() => setPlace(false)} onFocus={() => setPlace(false)} onBlur={() => {
+            if(value[name]===""||value[name]===undefined||value[name]===null){
+                setPlace(true)
+            }
+            }}>
             <div className={styles.inputContainer}  >
                 <input
                     value={value[name]}

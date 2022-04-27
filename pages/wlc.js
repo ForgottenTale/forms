@@ -36,7 +36,8 @@ export default function Home({ pricing: price, members }) {
       color: "white",
       fontSize: "14px",
       margin: 0,
-      padding: 0
+      padding: 0,
+      textTransform: "uppercase"
     }),
     placeholder: (defaultStyles) => {
       return {
@@ -44,9 +45,14 @@ export default function Home({ pricing: price, members }) {
         color: '#ffffff',
         fontSize: "14px",
         margin: 0,
-        padding: 0
+        padding: 0,
+        textTransform: "uppercase"
       }
     },
+    menu: (defaultStyles) => ({
+      ...defaultStyles,
+      textTransform: "uppercase"
+    }),
     valueContainer: (defaultStyles) => ({
       ...defaultStyles,
       margin: 0,
@@ -259,7 +265,7 @@ export default function Home({ pricing: price, members }) {
                 {({ values, setFieldValue, handleSubmit, errors }) => (
                   <>
                     <Input
-                      placeholder={"Your NAME *"}
+                      placeholder={"full NAME *"}
                       value={values}
                       name="name"
                       setFieldValue={setFieldValue}
