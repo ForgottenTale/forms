@@ -1,6 +1,7 @@
 const success = require('../../../mailTemplates/registerSuccess');
 const failed = require('../../../mailTemplates/registerFailed');
 const pending = require('../../../mailTemplates/registerPending');
+const moment = require('moment')
 
 function content(status, data, applicant,formDetails) {
 
@@ -44,7 +45,7 @@ function content(status, data, applicant,formDetails) {
                     orderId: data.id,
                     amount: data.amount,
                     paymentStatus: "pending",
-                    txnDate: data.created_at,
+                    txnDate: moment.unix(data.created_at).toISOString(),
                     email: applicant.email,
                     phone: applicant.phone,
                     banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails.banner}`,
