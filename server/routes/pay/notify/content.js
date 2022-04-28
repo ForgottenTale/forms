@@ -51,7 +51,8 @@ function content(status, data, applicant,formDetails) {
                     banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails.banner}`,
                     title:formDetails.title,
                     venue:formDetails.venue,
-                    eventDate:formDetails.eventDate
+                    eventDate:formDetails.eventDate,
+                    formId:formDetails.formId
                 }
             )
         }
