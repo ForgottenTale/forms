@@ -21,7 +21,7 @@ function content(status, data, applicant,formDetails) {
                     txnId: data.txnId,
                     email: applicant.email,
                     phone: applicant.phone,
-                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails.banner}`,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://forms.ieee-mint.org/form%20banners/${formDetails.banner}`,
                     title:formDetails.title,
                     venue:formDetails.venue,
                     eventDate:formDetails.eventDate
@@ -48,7 +48,7 @@ function content(status, data, applicant,formDetails) {
                     txnDate: moment.unix(data.created_at).toISOString(),
                     email: applicant.email,
                     phone: applicant.phone,
-                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails.banner}`,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://forms.ieee-mint.org/form%20banners/${formDetails.banner}`,
                     title:formDetails.title,
                     venue:formDetails.venue,
                     eventDate:formDetails.eventDate,
@@ -74,7 +74,7 @@ function content(status, data, applicant,formDetails) {
                     txnDate: data.txnDate,
                     email: applicant.email,
                     phone: applicant.phone,
-                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://nextforms.ieee-mint.org/form%20banners/${formDetails.banner}`,
+                    banner:process.env.NODE_ENV==="development"?`http://localhost:3000/form%20banners/${formDetails.banner}`:`https://forms.ieee-mint.org/form%20banners/${formDetails.banner}`,
                     title:formDetails.title,
                     venue:formDetails.venue,
                     eventDate:formDetails.eventDate
