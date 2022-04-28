@@ -46,7 +46,7 @@ router.get("/orderDetails", async (req, res) => {
     }
     catch (err) {
         logger.error(err)
-        res.status(400).send({ error: JSON.stringify(err.message) })
+        res.status(400).send(err)
     }
 
 })
