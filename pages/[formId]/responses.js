@@ -27,7 +27,7 @@ export default function Responses() {
     const [deleteId, setDeleteId] = useState(null);
     const [searchTerm, setSearchTerm] = useState("")
     const [applicant, setApplicant] = useState({});
-    const header = [<RadioButton />, "OrderId", "Name", "Email", "Phone", "Institute", "Membership Type", "Amount", "Payment Status", "Action"];
+    const header = ["OrderId", "Name", "Email", "Phone", "Institute", "Membership Type", "Amount", "Payment Status", "Action"];
     const router = useRouter();
     const formId = router.query.formId
     const queryClient = useQueryClient();
@@ -145,6 +145,11 @@ export default function Responses() {
 
                         <div className={styles.table}>
                             <div className={styles.table_row}>
+                                <div className={styles.table_header}>
+                                    {data !== undefined ? <RadioButton
+                                        onClick={() => !(selectedOrders.length === data.data.responses.length) ? setSelectedOrders(data.data.responses.map(v => v.orderId)) : setSelectedOrders([])}
+                                        checked={selectedOrders.length === data.data.responses.length ? true : false} /> : null}
+                                </div>
                                 {header.map((val, key) => <div key={key} className={styles.table_header}>
                                     {val}
                                 </div>)}
