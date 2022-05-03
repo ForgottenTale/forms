@@ -33,7 +33,6 @@ export default function Responses() {
     const queryClient = useQueryClient();
 
     const getData = async () => {
-        console.log(formId)
 
         try {
             const res = await axios.get(`/api/form/responses?formId=${formId}`)
@@ -49,20 +48,23 @@ export default function Responses() {
 
     const createCsv = () => {
         // const headers = ["OrderId", "Name", "Email", "Phone", "Institute", "Backlog", "Branch", "CGPA", "Year of graduation", "IEEE Member", "Membership Id", "Amount", "Payment Status", "Resume"];
-        // const rows = [headers];
+        const rows = [];
 
-        // data.forEach((val) => {
-        //     rows.push([
-        //         val.orderId, val.firstName + " " + val.lastName, val.email, val.phone, String(val.institute), val.backlog, val.branch, val.CGPA, val.yearofPassout, val.ieeeMember ? "Yes" : "No", val.membershipId, val.amount, val.paymentStatus, `https://forms.ieee-mint.org/${val.resume}`
-        //     ])
-        // })
+        data.data.responses.forEach((val) => {
+            var arr =[]
+            var keys = Object.keys(val)
+            keys.forEach((v)=>{
+                arr.push(val[v].replace(",",""))
+            })
+            rows.push(arr)
+        })
 
-        // let csvContent = "data:text/csv;charset=utf-8,"
-        //     + rows.map(e => e.join(",")).join("\n");
+        let csvContent = "data:text/csv;charset=utf-8,"
+            + rows.map(e => e.join(",")).join("\n");
 
 
-        // var encodedUri = encodeURI(csvContent);
-        // window.open(encodedUri);
+        var encodedUri = encodeURI(csvContent);
+        window.open(encodedUri);
         console.log("Excels")
 
     }
@@ -103,7 +105,6 @@ export default function Responses() {
 
     }
 
-
     return (
 
         <div className={styles.responses}>
@@ -116,7 +117,7 @@ export default function Responses() {
                     <div>
                         <h3>Responses</h3>
                         <p>Total responses : {data !== undefined ? data.data.responses.length : null}</p>
-                        {/* {JSON.stringify(data, null, 2)} */}
+
                         {data !== undefined ? <>
                             <p>Success : {data.data.responses.filter((e) => e.paymentStatus === "success").length}
                                 &nbsp; Pending : {data.data.responses.filter((e) => e.paymentStatus === "Pending").length}
@@ -124,7 +125,6 @@ export default function Responses() {
                         </>
                             : null}
 
-                        {/* {data.data.responses !== undefined ? data.data.responses.filter((e) => e.paymentStatus === "success").length : null} */}
                         <div className={styles.responses_tools}>
                             <Input onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search for users, email address..." />
                             <div className={styles.responses_buttons}>
@@ -178,9 +178,6 @@ export default function Responses() {
                                     <div className={styles.table_item}>{val.email}</div>
                                     <div className={styles.table_item}>{val.phone}</div>
                                     <div className={styles.table_item}>{val.institute}</div>
-                                    {/* <div className={styles.table_item}>{val.branch}</div> */}
-                                    {/* <div className={styles.table_item}>{val.CGPA}</div> */}
-                                    {/* <div className={styles.table_item}>{val.yearofPassout}</div> */}
                                     <div className={styles.table_item}>{val.membershipType}</div>
                                     <div className={styles.table_item}>{JSON.parse(val.amount).amount}</div>
                                     <div className={styles.table_item}>
@@ -207,7 +204,6 @@ export default function Responses() {
                                     </div>
 
                                 </div>) : null}
-
                         </div>
                     </div>
             }

@@ -14,7 +14,7 @@ function content(status, data, applicant,formDetails) {
             html: success(
                 {
                     name: applicant.name,
-                    orderId: data.orderId,
+                    orderId: data.orderId!==undefined?data.orderId:data.id,
                     amount: data.txnAmount,
                     paymentStatus: "success",
                     txnDate: data.txnDate,

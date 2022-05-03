@@ -69,14 +69,14 @@ export default function Home() {
 
         {
             label: "IEEE Member",
-            amount: 250,
-            earlyBirdAmount: 250,
+            amount: 0,
+            earlyBirdAmount: 0,
             expries: "2022-04-16T15:21:28.796Z"
         },
         {
             label: "Non IEEE members",
-            amount: 500,
-            earlyBirdAmount: 500,
+            amount: 0,
+            earlyBirdAmount: 0,
             expries: "2022-04-16T15:21:28.796Z"
         }
     ]
@@ -163,7 +163,7 @@ export default function Home() {
         // else{
         try {
             var data = values
-            data.membershipType = values.ieeeMember?"IEEE Member":"Non IEEE Member"
+            data.membershipType = values.ieeeMember ? "IEEE Member" : "Non IEEE Member"
             const formData = buildForm(data)
             const res = await axios.post("/api/pay/razorpay?formId=jobfair", formData,
                 {
@@ -180,8 +180,14 @@ export default function Home() {
             // }
 
             // post(details);
+            if (res.data.amount === 0) {
+               router.push(`/confirmation/jobfair/${res.data.id}`)
+            }
+            else {
+                displayRazorpay(res.data, values)
+            }
 
-            displayRazorpay(res.data, values)
+
         }
         catch (err) {
             setError(true)
@@ -337,7 +343,7 @@ export default function Home() {
                                         <CustomRadio3
                                             label={"Pricing *"}
                                             name="amount"
-                                            error={getIn(errors,"amount")!==undefined?true:false}
+                                            error={getIn(errors, "amount") !== undefined ? true : false}
                                             value={JSON.parse(values["amount"])}
                                             onClickFns={(val) => {
                                                 setFieldValue("amount", JSON.stringify(val))

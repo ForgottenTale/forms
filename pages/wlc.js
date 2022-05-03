@@ -73,35 +73,37 @@ export default function Home({ pricing: price, members }) {
   const [pricing, setPricing] = useState(price)
   const [errorMsg, setErrorMsg] = useState(false);
 
-  // const user = {
-  //   email: "abhijithkannan452@gmail.com",
-  //   name: "Abhijith Kannan",
-  //   phone: "7025263554",
-  //   gender: "male",
-  //   membershipType: "IEEE member",
-  //   membershipId: 12345,
-  //   institute: "College of Engineering Kidangoor",
-  //   role: "Student",
-  //   location: "Kottayam",
-  //   food: "Veg",
-  //   amount: null
-  // }
   const user = {
-    email: "",
-    name: "",
-    phone: undefined,
-    gender: "",
-    membershipType: "",
-    membershipId: undefined,
-    institute: "",
-    role: "",
-    location: "",
-    food: "",
+    email: "abhijithkannan452@gmail.com",
+    name: "Abhijith Kannan",
+    phone: "7025263554",
+    gender: "male",
+    membershipType: "IEEE member",
+    membershipId: 12345,
+    institute: "College of Engineering Kidangoor",
+    role: "Student",
+    location: "Kottayam",
+    food: "Veg",
     amount: null,
     accommodation: "",
     promoCode: new Date() >= new Date(price["earlyBird"].expiryDate) ? "default" : "earlyBird"
   }
-  console.log(new Date(price["earlyBird"].expiryDate))
+  // const user = {
+  //   email: "",
+  //   name: "",
+  //   phone: undefined,
+  //   gender: "",
+  //   membershipType: "",
+  //   membershipId: undefined,
+  //   institute: "",
+  //   role: "",
+  //   location: "",
+  //   food: "",
+  //   amount: null,
+  //   accommodation: "",
+  //   promoCode: new Date() >= new Date(price["earlyBird"].expiryDate) ? "default" : "earlyBird"
+  // }
+  // console.log(new Date(price["earlyBird"].expiryDate))
 
   let schema = yup.object().shape({
     email: yup.string().email().required(),

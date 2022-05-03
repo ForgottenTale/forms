@@ -130,52 +130,70 @@ router.post("/failed", async (req, res) => {
 
 router.post("/", upload.single("fileUpload"), async (req, res) => {
     try {
-        var ammount = JSON.parse(req.body.amount)
-
+        var ammount = JSON.parse(req.body.amount);
+        var order;
         var options = {
             amount: ammount.amount * 100,
             currency: "INR",
             receipt: generateRandomString()
         };
-        var order;
-        if (req.query.formId === "wlc") {
-            order = await instance.orders.create({
-                amount: ammount.amount * 100,
-                currency: "INR",
-                transfers: [
-                    {
-                        account: process.env.transferAcc,
-                        amount: ammount.amount * 100,
-                        currency: "INR",
-                        on_hold: 0
-                    }
-                ]
-            })
-        }
-        else {
-            order = await instance.orders.create(options);
+        if (ammount.amount !== 0) {
+
+            if (req.query.formId === "wlc") {
+                order = await instance.orders.create({
+                    amount: ammount.amount * 100,
+                    currency: "INR",
+                    transfers: [
+                        {
+                            account: process.env.transferAcc,
+                            amount: ammount.amount * 100,
+                            currency: "INR",
+                            on_hold: 0
+                        }
+                    ]
+                })
+            }
+            else {
+                order = await instance.orders.create(options);
+            }
+
+            order.key = process.env.razorPayId
         }
 
-        order.key = process.env.razorPayId
+        else {
+            order = {
+                id: generateRandomString(10),
+                amount: 0,
+                txnId: generateRandomString(10),
+                txnDate: new Date().toISOString(),
+                txnAmount: 0
+            }
+        }
+
 
         const response = await Form.findOneAndUpdate({ formId: req.query.formId }, {
             $push: {
                 responses: {
-
                     responseId: generateRandomString(10),
                     orderId: order.id,
-                    amount: order.amount / 100,
-                    paymentStatus: "pending",
-                    txnDate: "pending",
-                    txnId: "pending",
+                    amount: ammount.amount === 0 ? ammount.amount : order.amount / 100,
+                    paymentStatus: ammount.amount === 0 ? "success" : "pending",
+                    txnDate: ammount.amount === 0 ? order.txnDate : "pending",
+                    txnId: ammount.amount === 0 ? order.txnId : "pending",
                     ...req.body,
                     ...(req.file !== undefined && req.file.path !== undefined) && { fileUpload: req.file.path }
                 }
             }
         })
+        if (ammount.amount !== 0) {
+            notify("pending", order, req.body, response);
+        }
+        else {
+            notify("success", order, req.body, response);
+        }
 
         logger.info(`> Razor token created for ${req.body.name}`)
-        notify("pending", order, req.body, response);
+
         response.save()
             .then(() => res.send(order))
             .catch((err) => {
