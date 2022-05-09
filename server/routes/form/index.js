@@ -56,25 +56,34 @@ router.delete("/response", async (req, res) => {
 router.post("/mail/reminder", async (req, res) => {
 
     try {
-        const applicants = await Applicant.find({ $or: [{ paymentStatus: "failed" }, { paymentStatus: "Pending" }] })
-        applicants.forEach((applicant) => {
-            sendMail(applicant.email,
-                "IEEE Job Fair 2022 | Registration pending",
-                pendingTemplate(
-                    {
-                        name: applicant.firstName + " " + applicant.lastName,
-                        orderId: applicant.orderId,
-                        amount: applicant.amount * 100,
-                        paymentStatus: "pending",
-                        txnDate: applicant.createdAt,
-                        email: applicant.email,
-                        phone: applicant.phone
-                    }
+        const response = await Form.findOne({ formId: req.query.formId })
+        response.responses.forEach((applicant) => {
+            if (applicant.paymentStatus === "pending") {
+                sendMail(applicant.email,
+                    `${response.title} | Registration pending`,
+                    pendingTemplate(
+                        {
+                            name: applicant.name,
+                            orderId: applicant.orderId,
+                            amount: JSON.parse(applicant.amount).amount * 100,
+                            paymentStatus: "pending",
+                            txnDate: applicant.timeStamp !== undefined ? applicant.timeStamp : new Date(),
+                            email: applicant.email,
+                            phone: applicant.phone,
+                            banner: process.env.NODE_ENV === "development" ? `http://localhost:3000/form%20banners/${response.banner}` : `https://forms.ieee-mint.org/form%20banners/${response.banner}`,
+                            title: response.title,
+                            venue: response.venue,
+                            eventDate: response.eventDate,
+                            formId: response.formId
+                        }
+                    )
                 )
-            )
+            }
+
         })
 
-        res.sendStatus(200)
+
+        res.sendStatus(200);
     }
     catch (err) {
         logger.error(err);

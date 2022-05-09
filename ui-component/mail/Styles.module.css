@@ -18,3 +18,18 @@
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 
 }
+.responses_buttons {
+    display: flex;
+    cursor: pointer;
+}
+.responses_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eff2f5;
+    height: 45px;
+    font-size: 12px;
+    padding: 0 10px;
+    border-radius: 10px;
+    margin-left: 10px;
+}

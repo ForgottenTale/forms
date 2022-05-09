@@ -7,6 +7,7 @@ import Input from '../../ui-component/search';
 import Loader from '../../ui-component/loader';
 import RadioButton from '../../ui-component/RadioButton';
 import { useQuery, useQueryClient } from 'react-query'
+import Notification from '../../ui-component/notification';
 import UserDetails from '../../ui-component/userDetail';
 import SendIcon from '../../icons/send';
 import DownloadIcon from '../../icons/download';
@@ -19,7 +20,11 @@ import ViewIcon from '../../icons/view';
 
 export default function Responses() {
     const [errorMsg, setErrorMsg] = useState(false);
+    const [notificationMsg, setNotificationMsg] = useState(false);
+    const [notification, setNotification] = useState(false);
     const [modal, setModal] = useState(false);
+    const [notify, setNotify] = useState(false);
+    const [mail, setMail] = useState(false);
     const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
     const [showMail, setShowMail] = useState(false);
@@ -49,15 +54,25 @@ export default function Responses() {
     const createCsv = () => {
         // const headers = ["OrderId", "Name", "Email", "Phone", "Institute", "Backlog", "Branch", "CGPA", "Year of graduation", "IEEE Member", "Membership Id", "Amount", "Payment Status", "Resume"];
         const rows = [];
-
+        var a = true;
         data.data.responses.forEach((val) => {
-            var arr =[]
+            var arr = []
             var keys = Object.keys(val)
-            keys.forEach((v)=>{
-                arr.push(val[v].replace(",",""))
+            if (a) {
+
+                // arr.push(keys)
+
+                a = false
+                rows.push(keys)
+            }
+
+
+            keys.forEach((v) => {
+                arr.push(v==="amount" ? '\"' + JSON.parse(val[v]).amount + '\"' : '\"' + val[v] + '\"')
             })
             rows.push(arr)
         })
+
 
         let csvContent = "data:text/csv;charset=utf-8,"
             + rows.map(e => e.join(",")).join("\n");
@@ -65,21 +80,22 @@ export default function Responses() {
 
         var encodedUri = encodeURI(csvContent);
         window.open(encodedUri);
-        console.log("Excels")
+        // console.log("Excels")
 
     }
-
+  
     const sendNotification = async () => {
-        // try {
-        //     await axios.post("/api/form/mail/reminder")
-        //     setError(true)
-        //     setErrorMsg("Payment notification mail send")
-        // }
-        // catch (err) {
-        //     setError(true)
-        //     setErrorMsg(err.response !== undefined ? err.response.data.error : err)
-        // }
-        console.log("Notification")
+        try {
+            await axios.post(`/api/form/mail/reminder?formId=${formId}`)
+            setNotification(true)
+            setNotificationMsg("Payment link mail send successfully")
+            setNotify(false);
+        }
+        catch (err) {
+            setError(true)
+            setErrorMsg(err.response !== undefined ? err.response.data.error : err)
+        }
+        // console.log("Notification")
     }
 
     const handleSelect = (val) => {
@@ -108,10 +124,13 @@ export default function Responses() {
     return (
 
         <div className={styles.responses}>
-            {showMail ? <Mail setShowMail={setShowMail} /> : null}
+            {/* {showMail ? <Mail setShowMail={setShowMail} /> : null} */}
             {show ? <UserDetails data={applicant} setShow={setShow} /> : null}
+            {notification ? <Notification msg={notificationMsg} setNotify={setNotification} /> : null}
             {error ? <Error setError={setError} msg={errorMsg} /> : null}
             {modal ? <Modal setModal={setModal} title="Are you sure to delete this response" handleSubmit={handleDelete} /> : null}
+            {mail ? <Modal setModal={setMail} title="Are you sure to delete this response" handleSubmit={handleDelete} /> : null}
+            {notify ? <Modal setModal={setNotify} title="Are you sure to send the payment link to those who have not completed the payment" handleSubmit={sendNotification} /> : null}
             {
                 isLoading ? <Loader msg="Loading data" /> :
                     <div>
@@ -120,7 +139,7 @@ export default function Responses() {
 
                         {data !== undefined ? <>
                             <p>Success : {data.data.responses.filter((e) => e.paymentStatus === "success").length}
-                                &nbsp; Pending : {data.data.responses.filter((e) => e.paymentStatus === "Pending").length}
+                                &nbsp; Pending : {data.data.responses.filter((e) => e.paymentStatus === "pending").length}
                                 &nbsp; Failed : {data.data.responses.filter((e) => e.paymentStatus === "failed").length}</p>
                         </>
                             : null}
@@ -128,7 +147,7 @@ export default function Responses() {
                         <div className={styles.responses_tools}>
                             <Input onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search for users, email address..." />
                             <div className={styles.responses_buttons}>
-                                <div className={styles.responses_button} onClick={() => sendNotification()}><SendIcon /><p className={styles.responses_p}>Send notification</p></div>
+                                <div className={styles.responses_button} onClick={() => setNotify(true)}><SendIcon /><p className={styles.responses_p}>Send notification</p></div>
                                 <div className={styles.responses_button} onClick={() => setShowMail(true)}><SendIcon /><p className={styles.responses_p}>Send mail</p></div>
                                 <div className={styles.responses_button} onClick={() => createCsv()}><DownloadIcon /><p className={styles.responses_p}>Download CSV</p></div>
                             </div>

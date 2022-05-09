@@ -1,6 +1,6 @@
 
 import styles from './Styles.module.css'
-import Input from '../input';
+import Input from '../CustomInput/input3';
 import SendIcon from '../../icons/send';
 import TextArea from '../textArea';
 import DisabledInput from '../disabledInput';
@@ -24,13 +24,13 @@ export default function Mail({ setShowMail }) {
     const handleSubmit = async () => {
 
         try {
-            if (content.subject !== "" && content.subject !== ""&&!once) {
+            if (content.subject !== "" && content.subject !== "" && !once) {
                 setOnce(true)
                 await axios.post("/api/form/mail?to=success", content)
                 console.log(content)
                 setErrorMsg("Mail send")
                 setError(true)
-                setTimeout(()=>setShowMail(false), 5000)
+                setTimeout(() => setShowMail(false), 5000)
                 // setOnce(false)
                 // setShowMail(false)
 
