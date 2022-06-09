@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const port = process.env.PORT || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
-
+var cors = require('cors')
 const logger = require("./utils/logger");
 const payRoute = require('./routes/pay');
 const formRoute = require('./routes/form');
@@ -18,6 +18,7 @@ const handle = app.getRequestHandler()
 
 app.prepare().then(() => {
     const server = express()
+    server.use(cors())
     connectToPaytm()
 
     server.use(bodyParser.json());
