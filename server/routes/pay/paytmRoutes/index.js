@@ -28,12 +28,12 @@ router.post("/callback", async (req, res) => {
 
         if (response.responseObject.body.resultInfo.resultStatus === "TXN_SUCCESS") {
 
-            return res.redirect(process.env.NODE_ENV === "production" ? `https://ieee-mint.com/confirmation/jobfair/${req.body.ORDERID}` : `http://localhost:3001/confirmation/jobfair/${req.body.ORDERID}`)
+            return res.redirect(process.env.NODE_ENV === "production" ? `https://ieee-mint.org/confirmation/jobfair/${req.body.ORDERID}` : `http://localhost:3001/confirmation/jobfair/${req.body.ORDERID}`)
 
         }
         else {
         
-            return res.redirect(process.env.NODE_ENV === "production" ? `https://ieee-mint.com/confirmation/jobfair/${req.body.ORDERID}` : `http://localhost:3001/confirmation/jobfair/${req.body.ORDERID}`)
+            return res.redirect(process.env.NODE_ENV === "production" ? `https://ieee-mint.org/confirmation/jobfair/${req.body.ORDERID}` : `http://localhost:3001/confirmation/jobfair/${req.body.ORDERID}`)
         }
 
     }
