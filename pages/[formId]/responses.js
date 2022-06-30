@@ -32,7 +32,7 @@ export default function Responses() {
     const [deleteId, setDeleteId] = useState(null);
     const [searchTerm, setSearchTerm] = useState("")
     const [applicant, setApplicant] = useState({});
-    const header = ["OrderId", "Name", "Email", "Phone", "Institute", "Membership Type", "Amount", "Payment Status", "Action"];
+    const header = ["OrderId", "Name", "Email", "Promo Code", "Institute", "Membership Type", "Amount", "Payment Status", "Action"];
     const router = useRouter();
     const formId = router.query.formId
     const queryClient = useQueryClient();
@@ -195,7 +195,7 @@ export default function Responses() {
                                     <div className={styles.table_item}>{val.orderId}</div>
                                     <div className={styles.table_item}>{val.firstName !== undefined ? val.firstName + " " + val.lastName : val.name}</div>
                                     <div className={styles.table_item}>{val.email}</div>
-                                    <div className={styles.table_item}>{val.phone}</div>
+                                    <div className={styles.table_item}>{val.promoCode}</div>
                                     <div className={styles.table_item}>{val.institute}</div>
                                     <div className={styles.table_item}>{val.membershipType}</div>
                                     <div className={styles.table_item}>{JSON.parse(val.amount).amount}</div>
