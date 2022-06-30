@@ -16,7 +16,7 @@ import { useRouter } from 'next/router'
 import PromoCode from '../ui-component/promocode';
 // import pricing from '../utils/pricing';
 
-export default function Home({ pricing: price, members }) {
+export default function Home({ pricing: price, members, specific }) {
 
   const initialRender = useRef(true);
   const router = useRouter()
@@ -177,8 +177,24 @@ export default function Home({ pricing: price, members }) {
         initialRender.current = false;
 
       } else {
-        if (values.membershipId !== undefined && values.membershipId.length > 7 && new Date() >= new Date(price["earlyBird"].expiryDate)) {
-          setFieldValue("promoCode", members.some((val) => Number(values.membershipId) === Number(val)) ? "IEEEMember" : "default")
+        if (values.membershipId !== undefined && values.membershipId.length > 7 && new Date() >= new Date(price["earlyBird"].expiryDate))
+         {
+          if(members.some((val) => Number(values.membershipId) === Number(val))){
+            setFieldValue("promoCode", "IEEEMember")
+          }
+          else{
+            setFieldValue("promoCode", "default")
+          }
+
+          Object.keys(specific).forEach((discount)=>{
+            if(specific[discount].some((val) => Number(values.membershipId) === Number(val))){
+              setFieldValue("promoCode", discount)
+            }
+          })
+         
+          
+        
+
         } else {
           if(new Date() >= new Date(price["earlyBird"].expiryDate)){
             setFieldValue("promoCode", "default")
@@ -221,7 +237,13 @@ export default function Home({ pricing: price, members }) {
 
         }
       )
-      displayRazorpay(res.data, values)
+      if(res.data.id.includes("order")){
+        displayRazorpay(res.data, values)
+      }
+      else{
+        router.push(`/confirmation/wlc/${res.data.id}`)
+      }
+     
     }
     catch (err) {
       setError(true)

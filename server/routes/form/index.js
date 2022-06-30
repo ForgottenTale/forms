@@ -120,7 +120,8 @@ router.get("/pricing", async (req, res) => {
         const response = await Form.findOne({ formId: req.query.formId })
         res.send({
             pricing: response.pricing,
-            members: response.members
+            members: response.members,
+            specific: response.specific
         })
 
     } catch (err) {

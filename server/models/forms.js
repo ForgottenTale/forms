@@ -11,6 +11,7 @@ const applicantSchema = new Schema({
     eventDate: { type: String },
     pricing: { type: Object },
     members: { type: Array },
+    specific: { type: Object },
     responses: [
         Object
     ],
