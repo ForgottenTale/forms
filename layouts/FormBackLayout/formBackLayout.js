@@ -9,7 +9,7 @@ import { useState } from "react"
 function Icon({ label, children }) {
     const [show, setShow] = useState(false)
     return (
-        <div className={style.icons} onMouseEnter={()=>setShow(true)} onMouseLeave={()=>setShow(false)}> 
+        <div className={style.icons} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
             {children}
             {show ? <div className={style.label}>
                 <p>{label}</p>
@@ -23,6 +23,9 @@ export default function FormBackLayout({ children }) {
     return (
         <main className={style.container}>
             <div className={style.menu}>
+                <Icon label="Home">
+                    <img width={25} height="25" src="/logo.png" />
+                </Icon>
                 <Icon label="Responses">
                     <GridIcon className={style.icon} style={{ stroke: "#1479ff" }} />
                 </Icon>

@@ -126,7 +126,9 @@ export default function Responses() {
         try {
             await axios.post(`/api/form/addresponses?formId=wlc`,data)
             setDisabled(false);
-            setAddRes(false)
+            setAddRes(false);
+            setNotification(true)
+            setNotificationMsg("Added the new responses")
             queryClient.invalidateQueries("repoData");
         }
         catch (err) {
@@ -151,7 +153,10 @@ export default function Responses() {
                 {
                     isLoading ? <Loader msg="Loading data" /> :
                         <div>
-                            <h3>Responses</h3>
+                            <h3 className={styles.title}>{data.data.title}</h3>
+                            <div>
+                                <p>Total responses</p>
+                            </div>
                             <p>Total responses : {data !== undefined ? data.data.responses.length : null}</p>
 
                             {data !== undefined ? <>

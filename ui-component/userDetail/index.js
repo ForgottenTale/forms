@@ -26,7 +26,6 @@ export default function UserDetails({ data, setShow }) {
                 </div> : null}
                 {data.gender!== undefined ? <DisabledInput label="Gender" value={data.gender} /> : null}
                 {data.role!== undefined ? <DisabledInput label="Role" value={data.role} /> : null}
-                {data.location!== undefined ? <DisabledInput label="Resume Link" value={data.location} /> : null}
                 {data.accommodation!== undefined ? <DisabledInput label="DO YOU REQUIRE ACCOMMODATION PRIOR OR AFTER THE EVENT ?" value={data.accommodation} /> : null}
                 {data.location!== undefined ? <DisabledInput label="Location" value={data.location} /> : null}
                 {data.amount!== undefined ? <DisabledInput label="Amount Paid" value={JSON.parse(data.amount).amount} /> : null}

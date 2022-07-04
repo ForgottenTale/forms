@@ -4,7 +4,10 @@
     padding: 20px;
     background-color: #fafafa;
 }
-
+.title{
+    font-size: 26px;
+    padding: 10px 0 15px 0;
+}
 .responses_tools {
     display: flex;
     justify-content: space-between;
