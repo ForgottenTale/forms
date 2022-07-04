@@ -2,6 +2,7 @@
     width: 100%;
     height: 100%;
     padding: 20px;
+    background-color: #fafafa;
 }
 
 .responses_tools {
@@ -13,6 +14,33 @@
     display: flex;
     cursor: pointer;
 }
+.filterByPayStatus {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    align-items: center;
+    align-content: center;
+    margin: 20px 0;
+    text-align: center;
+
+}
+.filterByPayStatusLabel {
+    border: 1px rgb(235, 235, 235) solid;
+    padding: 5px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.filterByPayStatusLabel:first-child{
+    border-radius: 8px 0 0 8px;
+}
+.filterByPayStatusLabel:last-child{
+    border-radius: 0 8px 8px 0;
+}
+.response_options{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
 .responses_button {
     display: flex;
     justify-content: center;
@@ -23,6 +51,8 @@
     padding: 0 10px;
     border-radius: 10px;
     margin-left: 10px;
+    outline: none;
+    border: none;
 }
 .responses_p {
     margin-left: 10px;
@@ -31,7 +61,7 @@
 
 .table_row {
     display: grid;
-    grid-template-columns:30px repeat(9, minmax(100px, 200px));
+    grid-template-columns: 30px repeat(9, minmax(100px, 200px));
 }
 .table_item {
     padding: 10px 20px;

@@ -4,6 +4,7 @@ const logger = require('../../utils/logger');
 const router = express.Router();
 const sendMail = require('./sendMail');
 const pendingTemplate = require('../../mailTemplates/registerPending');
+const successTemplate = require('../../mailTemplates/registerSuccess')
 const Form = require('../../models/forms');
 const generateRandomString = require('../../utils/generateRandomString');
 
@@ -21,7 +22,68 @@ router.get("/responses", async (req, res) => {
     }
 
 })
+router.post("/addresponses",async (req, res) => {
+    try{
 
+        req.body.forEach( async(person)=>{
+            var order = {
+                orderId: generateRandomString(10),
+                txnDate: new Date().toISOString(),
+                txnId:  generateRandomString(10),
+            }
+            const response = await Form.findOneAndUpdate({ formId: req.query.formId }, {
+                $push: {
+                    responses: {
+                        ...person,
+                        responseId: generateRandomString(10),
+                        orderId: order.orderId,
+                        amount: JSON.stringify({label:"Manual added", amount:person.amount}),
+                        paymentStatus: "success",
+                        membershipType: "Non IEEE members Industry",
+                        txnDate: order.txnDate,
+                        txnId: order.txnId,
+                        promoCode:"Form Owner added",
+                        
+                    }
+                }
+            })
+            sendMail(
+                person.email,
+                        `${response.title} | Registration Successful`,
+                        successTemplate(
+                            {
+                                name: person.name,
+                                orderId: order.orderId,
+                                amount: 0,
+                                paymentStatus: "Success",
+                                txnDate: new Date(order.txnDate),
+                                txnId:order.txnId,
+                                email: person.email,
+                                phone: person.phone,
+                                banner: process.env.NODE_ENV === "development" ? `http://localhost:3000/form%20banners/${response.banner}` : `https://forms.ieee-mint.org/form%20banners/${response.banner}`,
+                                title: response.title,
+                                venue: response.venue,
+                                eventDate: response.eventDate,
+                                formId: response.formId
+                            }
+                        )
+            )
+        
+            response.save()
+            .then(() => console.log("Saved"))
+            .catch((err) => {
+                logger.error(err)
+                res.status(400).send({ error: err.message })
+            })
+
+        })
+        res.sendStatus(201)
+    }
+    catch (err) {
+        logger.error(err);
+        res.status(400).send({ error: err.message })
+    }
+})
 router.post("/mail", async (req, res) => {
 
     try {
