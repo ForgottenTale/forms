@@ -153,10 +153,8 @@ export default function Responses() {
                 {
                     isLoading ? <Loader msg="Loading data" /> :
                         <div>
-                            <h3 className={styles.title}>{data.data.title}</h3>
-                            <div>
-                                <p>Total responses</p>
-                            </div>
+                            <h3 className={styles.title}>{data !== undefined ? data.data.title:null}</h3>
+
                             <p>Total responses : {data !== undefined ? data.data.responses.length : null}</p>
 
                             {data !== undefined ? <>
