@@ -16,6 +16,16 @@
 .modal h4 {
     margin-bottom: 20px;
 }
+.modal_p{
+    font-size: 12px;
+}
+.modal_p2{
+    font-size: 14px;
+    text-align: left;
+}
+.table{
+    width: 100%;
+}
 .modal_con {
     position: absolute;
     top: 50%;

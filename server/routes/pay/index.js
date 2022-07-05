@@ -1,5 +1,4 @@
 const express = require('express')
-const Applicant = require('../../models/applicant');
 const logger = require('../../utils/logger');
 const router = express.Router();
 const razorPayRoutes = require('./razorpayRoutes');

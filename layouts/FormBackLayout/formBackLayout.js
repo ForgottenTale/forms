@@ -4,10 +4,12 @@ import GridIcon from "../../icons/grid"
 import CreateIcon from "../../icons/create"
 import CameraIcon from "../../icons/camera"
 import SettingsIcon from "../../icons/settings"
+import { useRouter } from 'next/router'
 import { useState } from "react"
 
 function Icon({ label, children }) {
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(false);
+
     return (
         <div className={style.icons} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
             {children}
@@ -19,28 +21,45 @@ function Icon({ label, children }) {
 }
 
 export default function FormBackLayout({ children }) {
-
+    const router = useRouter();
+    const formId = router.query.formId
     return (
-        <main className={style.container}>
+        <>
             <div className={style.menu}>
                 <Icon label="Home">
                     <img width={25} height="25" src="/logo.png" />
                 </Icon>
                 <Icon label="Responses">
-                    <GridIcon className={style.icon} style={{ stroke: "#1479ff" }} />
+                    <GridIcon
+                        onClick={() => router.push(`/${formId}/responses`)}
+                        className={style.icon}
+                        style={router.pathname.includes("responses") ? { stroke: "#1479ff" } : {}} />
                 </Icon>
                 <Icon label="Pricing">
-                    <CreateIcon className={style.icon} />
+                    <CreateIcon 
+                    onClick={() => router.push(`/${formId}/pricing`)} 
+                    className={style.icon} 
+                    style={router.pathname.includes("pricing") ? { stroke: "#1479ff" } : {}}  />
                 </Icon>
                 <Icon label="Validate">
-                    <CameraIcon className={style.icon} />
+                    <CameraIcon 
+                    onClick={() => router.push(`/${formId}/validate`)} 
+                    className={style.icon} 
+                    style={router.pathname.includes("validate") ? { stroke: "#1479ff" } : {}} />
                 </Icon>
-                <Icon label="Settings">
-                    <SettingsIcon className={style.icon} />
+                <Icon onClick={() => router.push("settings")} label="Settings">
+                    <SettingsIcon 
+                    onClick={() => router.push(`/${formId}/settings`)} 
+                    className={style.icon} 
+                    style={router.pathname.includes("settings") ? { stroke: "#1479ff" } : {}} />
                 </Icon>
             </div>
-            {children}
-        </main>
+            <main className={style.container}>
+                <div></div>
+                {children}
+            </main>
+
+        </>
     )
 
 }

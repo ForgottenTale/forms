@@ -6,8 +6,11 @@ const sendMail = require('./sendMail');
 const pendingTemplate = require('../../mailTemplates/registerPending');
 const successTemplate = require('../../mailTemplates/registerSuccess')
 const Form = require('../../models/forms');
+const discountRoutes = require("./discounts")
 const generateRandomString = require('../../utils/generateRandomString');
 
+
+router.use("/discounts",discountRoutes);
 
 router.get("/responses", async (req, res) => {
 
@@ -213,6 +216,7 @@ router.post("/test", async (req, res) => {
     }
 
 })
+
 router.post("/member", async (req, res) => {
     console.log(req.body.data)
     try {

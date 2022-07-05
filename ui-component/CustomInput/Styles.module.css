@@ -19,3 +19,7 @@
     width: 100%;
 
 }
+.errorMsg{
+    color: red;
+    font-size: 12px;
+}

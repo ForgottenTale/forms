@@ -2,6 +2,7 @@
 import styles from './Styles.module.css';
 import * as XLSX from 'xlsx/xlsx.mjs';
 import { useState } from 'react';
+import Loader from '../../ui-component/loader';
 
 export default function AddResponses({ setModal, handleSubmit, loading, disabled }) {
 
@@ -29,8 +30,8 @@ export default function AddResponses({ setModal, handleSubmit, loading, disabled
         <h4>Adding new responses</h4>
         {disabled ?
 
-          <div className={styles.loader}><span className={styles.span}></span>
-          </div> : <>
+         <Loader/>
+          : <>
 
             <p style={{ fontSize: "12px" }}>To add new data to the form response, download the csv file given below. After adding data to the csv file, upload it to the box given.</p>
             <button
