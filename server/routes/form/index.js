@@ -57,7 +57,7 @@ router.post("/addresponses",async (req, res) => {
                             {
                                 name: person.name,
                                 orderId: order.orderId,
-                                amount: 0,
+                                amount: person.amount*100,
                                 paymentStatus: "Success",
                                 txnDate: new Date(order.txnDate),
                                 txnId:order.txnId,
