@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx/xlsx.mjs';
 import { useState } from 'react';
 import Loader from '../../ui-component/loader';
 
-export default function AddResponses({ setModal, handleSubmit, loading, disabled }) {
+export default function AddResponses({ setModal, handleSubmit, loading }) {
 
   const [data, setData] = useState([]);
 
@@ -14,29 +14,21 @@ export default function AddResponses({ setModal, handleSubmit, loading, disabled
     const workbook = XLSX.read(data);
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-    console.log(jsonData)
     setData(jsonData);
   }
 
   return (
-
     <div className={styles.modal}>
-      <div className={styles.modal_overlay} onClick={() => setModal(false)}>
-
-      </div>
-
+      <div className={styles.modal_overlay} onClick={() => setModal(false)}></div>
       <div className={styles.modal_con}>
-
         <h4>Adding new responses</h4>
-        {disabled ?
-
-         <Loader/>
+        {loading ?
+          <Loader />
           : <>
-
             <p style={{ fontSize: "12px" }}>To add new data to the form response, download the csv file given below. After adding data to the csv file, upload it to the box given.</p>
             <button
-              className={disabled ? styles.buttons_first : styles.buttons_first}
-              disabled={loading || disabled}
+              className={styles.buttons_first}
+              disabled={loading}
               onClick={() => window.open("/addresponses.xlsx")}>
               Download CSV
             </button>
@@ -45,27 +37,18 @@ export default function AddResponses({ setModal, handleSubmit, loading, disabled
             <input type="file" onChange={handleFile} />
             <div className={styles.modal_con_buttons}>
               <button
-                className={disabled ? styles.buttons_first : styles.buttons_first}
-                disabled={loading || disabled}
-                onClick={() => {
-                  if (!disabled) {
-                    handleSubmit(data)
-                  }
-                }}>
+                className={styles.buttons_first}
+                disabled={loading}
+                onClick={() => handleSubmit(data)}>
                 Upload
 
               </button>
               <button
-                className={disabled ? styles.buttons_first : styles.buttons_first}
-                disabled={loading || disabled}
-                onClick={() => {
-                  if (!disabled) {
-                    setModal(false)
-                  }
-                }}>
+                className={styles.buttons_first}
+                disabled={loading}
+                onClick={() => setModal(false)}>
                 Cancel
               </button>
-
             </div>
           </>}
       </div>

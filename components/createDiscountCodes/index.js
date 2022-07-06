@@ -1,14 +1,11 @@
 
 import styles from './Styles.module.css';
 import Input from '../../ui-component/CustomInput/input3';
-import { useState } from 'react';
 import Loader from '../../ui-component/loader';
 import { Formik, getIn } from 'formik';
 import * as yup from 'yup';
 
-
 export default function CreateDiscountCodes({ setModal, handleSubmit, loading, data, disabled }) {
-
 
   let schema = yup.object().shape({
     code: yup.string().required("Required"),
@@ -19,7 +16,7 @@ export default function CreateDiscountCodes({ setModal, handleSubmit, loading, d
     expiryDate: yup.string()
 
   });
-  console.log(data)
+
   let initailData = {
     code: data !== undefined ? data.code : "",
     ieee: data !== undefined ? data.packages[0].amount / 1.18 : 0,
@@ -31,9 +28,7 @@ export default function CreateDiscountCodes({ setModal, handleSubmit, loading, d
   return (
 
     <div className={styles.modal}>
-      <div className={styles.modal_overlay} onClick={() => setModal(false)}>
-
-      </div>
+      <div className={styles.modal_overlay} onClick={() => setModal(false)}></div>
       <Formik
         initialValues={initailData}
         validationSchema={schema}

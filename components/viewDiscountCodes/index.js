@@ -3,7 +3,7 @@ import styles from './Styles.module.css';
 import moment from 'moment';
 
 export default function ViewDiscountCodes({ setModal, data }) {
- console.log(data)
+
   return (
 
     <div className={styles.modal}>

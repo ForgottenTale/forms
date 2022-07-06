@@ -44,7 +44,6 @@ export default function Pricing() {
     }
     const { isLoading, error: isError, data } = useQuery('pricing', getData, { enabled: formId !== undefined ? true : false })
 
-
     const handleAddDiscount = async (data) => {
         var arr = data;
         arr.specific = arr.specific.split(',');
@@ -62,8 +61,8 @@ export default function Pricing() {
             setLoading(false);
             setErrorMsg(err.response !== undefined ? err.response.data.error : err)
         }
-
     }
+
     const handleUpdateDiscount = async (data) => {
         
         var arr = data;
@@ -84,9 +83,7 @@ export default function Pricing() {
         }
        
     }
-
-
-
+ 
     return (
         <FormBackLayout>
             <Head>

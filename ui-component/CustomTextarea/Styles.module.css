@@ -8,10 +8,10 @@
     width: 100%;
     padding: 10px;
     height: 45px;
-    background-color: var(--input-color);
+    background-color: #eff2f5;
     border: none;
     border-radius: 10px;
-    outline-color: var(--blue-primary);
+    outline-color: #1479ff;
 }
 
 .inputContainer {
