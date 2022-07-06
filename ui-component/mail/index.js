@@ -5,10 +5,11 @@ import SendIcon from '../../icons/send';
 import TextArea from '../textArea';
 import DisabledInput from '../disabledInput';
 import Error from '../error';
+import Notification from '../notification';
 import axios from 'axios';
 import { useState } from 'react';
 
-export default function Mail({ setShowMail }) {
+export default function Mail({ setShowMail,data }) {
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
     const [fillMsg, setFillMsg] = useState(false);
@@ -16,7 +17,7 @@ export default function Mail({ setShowMail }) {
 
 
     const [content, setContent] = useState({
-        to: "all",
+        to: data.map((val)=>val.email).toString(),
         subject: "",
         msg: ""
     })
@@ -26,7 +27,7 @@ export default function Mail({ setShowMail }) {
         try {
             if (content.subject !== "" && content.subject !== "" && !once) {
                 setOnce(true)
-                await axios.post("/api/form/mail?to=success", content)
+                await axios.post("/api/form/mail", content)
                 console.log(content)
                 setErrorMsg("Mail send")
                 setError(true)
@@ -48,11 +49,11 @@ export default function Mail({ setShowMail }) {
     }
     return (
         <div className={styles.mail}>
-
+           {notification ? <Notification msg={notificationMsg} setNotify={setNotification} /> : null}
             {error ? <Error setError={setError} msg={errorMsg} /> : null}
             <div className={styles.mail_con}>
 
-                <DisabledInput label="To" value="To those who have successfully completed the payment" />
+                <Input label="To" value={content.to} onChange={(e) => { setFillMsg(false); setContent(prevState => { return { ...prevState, to: e.target.value } }) }} />
                 <Input label="Subject" onChange={(e) => { setFillMsg(false); setContent(prevState => { return { ...prevState, subject: e.target.value } }) }} />
                 <TextArea label="Message" onChange={(e) => { setFillMsg(false); setContent(prevState => { return { ...prevState, msg: e.target.value } }) }} />
                 {fillMsg ? <p style={{ color: "red", fontSize: "12px" }}>Subject and Message are required</p> : null}

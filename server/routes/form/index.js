@@ -10,7 +10,7 @@ const discountRoutes = require("./discounts")
 const generateRandomString = require('../../utils/generateRandomString');
 
 
-router.use("/discounts",discountRoutes);
+router.use("/discounts", discountRoutes);
 
 router.get("/responses", async (req, res) => {
 
@@ -25,14 +25,14 @@ router.get("/responses", async (req, res) => {
     }
 
 })
-router.post("/addresponses",async (req, res) => {
-    try{
+router.post("/addresponses", async (req, res) => {
+    try {
 
-        req.body.forEach( async(person)=>{
+        req.body.forEach(async (person) => {
             var order = {
                 orderId: generateRandomString(10),
                 txnDate: new Date().toISOString(),
-                txnId:  generateRandomString(10),
+                txnId: generateRandomString(10),
             }
             const response = await Form.findOneAndUpdate({ formId: req.query.formId }, {
                 $push: {
@@ -40,44 +40,44 @@ router.post("/addresponses",async (req, res) => {
                         ...person,
                         responseId: generateRandomString(10),
                         orderId: order.orderId,
-                        amount: JSON.stringify({label:"Manual added", amount:person.amount}),
+                        amount: JSON.stringify({ label: "Manual added", amount: person.amount }),
                         paymentStatus: "success",
                         membershipType: "Non IEEE members Industry",
                         txnDate: order.txnDate,
                         txnId: order.txnId,
-                        promoCode:"Form Owner added",
-                        
+                        promoCode: "Form Owner added",
+
                     }
                 }
             })
             sendMail(
                 person.email,
-                        `${response.title} | Registration Successful`,
-                        successTemplate(
-                            {
-                                name: person.name,
-                                orderId: order.orderId,
-                                amount: person.amount*100,
-                                paymentStatus: "Success",
-                                txnDate: new Date(order.txnDate),
-                                txnId:order.txnId,
-                                email: person.email,
-                                phone: person.phone,
-                                banner: process.env.NODE_ENV === "development" ? `http://localhost:3000/form%20banners/${response.banner}` : `https://forms.ieee-mint.org/form%20banners/${response.banner}`,
-                                title: response.title,
-                                venue: response.venue,
-                                eventDate: response.eventDate,
-                                formId: response.formId
-                            }
-                        )
+                `${response.title} | Registration Successful`,
+                successTemplate(
+                    {
+                        name: person.name,
+                        orderId: order.orderId,
+                        amount: person.amount * 100,
+                        paymentStatus: "Success",
+                        txnDate: new Date(order.txnDate),
+                        txnId: order.txnId,
+                        email: person.email,
+                        phone: person.phone,
+                        banner: process.env.NODE_ENV === "development" ? `http://localhost:3000/form%20banners/${response.banner}` : `https://forms.ieee-mint.org/form%20banners/${response.banner}`,
+                        title: response.title,
+                        venue: response.venue,
+                        eventDate: response.eventDate,
+                        formId: response.formId
+                    }
+                )
             )
-        
+
             response.save()
-            .then(() => console.log("Saved"))
-            .catch((err) => {
-                logger.error(err)
-                res.status(400).send({ error: err.message })
-            })
+                .then(() => console.log("Saved"))
+                .catch((err) => {
+                    logger.error(err)
+                    res.status(400).send({ error: err.message })
+                })
 
         })
         res.sendStatus(201)
@@ -90,12 +90,8 @@ router.post("/addresponses",async (req, res) => {
 router.post("/mail", async (req, res) => {
 
     try {
-        const param = req.query.to = "success" ? { paymentStatus: "success" } : req.query.to = "pending" ? { paymentStatus: "Pending" } : { paymentStatus: "failed" }
-        const applicants = await Applicant.find(param)
-        applicants.forEach((applicant) => {
-            sendMail(applicant.email, req.body.subject, req.body.msg)
-        })
 
+        sendMail(req.body.to, req.body.subject, req.body.msg)
         res.sendStatus(200)
     }
     catch (err) {

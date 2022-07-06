@@ -7,7 +7,7 @@ import { Formik, getIn } from 'formik';
 import * as yup from 'yup';
 
 
-export default function CreateDiscountCodes({ setModal, handleSubmit, loading, disabled }) {
+export default function CreateDiscountCodes({ setModal, handleSubmit, loading, data, disabled }) {
 
 
   let schema = yup.object().shape({
@@ -16,9 +16,18 @@ export default function CreateDiscountCodes({ setModal, handleSubmit, loading, d
     industry: yup.number("Must be a number").required("Required"),
     acadmic: yup.number("Must be a number").required("Required"),
     specific: yup.string(),
-    expiryDate:yup.string()
+    expiryDate: yup.string()
 
   });
+  console.log(data)
+  let initailData = {
+    code: data !== undefined ? data.code : "",
+    ieee: data !== undefined ? data.packages[0].amount / 1.18 : 0,
+    acadmic: data !== undefined ? data.packages[1].amount / 1.18 : 0,
+    industry: data !== undefined ? data.packages[2].amount / 1.18 : 0,
+    specific: data !== undefined ? data.specific : "",
+    expiryDate: ""
+  }
   return (
 
     <div className={styles.modal}>
@@ -26,7 +35,7 @@ export default function CreateDiscountCodes({ setModal, handleSubmit, loading, d
 
       </div>
       <Formik
-        initialValues={{ code: "", ieee: 0, industry: 0, acadmic: 0, specific: "",expiryDate:"" }}
+        initialValues={initailData}
         validationSchema={schema}
         onSubmit={(values) => { handleSubmit(values) }}
       >
@@ -34,11 +43,12 @@ export default function CreateDiscountCodes({ setModal, handleSubmit, loading, d
 
           <div className={styles.modal_con}>
 
-            <h4>Create new discound code</h4>
-            {disabled ? <Loader /> : <>
+            <h4>{data !== undefined ? "Update" : "Create new"} discound code</h4>
+            {loading ? <Loader /> : <>
               <Input
                 label="Discount code *"
                 value={values.code}
+                disabled={disabled}
                 placeholder="Enter the discount code"
                 error={getIn(errors, "code") !== undefined ? true : false}
                 errMsg={getIn(errors, "code") !== undefined ? getIn(errors, "code") : ""}
@@ -51,19 +61,19 @@ export default function CreateDiscountCodes({ setModal, handleSubmit, loading, d
                 errMsg={getIn(errors, "ieee") !== undefined ? getIn(errors, "ieee") : ""}
                 onChange={(e) => setFieldValue("ieee", e.target.value)} />
               <Input
-                label="Non IEEE Member Industry *"
-                value={values.industry}
-                placeholder="Enter the amount"
-                error={getIn(errors, "ieee") !== undefined ? true : false}
-                errMsg={getIn(errors, "ieee") !== undefined ? getIn(errors, "ieee") : ""}
-                onChange={(e) => setFieldValue("industry", e.target.value)} />
-              <Input
                 label="IEEE Member Acadamic *"
                 value={values.acadmic}
                 placeholder="Enter the amount"
                 error={getIn(errors, "ieee") !== undefined ? true : false}
                 errMsg={getIn(errors, "ieee") !== undefined ? getIn(errors, "ieee") : ""}
                 onChange={(e) => setFieldValue("acadmic", e.target.value)} />
+              <Input
+                label="Non IEEE Member Industry *"
+                value={values.industry}
+                placeholder="Enter the amount"
+                error={getIn(errors, "ieee") !== undefined ? true : false}
+                errMsg={getIn(errors, "ieee") !== undefined ? getIn(errors, "ieee") : ""}
+                onChange={(e) => setFieldValue("industry", e.target.value)} />
               {/* <Input
                 label="Expiry Date *"
                 value={values.expiryDate}
@@ -77,28 +87,27 @@ export default function CreateDiscountCodes({ setModal, handleSubmit, loading, d
                 value={values.specific}
                 placeholder="Enter the users ID"
                 onChange={(e) => setFieldValue("specific", e.target.value)} />
-              {/* {JSON.stringify(values, null, 2)} */}
-
+    
               <div className={styles.modal_con_buttons}>
                 <button
-                  className={disabled ? styles.buttons_first : styles.buttons_first}
-                  disabled={loading || disabled}
+                  className={loading ? styles.buttons_first : styles.buttons_first}
+
                   type="submit"
                   onClick={() => {
-                    if (!disabled) {
-                      handleSubmit()
-                    }
+
+                    handleSubmit()
+
                   }}>
                   Upload
 
                 </button>
                 <button
-                  className={disabled ? styles.buttons_first : styles.buttons_first}
-                  disabled={loading || disabled}
+                  className={loading ? styles.buttons_first : styles.buttons_first}
+
                   onClick={() => {
-                    if (!disabled) {
-                      setModal(false)
-                    }
+
+                    setModal(false)
+
                   }}>
                   Cancel
                 </button>

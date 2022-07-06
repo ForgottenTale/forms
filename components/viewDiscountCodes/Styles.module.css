@@ -18,13 +18,19 @@
 }
 .modal_p{
     font-size: 12px;
+
 }
 .modal_p2{
     font-size: 14px;
     text-align: left;
+    word-break: break-all;
 }
 .table{
     width: 100%;
+}
+.row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 .modal_con {
     position: absolute;

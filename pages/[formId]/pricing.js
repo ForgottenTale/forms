@@ -17,11 +17,13 @@ import ViewDiscountCodes from "../../components/viewDiscountCodes";
 export default function Pricing() {
 
     const [show, setShow] = useState(false);
+    const [edit, setEdit] = useState(false);
     const [showDisDetails, setShowDisDetails] = useState(false);
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
     const [notificationMsg, setNotificationMsg] = useState(false);
     const [notification, setNotification] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [discount, setDiscount] = useState({})
     const queryClient = useQueryClient();
@@ -43,23 +45,44 @@ export default function Pricing() {
     const { isLoading, error: isError, data } = useQuery('pricing', getData, { enabled: formId !== undefined ? true : false })
 
 
-    const handleSubmit = async (data) => {
+    const handleAddDiscount = async (data) => {
         var arr = data;
         arr.specific = arr.specific.split(',');
-        setDisabled(true);
+        setLoading(true);
         try {
             await axios.post(`/api/form/discounts/create?formId=wlc`, arr)
             setNotification(true);
             setNotificationMsg("Added the discount code");
-            setDisabled(false);
+            queryClient.invalidateQueries("pricing");
+            setLoading(false);
             setShow(false);
         }
         catch (err) {
             setError(true);
-            setDisabled(false);
+            setLoading(false);
             setErrorMsg(err.response !== undefined ? err.response.data.error : err)
         }
 
+    }
+    const handleUpdateDiscount = async (data) => {
+        
+        var arr = data;
+        arr.specific = arr.specific.split(',');
+        setLoading(true);
+        try {
+            await axios.put(`/api/form/discounts?formId=wlc`, arr)
+            setNotification(true);
+            setNotificationMsg("Updated the discount code");
+            queryClient.invalidateQueries("pricing");
+            setLoading(false);
+            setEdit(false);
+        }
+        catch (err) {
+            setError(true);
+            setLoading(false);
+            setErrorMsg(err.response !== undefined ? err.response.data.error : err)
+        }
+       
     }
 
 
@@ -74,7 +97,8 @@ export default function Pricing() {
             {showDisDetails ? <ViewDiscountCodes data={discount} setModal={setShowDisDetails} /> : null}
             {notification ? <Notification msg={notificationMsg} setNotify={setNotification} /> : null}
             {error ? <Error setError={setError} msg={errorMsg} /> : null}
-            {show ? <CreateDiscountCodes handleSubmit={handleSubmit} disabled={disabled} setModal={setShow} /> : null}
+            {show ? <CreateDiscountCodes handleSubmit={handleAddDiscount} loading={loading} setModal={setShow} /> : null}
+            {edit ? <CreateDiscountCodes handleSubmit={handleUpdateDiscount} data={discount} loading={loading} disabled setModal={setEdit} /> : null}
             {isLoading ?
                 <div className={styles.loader}>
                     <Loader />
@@ -98,7 +122,14 @@ export default function Pricing() {
                                 <p>{val}</p>
                                 <p>{data.data.pricing[val].expiryDate !== null ? moment(data.data.pricing[val].expiryDate).format("LLLL") : "None"} {val.expiryDate}</p>
                                 <div className={styles.buttons}>
-                                    <ViewIcon onClick={()=>{setDiscount(data.data.pricing[val]);setShowDisDetails(true)}} />
+                                    <ViewIcon onClick={() => {
+                                        setDiscount({
+                                            code: val,
+                                            specific:data.data.specific[val]!==undefined?data.data.specific[val].toString():"",
+                                            ...data.data.pricing[val]
+                                        });
+                                        setShowDisDetails(true)
+                                    }} />
                                     <EditIcon />
                                 </div>
                             </div> : "")}
@@ -121,8 +152,22 @@ export default function Pricing() {
                                     <p>{val}</p>
                                     <p>{data.data.pricing[val].expiryDate !== null ? moment(data.data.pricing[val].expiryDate).format("LLLL") : "None"} {val.expiryDate}</p>
                                     <div className={styles.buttons}>
-                                        <ViewIcon onClick={()=>{setDiscount(data.data.pricing[val]);setShowDisDetails(true)}}  />
-                                        <EditIcon />
+                                        <ViewIcon onClick={() => {
+                                            setDiscount({
+                                                code: val,
+                                                specific:data.data.specific[val]!==undefined?data.data.specific[val].toString():"",
+                                                ...data.data.pricing[val]
+                                            });
+                                            setShowDisDetails(true)
+                                        }} />
+                                        <EditIcon onClick={() => {
+                                            setDiscount({
+                                                code: val,
+                                                specific:data.data.specific[val]!==undefined?data.data.specific[val].toString():"",
+                                                ...data.data.pricing[val]
+                                            });
+                                            setEdit(true)
+                                        }} />
                                     </div>
 
 
