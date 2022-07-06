@@ -29,6 +29,7 @@ export default function UserDetails({ data, setShow }) {
                 {data.accommodation!== undefined ? <DisabledInput label="DO YOU REQUIRE ACCOMMODATION PRIOR OR AFTER THE EVENT ?" value={data.accommodation} /> : null}
                 {data.location!== undefined ? <DisabledInput label="Location" value={data.location} /> : null}
                 {data.amount!== undefined ? <DisabledInput label="Amount Paid" value={JSON.parse(data.amount).amount} /> : null}
+                {data.promoCode!== undefined ? <DisabledInput label="Promo Code" value={data.promoCode} /> : null}
 
             </div>
         </div>
