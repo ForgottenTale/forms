@@ -1,17 +1,19 @@
 .pricing{
     padding: 20px;
+    color: var( --textcolor-primary);
 }
 .row{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     padding: 10px 20px;
-    background-color: white;
+    background-color: var(--background-color);
     font-size: 14px;
+    color: var( --textcolor-secondary);
 }
 .row:first-child{
     padding: 15px 20px;
     border-radius: 5px;
-    background-color: #eff2f5;
+    background-color: var(--input-color);
     font-weight: 600;
     color: #757575;
 }

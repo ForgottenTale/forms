@@ -237,8 +237,8 @@ export default function Responses() {
                                     <div className={styles.table_item}>{JSON.parse(val.amount).amount}</div>
                                     <div className={styles.table_item}>
                                         <div className={styles.table_item_status} style={
-                                            val.paymentStatus === "pending" ? { color: "#f39c12", backgroundColor: "#f8f8e7" } :
-                                                val.paymentStatus === "success" ? { color: "#12b268", backgroundColor: "#e7f8f0" } : { color: "#f8ecee", backgroundColor: "#c52d5e" }
+                                            val.paymentStatus === "pending" ? { color: "#f39c12", backgroundColor: "var(--pending-back)" } :
+                                                val.paymentStatus === "success" ? { color: "#12b268", backgroundColor: "var(--success-back)" } : { color: "#f8ecee", backgroundColor: "var(--failed-back)" }
                                         }>
                                             {val.paymentStatus}
                                         </div>
@@ -246,7 +246,7 @@ export default function Responses() {
                                     </div>
                                     <div className={styles.table_item}>
                                         <div className={styles.table_icon}>
-                                            <div className={styles.table_icon_container} onClick={() => { setApplicant(val); setShow(true) }}>
+                                            <div className={styles.table_icon_container} onClick={() => { setApplicant(val); setShowResponse(true) }}>
                                                 <ViewIcon />
                                             </div>
                                         </div>

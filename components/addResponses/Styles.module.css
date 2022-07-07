@@ -21,7 +21,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgb(255, 255, 255);
+    background-color: var(--background-color);
+    color: var(--textcolor-secondary);
     border-radius: 10px;
     width: 500px;
     padding: 30px 20px;
@@ -30,6 +31,8 @@
 .buttons_first {
     padding: 5px 20px;
     border: none;
+    background-color: var(--input-color);
+    color: var(--textcolor-secondary);
     border-radius: 10px;
 }
 .buttons_first:hover {

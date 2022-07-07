@@ -90,8 +90,8 @@ router.post("/addresponses", async (req, res) => {
 router.post("/mail", async (req, res) => {
 
     try {
-
-        sendMail(req.body.to, req.body.subject, req.body.msg)
+        var emailIds = req.body.to.split(',');
+        sendMail(emailIds, req.body.subject, req.body.msg)
         res.sendStatus(200)
     }
     catch (err) {

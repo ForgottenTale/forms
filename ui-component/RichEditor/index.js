@@ -47,8 +47,8 @@ export default function RichEditor({ label, state, setState, ...rest}) {
             <h6 className="services_label">{label}</h6>
             <Editor
                 editorState={editorState}
-                wrapperClassName="services_editor_wrapper"
-                editorClassName="services_editor_editor"
+                // wrapperClassName="services_editor_wrapper"
+                // editorClassName="services_editor_editor"
                 toolbarClassName="services_editor_toolbar"
                 onEditorStateChange={handleEditorChange}
                 {...rest}

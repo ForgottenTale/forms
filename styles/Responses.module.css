@@ -2,6 +2,7 @@
     width: 100%;
     height: 100%;
     padding: 20px;
+    color: var(--textcolor-primary);
   
 }
 .title{
@@ -27,10 +28,11 @@
 
 }
 .filterByPayStatusLabel {
-    border: 1px rgb(235, 235, 235) solid;
+    border: 1px var(--border-color) solid;
     padding: 5px;
     font-size: 12px;
     font-weight: 600;
+    color: var(--textcolor-secondary);
 }
 .filterByPayStatusLabel:first-child{
     border-radius: 8px 0 0 8px;
@@ -48,7 +50,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #eff2f5;
+    background-color: var(--input-color);
     height: 45px;
     font-size: 12px;
     padding: 0 10px;
@@ -56,6 +58,7 @@
     margin-left: 10px;
     outline: none;
     border: none;
+    color: var(--textcolor-secondary);
 }
 .responses_p {
     margin-left: 10px;
@@ -72,7 +75,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background-color: white;
+    background-color: var( --background-color);
+    color: var(--textcolor-secondary);
 }
 .table_item_status {
     padding: 5px 8px;
@@ -89,7 +93,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #eff2f5;
+    background-color: var(--background-color);
     border-radius: 50%;
 }
 .table_icon {
@@ -98,7 +102,7 @@
     margin-left: 5px;
 }
 .table_header {
-    background-color: #eff2f5;
+    background-color: var(--input-color);
     padding: 20px;
     font-size: 12px;
     font-weight: 500;

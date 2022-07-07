@@ -4,7 +4,7 @@
     top: 0;
     z-index: 1;
     display: flex;
-
+    color: var(--textcolor-secondary);
   
 }
 .userDetails_overlay {
@@ -13,7 +13,7 @@
 .userDetails_con {
     height: 100vh;
     width: 500px;
-    background-color: white;
+    background: var(--background-color);
     padding: 20px;
     overflow-y: scroll;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;

@@ -1,6 +1,7 @@
 
 .radioButton{
     display: flex;
+
 }
 .radio:checked,
 .radio:not(:checked) {
@@ -24,10 +25,11 @@
     top: 0;
     width: 18px;
     height: 18px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 100%;
-    background: #fff;
+    background-color: var(--border-color);
 }
+
 .radio:checked + label:after,
 .radio:not(:checked) + label:after {
     content: '';
