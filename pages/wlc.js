@@ -133,7 +133,7 @@ export default function Home({ pricing: price, members, specific }) {
       currency: data.currency,
       amount: String(data.amount),
       order_id: data.id,
-      name: 'IEEE Job Fair 2022',
+      name: 'WIE ILS 2022',
       description: 'Thank you for registering',
 
       handler: async (response) => {
