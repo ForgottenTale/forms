@@ -9,6 +9,7 @@
   display: flex;
   height: 100vh;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   background-color: white!important;
   /* padding: 0 100px; */
@@ -17,6 +18,7 @@
 .eventform_con {
   max-width: 600px;
   width: 100%;
+  text-align: center;
 }
 
 .eventdetails_dnt {

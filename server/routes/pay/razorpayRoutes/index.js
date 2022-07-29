@@ -11,6 +11,7 @@ const Form = require('../../../models/forms');
 const logger = require('../../../utils/logger');
 const router = express.Router();
 
+
 var instance = new Razorpay({
     key_id: process.env.razorPayId,
     key_secret: process.env.razorPaySecret,
@@ -110,6 +111,7 @@ router.post("/failed", async (req, res) => {
             }
         })
         const index = response.responses.findIndex(obj => obj.orderId === req.body.metadata.order_id)
+
         notify("failed", data, response.responses[index], response);
 
         response.save()

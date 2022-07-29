@@ -10,6 +10,7 @@ var cors = require('cors')
 const logger = require("./utils/logger");
 const payRoute = require('./routes/pay');
 const formRoute = require('./routes/form');
+const responseRoute =require('./routes/response')
 const { connectToPaytm } = require('./modules/paytm');
 
 const handle = app.getRequestHandler()
@@ -32,7 +33,7 @@ app.prepare().then(() => {
     })
     server.use("/api/pay", payRoute);
     server.use("/api/form", formRoute);
-
+    server.use("/api/response", responseRoute);
     // This code should be in the last portion
     server.all('*', (req, res) => {
         return handle(req, res)

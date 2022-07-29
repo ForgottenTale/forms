@@ -1,0 +1,22 @@
+.label {
+    margin-bottom: 10px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    height: 45px;
+    background-color: #eff2f5;
+    border: none;
+    border-radius: 10px;
+    outline-color: #1479ff;
+}
+
+.inputContainer {
+    margin-bottom: 20px;
+    width: 100%;
+
+}
