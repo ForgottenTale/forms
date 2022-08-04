@@ -8,8 +8,57 @@ const successTemplate = require("../../mailTemplates/registerSuccess");
 const Form = require("../../models/forms");
 const discountRoutes = require("./discounts");
 const generateRandomString = require("../../utils/generateRandomString");
+// const fs = require("fs");
+// const PDFDocument = require("pdfkit");
 
-router.use("/discounts", discountRoutes);
+router.get("/discounts", discountRoutes);
+
+router.get("/certiCheck", async (req, res) => {
+  try {
+    const responses = await Form.findOne(
+      { formId: req.query.formId },
+      { members: { $elemMatch: { id: req.query.id } } }
+    );
+    if (responses.members.length !== 0) {
+      if (!responses.members[0].status) {
+        res.send({ status: true });
+      } else {
+        res.send({ status: false, id: responses.members[0].email });
+      }
+    } else {
+      res.status(404);
+      res.send({ message: "Invalid UUID" });
+    }
+  } catch (err) {
+    logger.error(err);
+    res.status(400).send({ error: err.message });
+  }
+});
+router.post("/cert", async (req, res) => {
+  console.log(req.body);
+  res.sendStatus(201)
+})
+router.post("/certificate", async (req, res) => {
+  try {
+    console.log(req.body);
+    // const doc = new PDFDocument({
+    //   layout: "landscape",
+    //   size: "A4",
+    // });
+    // const name = req.body.name;
+    // doc.pipe(fs.createWriteStream(`./public/pdf/${name}.pdf`));
+    // doc.image("./public/participation.png", 0, 0, { width: 842 });
+    // doc.font("./public/Autography.otf");
+    // doc.fontSize(36).text(name, 82, 230, {
+    //   align: "left",
+    // });
+    // doc.end();
+    res.send({ link: `http://localhost:3000/${name}.pdf` });
+  } catch (err) {
+    logger.error(err);
+    res.status(400).send({ error: err.message });
+  }
+});
 
 router.post("/create", async (req, res) => {
   try {
