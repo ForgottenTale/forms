@@ -159,7 +159,7 @@ router.post(
   upload.single("fileUpload"),
   async (req, res) => {
     try {
-      genCertificate(req.body.email);
+      genCertificate(req.body.name,req.body.email);
 
       var data = [new Date().toLocaleString()];
       data = data.concat(Object.values(req.body));

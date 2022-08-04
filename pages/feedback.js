@@ -120,8 +120,6 @@ export default function Home() {
     session19Des: "",
     session20: "",
     session20Des: "",
-    session21: "",
-    session21Des: "",
     join: "",
     nextWie: "",
   };
@@ -168,8 +166,6 @@ export default function Home() {
   //   session19Des: "fsduhiuhsiduhfishd",
   //   session20: "fsduhiuhsiduhfishd",
   //   session20Des: "fsduhiuhsiduhfishd",
-  //   session21: "fsduhiuhsiduhfishd",
-  //   session21Des: "fsduhiuhsiduhfishd",
   //   join: "fsduhiuhsiduhfishd",
   //   nextWie: "fsduhiuhsiduhfishd",
   // };
@@ -219,8 +215,7 @@ export default function Home() {
     session19Des: yup.string(),
     session20: yup.string().required(),
     session20Des: yup.string(),
-    session21: yup.string().required("Required"),
-    session21Des: yup.string(),
+
   });
 
   const handleUpload = async (values) => {
@@ -466,28 +461,20 @@ export default function Home() {
                           values={values}
                           errors={errors}
                         />
+
                         <Rating
-                          event="the general arrangements"
+                          event="general arrangements"
                           setFieldValue={setFieldValue}
                           name1="session19"
                           name2="session19Des"
                           values={values}
                           errors={errors}
                         />
-                      
-                        <Rating
-                          event="general arrangements"
-                          setFieldValue={setFieldValue}
-                          name1="session20"
-                          name2="session20Des"
-                          values={values}
-                          errors={errors}
-                        />
                           <Rating
                           event="the overall programme"
                           setFieldValue={setFieldValue}
-                          name1="session21"
-                          name2="session21Des"
+                          name1="session20"
+                          name2="session20Des"
                           values={values}
                           errors={errors}
                         />
@@ -497,7 +484,7 @@ export default function Home() {
                           onChange={(e) =>
                             setFieldValue("join", e.target.value)
                           }
-                          placeholder="Enter your join "
+                          placeholder="Are you interested in associating with IEEE WIE"
                           errors={
                             getIn(errors, "join") !== undefined
                               ? getIn(errors, "join")
@@ -510,14 +497,14 @@ export default function Home() {
                           onChange={(e) =>
                             setFieldValue("nextWie", e.target.value)
                           }
-                          placeholder="Enter your nextWie "
+                          placeholder="Are you interested in comming to the next IEEE WIEILS"
                           errors={
                             getIn(errors, "nextWie") !== undefined
                               ? getIn(errors, "nextWie")
                               : ""
                           }
                         />
-                        {/* {JSON.stringify(values, 2, null)} */}
+                        {/* {JSON.stringify(errors, 2, null)} */}
                         <button
                           className={styles.button}
                           onClick={handleSubmit}

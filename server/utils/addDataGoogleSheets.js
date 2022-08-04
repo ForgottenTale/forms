@@ -14,7 +14,7 @@ async function addDataGoogleSheets(data){
   await googleSheets.spreadsheets.values.append({
     auth,
     spreadsheetId,
-    range: "Sheet1!A:A",
+    range: "Sheet1!A:AT",
     valueInputOption: "USER_ENTERED",
     resource: {
       values: [data],
