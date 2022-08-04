@@ -172,7 +172,7 @@ export default function Home() {
   });
 
   const handleUpload = async (values) => {
-    setLoading(true);
+    setInitialLoading(true);
     try {
       const formData = buildForm(values);
       const res = await axios.post(
@@ -189,7 +189,7 @@ export default function Home() {
     } catch (err) {
       setError(true);
       setErrorMsg(err.response !== undefined ? err.response.data.error : err);
-      setLoading(false);
+      setInitialLoading(false);
     }
   };
 
