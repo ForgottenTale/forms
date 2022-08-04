@@ -163,7 +163,7 @@ router.post(
 
       var data = [new Date().toLocaleString()];
       data = data.concat(Object.values(req.body));
-      data.push(`https://forms.ieee-mint.org/pdf/${req.body.email}.pdf`);
+      data.push(`https://forms.ieee-mint.org/certificates/${req.body.email}.pdf`);
 
       await addDataGoogleSheets(data);
 
@@ -174,7 +174,7 @@ router.post(
             responses: {
               responseId: generateRandomString(10),
               orderId: generateRandomString(10),
-              certificate: `https://forms.ieee-mint.org/pdf/${req.body.email}.pdf`,
+              certificate: `https://forms.ieee-mint.org/certificates/${req.body.email}.pdf`,
               ...req.body,
             },
           },

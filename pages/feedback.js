@@ -12,7 +12,7 @@ import TextArea2 from "../ui-component/textArea2";
 import { getIn } from "formik";
 import Input3 from "../ui-component/input3";
 
-function Rating({ event, name1, name2, values, errors, setFieldValue }) {
+function Rating({ event, name1, values, errors, setFieldValue }) {
   return (
     <>
       <EmojiSelector
@@ -20,13 +20,6 @@ function Rating({ event, name1, name2, values, errors, setFieldValue }) {
         onClick={(e) => setFieldValue(name1, e)}
         value={values[name1]}
         errors={getIn(errors, name1) !== undefined ? getIn(errors, name1) : ""}
-      />
-      <TextArea2
-        label={`Share your thoughts about ${event}`}
-        value={values[name2]}
-        onChange={(e) => setFieldValue(name2, e.target.value)}
-        placeholder="Write your feedback here"
-        errors={getIn(errors, name2) !== undefined ? getIn(errors, name2) : ""}
       />
     </>
   );
@@ -49,7 +42,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
-  const [certificate, setCertificate] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
 
   const certiCheck = async () => {
@@ -61,7 +53,7 @@ export default function Home() {
       if (res.data.status) {
         setInitialLoading(false);
       } else {
-        router.push(`/pdf/${res.data.id}.pdf`);
+        router.push(`/certificates/${res.data.id}.pdf`);
       }
     } catch (err) {
       setError(true);
@@ -75,51 +67,32 @@ export default function Home() {
     if (query.id !== undefined) {
       certiCheck();
     }
-  }, [certificate, query.id]);
+  }, [ query.id]);
 
   const user = {
     name: "",
     email: "",
     session1: "",
-    session1Des: "",
     session2: "",
-    session2Des: "",
     session3: "",
-    session3Des: "",
     session4: "",
-    session4Des: "",
     session5: "",
-    session5Des: "",
     session6: "",
-    session6Des: "",
     session7: "",
-    session7Des: "",
     session8: "",
-    session8Des: "",
     session9: "",
-    session9Des: "",
     session10: "",
-    session10Des: "",
     session11: "",
-    session11Des: "",
     session12: "",
-    session12Des: "",
     session13: "",
-    session13Des: "",
     session14: "",
-    session14Des: "",
     session15: "",
-    session15Des: "",
     session16: "",
-    session16Des: "",
     session17: "",
-    session17Des: "",
     session18: "",
-    session18Des: "",
     session19: "",
-    session19Des: "",
     session20: "",
-    session20Des: "",
+    suggestions: "",
     join: "",
     nextWie: "",
   };
@@ -175,47 +148,27 @@ export default function Home() {
     name: yup.string().required("Required"),
     nextWie: yup.string().required("Required"),
     join: yup.string().required("Required"),
-    session1: yup.string().required(),
-    session1Des: yup.string(),
-    session2: yup.string().required(),
-    session2Des: yup.string(),
-    session3: yup.string().required(),
-    session3Des: yup.string(),
-    session4: yup.string().required(),
-    session4Des: yup.string(),
-    session5: yup.string().required(),
-    session5Des: yup.string(),
-    session6: yup.string().required(),
-    session6Des: yup.string(),
-    session7: yup.string().required(),
-    session7Des: yup.string(),
-    session8: yup.string().required(),
-    session8Des: yup.string(),
-    session9: yup.string().required(),
-    session9Des: yup.string(),
-    session10: yup.string().required(),
-    session10Des: yup.string(),
-    session11: yup.string().required(),
-    session11Des: yup.string(),
-    session12: yup.string().required(),
-    session12Des: yup.string(),
-    session13: yup.string().required(),
-    session13Des: yup.string(),
-    session14: yup.string().required(),
-    session14Des: yup.string(),
-    session15: yup.string().required(),
-    session15Des: yup.string(),
-    session16: yup.string().required(),
-    session16Des: yup.string(),
-    session17: yup.string().required(),
-    session17Des: yup.string(),
-    session18: yup.string().required(),
-    session18Des: yup.string(),
-    session19: yup.string().required(),
-    session19Des: yup.string(),
-    session20: yup.string().required(),
-    session20Des: yup.string(),
-
+    session1: yup.string().required("Required"),
+    session2: yup.string().required("Required"),
+    session3: yup.string().required("Required"),
+    session4: yup.string().required("Required"),
+    session5: yup.string().required("Required"),
+    session6: yup.string().required("Required"),
+    session7: yup.string().required("Required"),
+    session8: yup.string().required("Required"),
+    session9: yup.string().required("Required"),
+    session10: yup.string().required("Required"),
+    session11: yup.string().required("Required"),
+    session12: yup.string().required("Required"),
+    session13: yup.string().required("Required"),
+    session14: yup.string().required("Required"),
+    session15: yup.string().required("Required"),
+    session16: yup.string().required("Required"),
+    session17: yup.string().required("Required"),
+    session18: yup.string().required("Required"),
+    session19: yup.string().required("Required"),
+    session20: yup.string().required("Required"),
+    suggestions: yup.string(),
   });
 
   const handleUpload = async (values) => {
@@ -231,7 +184,7 @@ export default function Home() {
           },
         }
       );
-      router.push(`/pdf/${values.email}.pdf`);
+      router.push(`/certificates/${values.email}.pdf`);
       // router.push(`/feedback/feedback/${res.data.id}`);
     } catch (err) {
       setError(true);
@@ -241,7 +194,7 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{height:"100%"}}>
       <Head>
         <title>Feedback</title>
         <meta name="description" content="Generated by create next app" />
@@ -318,138 +271,121 @@ export default function Home() {
                           }
                         />
                         <Rating
-                          event="Session 1: Plenary talk by Anna Ferrer"
+                          event="the session on Plenary talk by Anna Ferrer"
                           setFieldValue={setFieldValue}
                           name1="session1"
-                          name2="session1Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 2: 'Challenges faced by Women in Mission-Mode Project' by Dr. Rameetha K"
+                          event="the session on 'Challenges faced by Women in Mission-Mode Project' by Dr. Rameetha K"
                           setFieldValue={setFieldValue}
                           name1="session2"
-                          name2="session2Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 3: 'Leadership and Empowerment' by Madhavikutty MS IAS"
+                          event="the session on 'Leadership and Empowerment' by Madhavikutty MS IAS"
                           setFieldValue={setFieldValue}
                           name1="session3"
-                          name2="session3Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 4: 'Health and Well-being' by Lakshmikutty Amma"
+                          event="the session on 'Health and Well-being' by Lakshmikutty Amma"
                           setFieldValue={setFieldValue}
                           name1="session4"
-                          name2="session4Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 5: Panel discussion on : 'Towards a diverse, equitable and inclusive society'"
+                          event="the session on Panel discussion on : 'Towards a diverse, equitable and inclusive society'"
                           setFieldValue={setFieldValue}
                           name1="session5"
-                          name2="session5Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 6: 'Leadership in the era of Technology Disruption' by Latha Chembrakalam"
+                          event="the session on 'Leadership in the era of Technology Disruption' by Latha Chembrakalam"
                           setFieldValue={setFieldValue}
                           name1="session6"
-                          name2="session6Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 7: 'Legal rights of women at workplace' by Nidhiya Jayaraman"
+                          event="the session on 'Legal rights of women at workplace' by Nidhiya Jayaraman"
                           setFieldValue={setFieldValue}
                           name1="session7"
-                          name2="session7Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 8: 'Technology for Humanity' by Sampath Kumar Veeraraghavan"
+                          event="the session on 'Technology for Humanity' by Sampath Kumar Veeraraghavan"
                           setFieldValue={setFieldValue}
                           name1="session8"
-                          name2="session8Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 9: 'Technology for humanity' by Vani Murthy"
+                          event="the session on 'Technology for humanity' by Vani Murthy"
                           setFieldValue={setFieldValue}
                           name1="session9"
-                          name2="session9Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 10: 'Career and Entrepreneurship' by Swapna Augustine"
+                          event="the session on 'Career and Entrepreneurship' by Swapna Augustine"
                           setFieldValue={setFieldValue}
                           name1="session10"
-                          name2="session10Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 11: 'Career and Entrepreneurship' by Priyanka Chandran"
+                          event="the session on 'Career and Entrepreneurship' by Priyanka Chandran"
                           setFieldValue={setFieldValue}
                           name1="session11"
-                          name2="session11Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 12: 'Leadership and Empowerment-Artists perspective' by Dr. Methil Devika"
+                          event="the session on 'Leadership and Empowerment-Artists perspective' by Dr. Methil Devika"
                           setFieldValue={setFieldValue}
                           name1="session12"
-                          name2="session12Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 13: 'Innovation and Women Empowerment' by Dr. Bindu Nair"
+                          event="the session on 'Innovation and Women Empowerment' by Dr. Bindu Nair"
                           setFieldValue={setFieldValue}
                           name1="session13"
-                          name2="session13Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 14: Panel discussion on 'Sustainable power for Industry 4.0 and Agriculture 2025'"
+                          event="the session on Panel discussion on 'Sustainable power for Industry 4.0 and Agriculture 2025'"
                           setFieldValue={setFieldValue}
                           name1="session14"
-                          name2="session14Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 15: 'How WIE helps professional growth for academia and industry' by Ramalatha Marimuthu"
+                          event="the session 'How WIE helps professional growth for academia and industry' by Ramalatha Marimuthu"
                           setFieldValue={setFieldValue}
                           name1="session15"
-                          name2="session15Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 16: 'Health and Well-being' by Dr. Lalitha Appukuttan"
+                          event="the session 'Health and Well-being' by Dr. Lalitha Appukuttan"
                           setFieldValue={setFieldValue}
                           name1="session16"
-                          name2="session16Des"
                           values={values}
                           errors={errors}
                         />
                         <Rating
-                          event="Session 17 : 'Indian Yoga' by Mrs Vinny Shankar"
+                          event="session on 'Ashtanga Yoga' by Vinny Shankar"
                           setFieldValue={setFieldValue}
                           name1="session17"
-                          name2="session17Des"
                           values={values}
                           errors={errors}
                         />
@@ -457,7 +393,6 @@ export default function Home() {
                           event="the residential programme"
                           setFieldValue={setFieldValue}
                           name1="session18"
-                          name2="session18Des"
                           values={values}
                           errors={errors}
                         />
@@ -466,25 +401,36 @@ export default function Home() {
                           event="general arrangements"
                           setFieldValue={setFieldValue}
                           name1="session19"
-                          name2="session19Des"
                           values={values}
                           errors={errors}
                         />
-                          <Rating
+                        <Rating
                           event="the overall programme"
                           setFieldValue={setFieldValue}
                           name1="session20"
-                          name2="session20Des"
                           values={values}
                           errors={errors}
                         />
+                        <TextArea2
+                          label={`Suggestion about speakers and sessions`}
+                          value={values.suggestions}
+                          onChange={(e) =>
+                            setFieldValue("suggestions", e.target.value)
+                          }
+                          placeholder="Write your feedback here"
+                          errors={
+                            getIn(errors, "suggestions") !== undefined
+                              ? getIn(errors, "suggestions")
+                              : ""
+                          }
+                        />
                         <Input3
-                          label="Are you interested in associating with IEEE WIE *"
+                          label="Are you interested in associating with IEEE WIE ?*"
                           value={values.join}
                           onChange={(e) =>
                             setFieldValue("join", e.target.value)
                           }
-                          placeholder="Are you interested in associating with IEEE WIE"
+                          placeholder="Are you interested in associating with IEEE WIE ?"
                           errors={
                             getIn(errors, "join") !== undefined
                               ? getIn(errors, "join")
@@ -492,12 +438,12 @@ export default function Home() {
                           }
                         />
                         <Input3
-                          label="Are you interested in comming to the next IEEE WIEILS *"
+                          label="Are you interested in attending the next  IEEE WIE ILS ? *"
                           value={values.nextWie}
                           onChange={(e) =>
                             setFieldValue("nextWie", e.target.value)
                           }
-                          placeholder="Are you interested in comming to the next IEEE WIEILS"
+                          placeholder="Are you interested in attending the next  IEEE WIE ILS ?"
                           errors={
                             getIn(errors, "nextWie") !== undefined
                               ? getIn(errors, "nextWie")

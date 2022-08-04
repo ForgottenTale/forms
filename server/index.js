@@ -27,7 +27,9 @@ app.prepare().then(() => {
     server.route('/files/*').get((req, res) => {
       res.sendFile(process.cwd() + decodeURI(req.url));
     })
-
+    server.route('/certificates/*').get((req, res) => {
+        res.sendFile(process.cwd() + decodeURI(req.url));
+      })
     server.get("/api/test", (req, res) => {
         return res.send("Hi")
     })
