@@ -7,12 +7,11 @@ const multer = require("multer");
 require("dotenv").config();
 const genCertificate = require("../../../utils/GenCertificate");
 const generateRandomString = require("../../../utils/generateRandomString");
-const addDataGoogleSheets = require("../../../utils/addDataGoogleSheets")
+const addDataGoogleSheets = require("../../../utils/addDataGoogleSheets");
 const notify = require("../notify");
 const Form = require("../../../models/forms");
 const logger = require("../../../utils/logger");
 const router = express.Router();
-
 
 var instance = new Razorpay({
   key_id: process.env.razorPayId,
@@ -159,47 +158,60 @@ router.post(
   upload.single("fileUpload"),
   async (req, res) => {
     try {
-      genCertificate(req.body.name,req.body.email);
 
-      var data = [new Date().toLocaleString()];
-      data = data.concat(Object.values(req.body));
-      data.push(`https://forms.ieee-mint.org/certificates/${req.body.email}.pdf`);
-
-      await addDataGoogleSheets(data);
-
-      const response = await Form.findOneAndUpdate(
+      const member = await Form.findOne(
         { formId: req.query.formId },
-        {
-          $push: {
-            responses: {
-              responseId: generateRandomString(10),
-              orderId: generateRandomString(10),
-              certificate: `https://forms.ieee-mint.org/certificates/${req.body.email}.pdf`,
-              ...req.body,
+        { members: { $elemMatch: { id: req.query.uuid } } }
+      );
+
+      if (member.members.length != 0) {
+
+        genCertificate(req.body.name, member.members[0].id);
+
+        var data = [new Date().toLocaleString()];
+        data = data.concat(Object.values(req.body));
+        data.push(
+          `https://forms.ieee-mint.org/certificates/${member.members[0].id}.pdf`
+        );
+
+        await addDataGoogleSheets(data);
+
+        const response = await Form.findOneAndUpdate(
+          { formId: req.query.formId },
+          {
+            $push: {
+              responses: {
+                responseId: generateRandomString(10),
+                orderId: generateRandomString(10),
+                certificate: `https://forms.ieee-mint.org/certificates/${member.members[0].id}.pdf`,
+                ...req.body,
+              },
+            },
+            $set: {
+              "members.$[elemX].status": true,
             },
           },
-        }
-      );
-      //   $set:{
-      //     "members.$[elemX].status":true
-      //   }
-      // },
-      // {
-      //   "arrayFilters":[
-      //     {
-      //       "elemX.email":req.body.email
-      //     }
-      //   ]
-      // }
-      response
-        .save()
-        .then(() =>
-          res.send({ link: `http://localhost:3000/${req.body.email}.pdf` })
-        )
-        .catch((err) => {
-          logger.error(err);
-          res.status(400).send({ error: err.message });
-        });
+          {
+            arrayFilters: [
+              {
+                "elemX.id": req.query.uuid,
+              },
+            ],
+          }
+        );
+
+        response
+          .save()
+          .then(() =>
+            res.send({ link: `http://localhost:3000/${member.members[0].id}.pdf` })
+          )
+          .catch((err) => {
+            logger.error(err);
+            res.status(400).send({ error: err.message });
+          });
+      } else {
+        res.status(400).send({ msg: "Invalid UUID. User not found" });
+      }
     } catch (err) {
       console.log(err);
       logger.error(err);

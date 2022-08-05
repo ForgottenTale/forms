@@ -23,7 +23,7 @@ router.get("/certiCheck", async (req, res) => {
       if (!responses.members[0].status) {
         res.send({ status: true });
       } else {
-        res.send({ status: false, id: responses.members[0].email });
+        res.send({ status: false, id: responses.members[0].id });
       }
     } else {
       res.status(404);
@@ -291,6 +291,35 @@ router.post("/member", async (req, res) => {
     response
       .save()
       .then(() => res.send(response))
+      .catch((err) => {
+        logger.error(err);
+        res.status(400).send({ error: err.message });
+      });
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(400);
+  }
+});
+
+router.get("/memberAdded", async (req, res) => {
+  try {
+   
+    const response = await Form.findOneAndUpdate(
+      { formId: "feedback"},
+      {
+        $push: {
+          members: {
+            name:req.body.name,
+            id:req.body.uuid,
+            email:req.body.email,
+            status:false
+          },
+        },
+      }
+    );
+    response
+      .save()
+      .then(() => res.sendStatus(200))
       .catch((err) => {
         logger.error(err);
         res.status(400).send({ error: err.message });
