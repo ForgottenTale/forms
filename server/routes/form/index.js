@@ -301,7 +301,7 @@ router.post("/member", async (req, res) => {
   }
 });
 
-router.get("/memberAdded", async (req, res) => {
+router.post("/memberAdded", async (req, res) => {
   try {
    
     const response = await Form.findOneAndUpdate(

@@ -168,7 +168,7 @@ router.post(
 
         genCertificate(req.body.name, member.members[0].id);
 
-        var data = [new Date().toLocaleString()];
+        var data = [moment().format('MMMM Do YYYY, h:mm:ss a')];
         data = data.concat(Object.values(req.body));
         data.push(
           `https://forms.ieee-mint.org/certificates/${member.members[0].id}.pdf`

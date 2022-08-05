@@ -98,52 +98,6 @@ export default function Home() {
     join: "",
     nextWie: "",
   };
-  // const user = {
-  //   name: "Abhijith Kannan",
-  //   email: "abhijithkannan452@gmail.com",
-  //   session1: "fsduhiuhsiduhfishd",
-  //   session1Des: "fsduhiuhsiduhfishd",
-  //   session2: "fsduhiuhsiduhfishd",
-  //   session2Des: "fsduhiuhsiduhfishd",
-  //   session3: "fsduhiuhsiduhfishd",
-  //   session3Des: "fsduhiuhsiduhfishd",
-  //   session4: "fsduhiuhsiduhfishd",
-  //   session4Des: "fsduhiuhsiduhfishd",
-  //   session5: "fsduhiuhsiduhfishd",
-  //   session5Des: "fsduhiuhsiduhfishd",
-  //   session6: "fsduhiuhsiduhfishd",
-  //   session6Des: "fsduhiuhsiduhfishd",
-  //   session7: "fsduhiuhsiduhfishd",
-  //   session7Des: "fsduhiuhsiduhfishd",
-  //   session8: "fsduhiuhsiduhfishd",
-  //   session8Des: "fsduhiuhsiduhfishd",
-  //   session9: "fsduhiuhsiduhfishd",
-  //   session9Des: "fsduhiuhsiduhfishd",
-  //   session10: "fsduhiuhsiduhfishd",
-  //   session10Des: "fsduhiuhsiduhfishd",
-  //   session11: "fsduhiuhsiduhfishd",
-  //   session11Des: "fsduhiuhsiduhfishd",
-  //   session12: "fsduhiuhsiduhfishd",
-  //   session12Des: "fsduhiuhsiduhfishd",
-  //   session13: "fsduhiuhsiduhfishd",
-  //   session13Des: "fsduhiuhsiduhfishd",
-  //   session14: "fsduhiuhsiduhfishd",
-  //   session14Des: "fsduhiuhsiduhfishd",
-  //   session15: "fsduhiuhsiduhfishd",
-  //   session15Des: "fsduhiuhsiduhfishd",
-  //   session16: "fsduhiuhsiduhfishd",
-  //   session16Des: "fsduhiuhsiduhfishd",
-  //   session17: "fsduhiuhsiduhfishd",
-  //   session17Des: "fsduhiuhsiduhfishd",
-  //   session18: "fsduhiuhsiduhfishd",
-  //   session18Des: "fsduhiuhsiduhfishd",
-  //   session19: "fsduhiuhsiduhfishd",
-  //   session19Des: "fsduhiuhsiduhfishd",
-  //   session20: "fsduhiuhsiduhfishd",
-  //   session20Des: "fsduhiuhsiduhfishd",
-  //   join: "fsduhiuhsiduhfishd",
-  //   nextWie: "fsduhiuhsiduhfishd",
-  // };
 
   let schema = yup.object().shape({
     email: yup.string().email().required("Required"),
@@ -408,13 +362,7 @@ export default function Home() {
                           values={values}
                           errors={errors}
                         />
-                        <Rating
-                          event="the overall programme"
-                          setFieldValue={setFieldValue}
-                          name1="session20"
-                          values={values}
-                          errors={errors}
-                        />
+                     
                         <TextArea2
                           label={`Suggestion about speakers and sessions`}
                           value={values.suggestions}
@@ -442,7 +390,7 @@ export default function Home() {
                           }
                         />
                         <TextArea2
-                          label={`Opinion on Venue and accomodation`}
+                          label={`Your opinion on Venue and accomodation`}
                           value={values.accomodation}
                           onChange={(e) =>
                             setFieldValue("accomodation", e.target.value)
@@ -453,6 +401,13 @@ export default function Home() {
                               ? getIn(errors, "accomodation")
                               : ""
                           }
+                        />
+                           <Rating
+                          event="the overall programme"
+                          setFieldValue={setFieldValue}
+                          name1="session20"
+                          values={values}
+                          errors={errors}
                         />
                         <Input3
                           label="Are you interested in associating with IEEE WIE ?*"
