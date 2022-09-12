@@ -29,13 +29,34 @@ router.post("/callback", async (req, res) => {
       
         if (response.responseObject.body.resultInfo.resultStatus === "TXN_SUCCESS") {
 
-            return res.redirect(process.env.NODE_ENV === "production" ? `https://ieee-mint.org/confirmation/jobfair/${req.body.ORDERID}` : `http://localhost:3001/confirmation/jobfair/${req.body.ORDERID}/${req.body.txnId}/Success`)
+            return res.redirect(process.env.NODE_ENV === "production" ? `https://ieee-mint.org/confirmation/jobfair/${req.body.ORDERID}` : `http://localhost:3001/confirmation/jobfair/${req.body.ORDERID}`)
 
         }
         else {
         
-            return res.redirect(process.env.NODE_ENV === "production" ? `https://ieee-mint.org/confirmation/jobfair/${req.body.ORDERID}` : `http://localhost:3001/confirmation/jobfair/${req.body.ORDERID}/${req.body.txnId}/Failure`)
+            return res.redirect(process.env.NODE_ENV === "production" ? `https://ieee-mint.org/confirmation/jobfair/${req.body.ORDERID}` : `http://localhost:3001/confirmation/jobfair/${req.body.ORDERID}`)
         }
+
+    }
+    catch (err) {
+        res.status(400).send(err)
+        logger.error(err)
+    }
+
+})
+
+router.post("/confirmation", async (req, res) => {
+
+    try {
+
+        var orderId = req.body.ORDERID;
+        var readTimeout = 80000;
+        var paymentStatusDetailBuilder = new Paytm.PaymentStatusDetailBuilder(orderId);
+        var paymentStatusDetail = paymentStatusDetailBuilder.setReadTimeout(readTimeout).build();
+        var response = await Paytm.Payment.getPaymentStatus(paymentStatusDetail);
+      
+        res.send(response)
+      
 
     }
     catch (err) {
