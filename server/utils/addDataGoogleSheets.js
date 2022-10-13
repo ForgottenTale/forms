@@ -1,9 +1,8 @@
 
 const { google } = require("googleapis");
 
-async function addDataGoogleSheets(data){
+async function addDataGoogleSheets(data,spreadsheetId){
 
-  const spreadsheetId = process.env.spreadsheetId;
   const auth = new google.auth.GoogleAuth({
     keyFile: "./credgoogle.json",
     scopes: "https://www.googleapis.com/auth/spreadsheets",

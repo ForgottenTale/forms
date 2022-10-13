@@ -158,57 +158,59 @@ router.post(
   upload.single("fileUpload"),
   async (req, res) => {
     try {
-
       const member = await Form.findOne(
         { formId: req.query.formId },
-        { members: { $elemMatch: { id: req.query.uuid } } }
+        { members: { $elemMatch: { id: req.query.uuid } }, sheetId: 1,certificate:1 }
       );
 
       if (member.members.length != 0) {
+        genCertificate(req.body.name, member.members[0].id, member.certificate);
 
-        genCertificate(req.body.name, member.members[0].id);
-
-        var data = [moment().format('MMMM Do YYYY, h:mm:ss a')];
+        var data = [moment().format("MMMM Do YYYY, h:mm:ss a")];
         data = data.concat(Object.values(req.body));
         data.push(
           `https://forms.ieee-mint.org/certificates/${member.members[0].id}.pdf`
         );
 
-        await addDataGoogleSheets(data);
+        await addDataGoogleSheets(data, member.sheetId);
+        res.send({
+          link: `http://localhost:3000/${member.members[0].id}.pdf`,
+        })
+        // const response = await Form.findOneAndUpdate(
+        //   { formId: req.query.formId },
+        //   {
+        //     $push: {
+        //       responses: {
+        //         responseId: generateRandomString(10),
+        //         orderId: generateRandomString(10),
+        //         certificate: `https://forms.ieee-mint.org/certificates/${member.members[0].id}.pdf`,
+        //         ...req.body,
+        //       },
+        //     },
+        //     $set: {
+        //       "members.$[elemX].status": true,
+        //     },
+        //   },
+        //   {
+        //     arrayFilters: [
+        //       {
+        //         "elemX.id": req.query.uuid,
+        //       },
+        //     ],
+        //   }
+        // );
 
-        const response = await Form.findOneAndUpdate(
-          { formId: req.query.formId },
-          {
-            $push: {
-              responses: {
-                responseId: generateRandomString(10),
-                orderId: generateRandomString(10),
-                certificate: `https://forms.ieee-mint.org/certificates/${member.members[0].id}.pdf`,
-                ...req.body,
-              },
-            },
-            $set: {
-              "members.$[elemX].status": true,
-            },
-          },
-          {
-            arrayFilters: [
-              {
-                "elemX.id": req.query.uuid,
-              },
-            ],
-          }
-        );
-
-        response
-          .save()
-          .then(() =>
-            res.send({ link: `http://localhost:3000/${member.members[0].id}.pdf` })
-          )
-          .catch((err) => {
-            logger.error(err);
-            res.status(400).send({ error: err.message });
-          });
+        // response
+        //   .save()
+        //   .then(() =>
+        //     res.send({
+        //       link: `http://localhost:3000/${member.members[0].id}.pdf`,
+        //     })
+        //   )
+        //   .catch((err) => {
+        //     logger.error(err);
+        //     res.status(400).send({ error: err.message });
+        //   });
       } else {
         res.status(400).send({ msg: "Invalid UUID. User not found" });
       }

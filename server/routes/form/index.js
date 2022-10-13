@@ -19,6 +19,7 @@ router.get("/certiCheck", async (req, res) => {
       { formId: req.query.formId },
       { members: { $elemMatch: { id: req.query.id } } }
     );
+    console.log(responses)
     if (responses.members.length !== 0) {
       if (!responses.members[0].status) {
         res.send({ status: true });

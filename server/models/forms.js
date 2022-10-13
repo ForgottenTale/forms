@@ -1,8 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const applicantSchema = new Schema({
+const applicantSchema = new Schema(
+  {
     formId: { type: String },
+    sheetId: { type: String },
     name: { type: String },
     banner: { type: String },
     title: { type: String },
@@ -12,10 +14,11 @@ const applicantSchema = new Schema({
     pricing: { type: Object },
     members: { type: Array },
     specific: { type: Object },
-    responses: [
-        Object
-    ],
-}, { timestamps: true })
+    certificate: Object,
+    responses: [Object],
+  },
+  { timestamps: true }
+);
 
-const Applicant = mongoose.model('Form', applicantSchema)
+const Applicant = mongoose.model("Form", applicantSchema);
 module.exports = Applicant;
