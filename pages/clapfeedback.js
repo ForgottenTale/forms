@@ -319,7 +319,7 @@ export default function Home() {
                           }
                         />
                        
-                        {JSON.stringify(errors, 2, null)}
+                        {/* {JSON.stringify(errors, 2, null)} */}
                         <button
                           className={styles.button}
                           onClick={handleSubmit}

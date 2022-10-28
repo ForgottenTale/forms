@@ -160,7 +160,11 @@ router.post(
     try {
       const member = await Form.findOne(
         { formId: req.query.formId },
-        { members: { $elemMatch: { id: req.query.uuid } }, sheetId: 1,certificate:1 }
+        {
+          members: { $elemMatch: { id: req.query.uuid } },
+          sheetId: 1,
+          certificate: 1,
+        }
       );
 
       if (member.members.length != 0) {
@@ -175,7 +179,7 @@ router.post(
         await addDataGoogleSheets(data, member.sheetId);
         res.send({
           link: `http://localhost:3000/${member.members[0].id}.pdf`,
-        })
+        });
         // const response = await Form.findOneAndUpdate(
         //   { formId: req.query.formId },
         //   {
@@ -221,6 +225,22 @@ router.post(
     }
   }
 );
+
+router.post("/feedback", upload.single("fileUpload"), async (req, res) => {
+  try {
+    const member = await Form.findOne({ formId: req.query.formId });
+    var data = [moment().format("MMMM Do YYYY, h:mm:ss a")];
+    data = data.concat(Object.values(req.body));
+
+
+    await addDataGoogleSheets(data, member.sheetId);
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    logger.error(err);
+    return res.status(400).send(err);
+  }
+});
 
 router.post("/", upload.single("fileUpload"), async (req, res) => {
   try {

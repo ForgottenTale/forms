@@ -1,0 +1,455 @@
+import Head from "next/head";
+import styles from "../styles/Feedback.module.css";
+import { Formik } from "formik";
+import * as yup from "yup";
+import axios from "axios";
+import Loader from "../ui-component/loader";
+import { useState, useEffect } from "react";
+import Error from "../ui-component/error";
+import { useRouter } from "next/router";
+import EmojiSelector from "../ui-component/emojiSelector";
+import TextArea2 from "../ui-component/textArea2";
+import { getIn } from "formik";
+import Input3 from "../ui-component/input3";
+import CustomRadio from "../ui-component/CustomRadio";
+import jsonData from "../test.json";
+
+function Rating({ event, name1, values, errors, setFieldValue }) {
+  return (
+    <>
+      <EmojiSelector
+        event={`${event} *`}
+        onClick={(e) => setFieldValue(name1, e)}
+        value={values[name1]}
+        errors={getIn(errors, name1) !== undefined ? getIn(errors, name1) : ""}
+      />
+    </>
+  );
+}
+
+export default function Home() {
+  const { query } = useRouter();
+  const router = useRouter();
+
+  function buildForm(values) {
+    var formData = new FormData();
+    var key = Object.keys(values);
+
+    key.forEach((val) => {
+      formData.append(val, values[val]);
+    });
+    return formData;
+  }
+
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(false);
+
+  // const certiCheck = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `/api/form/certiCheck?id=${query.id}&formId=upskill2022feedback`
+  //     );
+  //     console.log(res);
+  //     if (res.data.status) {
+  //       setInitialLoading(false);
+  //     } else {
+  //       router.push(`/certificates/${res.data.id}.pdf`);
+  //     }
+  //   } catch (err) {
+  //     setError(true);
+  //     setErrorMsg(err.response !== undefined ? err.response.data.error : err);
+  //     setLoading(false);
+  //   }
+  //   // setInitialLoading(false);
+  // };
+
+  // useEffect(() => {
+  //   if (query.id !== undefined) {
+  //     certiCheck();
+  //   }
+  // }, [query.id]);
+
+  const user = {
+    name: "",
+    email: "",
+    section: "",
+    ieeeMember: "",
+    membershipId: "",
+    session1: "",
+    session2: "",
+    session3: "",
+    session4: "",
+    session5: "",
+    session6: "",
+    enjoyment: "",
+    curriculum: "",
+    subjectMatter: "",
+    knowledge: "",
+    improve: "",
+    additional: "",
+  };
+  // const user = {
+  //   name: "asdfa",
+  //   email: "a@gmail.com",
+  //   ieeeMember: "No",
+  //   section: "",
+  //   membershipId: "",
+  //   session1: "Excellent",
+  //   session2: "Excellent",
+  //   session3: "Excellent",
+  //   session4: "Excellent",
+  //   session5: "Excellent",
+  //   session6: "Excellent",
+  //   enjoyment: "Excellent",
+  //   curriculum: "Excellent",
+  //   subjectMatter: "asdas",
+  //   knowledge: "asdas",
+  //   improve: "sdfasdfas",
+  //   additional: "asdasdas",
+  // };
+  let schema = yup.object().shape({
+    email: yup.string().email().required("Required"),
+    name: yup.string().required("Required"),
+    ieeeMember: yup.string().required("Required"),
+    membershipId: yup.string().when("ieeeMember", {
+      is: "Yes",
+      then: yup.string().required(),
+    }),
+    section: yup.string().when("ieeeMember", {
+      is: "Yes",
+      then: yup.string().required(),
+    }),
+    session1: yup.string().required("Required"),
+    session2: yup.string().required("Required"),
+    session3: yup.string().required("Required"),
+    session4: yup.string().required("Required"),
+    session5: yup.string().required("Required"),
+    session6: yup.string().required("Required"),
+
+    enjoyment: yup.string().required("Required"),
+    curriculum: yup.string().required("Required"),
+    subjectMatter: yup.string().required("Required"),
+    knowledge: yup.string().required("Required"),
+    improve: yup.string().required("Required"),
+    additional: yup.string().required("Required"),
+  });
+
+  const handleUpload = async (values) => {
+    setInitialLoading(true);
+    try {
+      const formData = buildForm(values);
+      const res = await axios.post(
+        `/api/pay/razorpay/feedback?formId=upskill2022feedback`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setInitialLoading(false);
+
+      setSubmitted(true);
+
+      // router.push(`/feedback/feedback/${res.data.id}`);
+    } catch (err) {
+      setError(true);
+      setErrorMsg(err.response !== undefined ? err.response.data.error : err);
+      setInitialLoading(false);
+    }
+  };
+
+  return (
+    <div className={styles.container} style={{ height: "100%" }}>
+      <Head>
+        <title>Feedback</title>
+        <meta name="description" content="Generated by create next app" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      {initialLoading ? (
+        <div
+          className={styles.eventform}
+          style={{
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Loader msg="Don't refresh this page. Redirecting to payment processing service ..." />
+        </div>
+      ) : (
+        <main className={styles.main}>
+          {!submitted ? (
+            <>
+              <div className={styles.eventdetails_con}>
+                {/* <img src={"./banner.jpeg"} className={styles.image} alt="BANNER" /> */}
+                <div className={styles.eventdetails_con_circle}></div>
+                <div className={styles.eventdetails_con_circle}></div>
+                <div className={styles.eventdetails_con_circle}></div>
+
+                <div className={styles.eventdetails}>
+                  {/* <p className={styles.eventdetails_dnt} >REGISTRATION FORM</p> */}
+                  <h3 className={styles.eventdetails_title}>Feedback</h3>
+                </div>
+              </div>
+              <div className={styles.eventform}>
+                {error ? <Error setError={setError} msg={errorMsg} /> : null}
+
+                {loading ? (
+                  <>
+                    <Loader msg="Don't refresh this page. Redirecting to payment processing service ..." />
+                  </>
+                ) : (
+                  <div className={styles.eventform_con}>
+                    <Formik
+                      initialValues={user}
+                      validationSchema={schema}
+                      onSubmit={(values) => {
+                        handleUpload(values);
+                      }}
+                    >
+                      {({ values, setFieldValue, handleSubmit, errors }) => (
+                        <>
+                          <Input3
+                            label="Enter your name *"
+                            value={values.name}
+                            onChange={(e) =>
+                              setFieldValue("name", e.target.value)
+                            }
+                            placeholder="Enter your name "
+                            errors={
+                              getIn(errors, "name") !== undefined
+                                ? getIn(errors, "name")
+                                : ""
+                            }
+                          />
+                          <Input3
+                            label="Enter your registered email *"
+                            value={values.email}
+                            onChange={(e) =>
+                              setFieldValue("email", e.target.value)
+                            }
+                            placeholder="Enter your registered email *"
+                            errors={
+                              getIn(errors, "email") !== undefined
+                                ? getIn(errors, "email")
+                                : ""
+                            }
+                          />
+                          <CustomRadio
+                            label={"Are you an IEEE Member ?*"}
+                            name="ieeeMember"
+                            values={values}
+                            setFieldValue={setFieldValue}
+                            errors={
+                              getIn(errors, "ieeeMember") !== undefined
+                                ? getIn(errors, "ieeeMember")
+                                : ""
+                            }
+                            options={["Yes", "No"]}
+                          />
+                          {values.ieeeMember === "Yes" ? (
+                            <>
+                              <Input3
+                                label="Enter your membership Id*"
+                                value={values.membershipId}
+                                onChange={(e) =>
+                                  setFieldValue("membershipId", e.target.value)
+                                }
+                                placeholder="Enter your registered email *"
+                                errors={
+                                  getIn(errors, "membershipId") !== undefined
+                                    ? getIn(errors, "membershipId")
+                                    : ""
+                                }
+                              />
+                              <Input3
+                                label="Section*"
+                                value={values.section}
+                                onChange={(e) =>
+                                  setFieldValue("section", e.target.value)
+                                }
+                                placeholder="Enter your registered email *"
+                                errors={
+                                  getIn(errors, "section") !== undefined
+                                    ? getIn(errors, "section")
+                                    : ""
+                                }
+                              />
+                            </>
+                          ) : null}
+                          <Rating
+                            event="Keynote session on Leadership and entrepreneurship by Dr. Suresh Nair"
+                            setFieldValue={setFieldValue}
+                            name1="session1"
+                            values={values}
+                            errors={errors}
+                          />
+                          <Rating
+                            event="session on Management for Engineers by Ms. Rashmi Mohandas"
+                            setFieldValue={setFieldValue}
+                            name1="session2"
+                            values={values}
+                            errors={errors}
+                          />
+                          <Rating
+                            event="Workshop on Professional Ethics by Mr. Vijay S Paul"
+                            setFieldValue={setFieldValue}
+                            name1="session3"
+                            values={values}
+                            errors={errors}
+                          />
+                          <Rating
+                            event="Panel Discussion: Responsibility of Professionals towards Sustainable Development"
+                            setFieldValue={setFieldValue}
+                            name1="session4"
+                            values={values}
+                            errors={errors}
+                          />
+                          <Rating
+                            event="Networking Workshop: “N of PVN Model of IEEE” for success by Mr. Ramneek Kalra"
+                            setFieldValue={setFieldValue}
+                            name1="session5"
+                            values={values}
+                            errors={errors}
+                          />
+                          <Rating
+                            event="Engineers for Society by Mr. Shahim Baker"
+                            setFieldValue={setFieldValue}
+                            name1="session6"
+                            values={values}
+                            errors={errors}
+                          />
+
+                          <TextArea2
+                            label={`What did you enjoy most during the Upskill 2022`}
+                            value={values.enjoyment}
+                            onChange={(e) =>
+                              setFieldValue("enjoyment", e.target.value)
+                            }
+                            placeholder=""
+                            errors={
+                              getIn(errors, "enjoyment") !== undefined
+                                ? getIn(errors, "enjoyment")
+                                : ""
+                            }
+                          />
+                          <TextArea2
+                            label={`Please list 2-3 key learnings from today's curriculum, and how you anticipate applying them to your work in the future *`}
+                            value={values.curriculum}
+                            onChange={(e) =>
+                              setFieldValue("curriculum", e.target.value)
+                            }
+                            placeholder=""
+                            errors={
+                              getIn(errors, "curriculum") !== undefined
+                                ? getIn(errors, "curriculum")
+                                : ""
+                            }
+                          />
+                          <TextArea2
+                            label={`Was there any subject matter that you found confusing? If so, please provide specific examples *`}
+                            value={values.subjectMatter}
+                            onChange={(e) =>
+                              setFieldValue("subjectMatter", e.target.value)
+                            }
+                            placeholder=""
+                            errors={
+                              getIn(errors, "subjectMatter") !== undefined
+                                ? getIn(errors, "subjectMatter")
+                                : ""
+                            }
+                          />
+                          <TextArea2
+                            label={`What is the most valuable thing you learned today (knowledge or skills)? *`}
+                            value={values.knowledge}
+                            onChange={(e) =>
+                              setFieldValue("knowledge", e.target.value)
+                            }
+                            placeholder=""
+                            errors={
+                              getIn(errors, "knowledge") !== undefined
+                                ? getIn(errors, "knowledge")
+                                : ""
+                            }
+                          />
+                          <TextArea2
+                            label={`Any areas that we can improve? *`}
+                            value={values.improve}
+                            onChange={(e) =>
+                              setFieldValue("improve", e.target.value)
+                            }
+                            placeholder=""
+                            errors={
+                              getIn(errors, "improve") !== undefined
+                                ? getIn(errors, "improve")
+                                : ""
+                            }
+                          />
+                          <TextArea2
+                            label={`Any additional comments you wish to share? *`}
+                            value={values.additional}
+                            onChange={(e) =>
+                              setFieldValue("additional", e.target.value)
+                            }
+                            placeholder=""
+                            errors={
+                              getIn(errors, "additional") !== undefined
+                                ? getIn(errors, "additional")
+                                : ""
+                            }
+                          />
+                          {/* {JSON.stringify(errors, 2, null)} */}
+                          <button
+                            className={styles.button}
+                            onClick={handleSubmit}
+                          >
+                            SUBMIT
+                          </button>
+                        </>
+                      )}
+                    </Formik>
+
+                    <footer className={styles.footer}>
+                      <p>
+                        This content is created by the owner of the form. The
+                        data you submit will be sent to the form owner. IEEE
+                        Kerala Section is not responsible for the privacy or
+                        security practices of its customers, including those of
+                        this form owner. Never give out your password.
+                      </p>
+                      <br />
+                      Powered by IKS Mint Forms |{" "}
+                      <a
+                        style={{ color: "blue" }}
+                        href="https://ieee-mint.org/privacy"
+                      >
+                        Privacy and cookies
+                      </a>{" "}
+                      |{" "}
+                      <a
+                        style={{ color: "blue" }}
+                        href="https://ieee-mint.org/terms"
+                      >
+                        Terms of use
+                      </a>
+                    </footer>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <div style={{widthL:"100%",height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+            Your response have been submitted
+
+            </div>
+          )}
+        </main>
+      )}
+    </div>
+  );
+}
